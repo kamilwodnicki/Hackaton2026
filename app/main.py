@@ -1,7 +1,9 @@
 import os
 from flask import Flask, request, jsonify
+from chat import chat_bp
 
 app = Flask(__name__)
+app.register_blueprint(chat_bp)
 
 # Konfiguracja środowiska
 QDRANT_HOST = os.getenv("QDRANT_HOST", "qdrant")
