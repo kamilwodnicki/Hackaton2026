@@ -5,7 +5,25 @@ Ten komponent systemu odpowiada za analizę, przechowywanie oraz zaawansowane wy
 ### 1. Architektura i uruchamianie modułu
 Moduł działa w oparciu o konteneryzację (Docker). W celu optymalizacji obciążenia systemu, elementy związane ze sztuczną inteligencją oraz bazą wektorową nie są uruchamiane domyślnie. 
 
+Wariant lekki (bez AI):
+
+Budowanie obrazu:
+
+```cmd
+docker compose build
+```
+Uruchomienie środowiska:
+
+```cmd
+docker compose up -d
+```
+
 **Uruchamianie usług AI:** 
+Budowanie obrazu (wymagane przekazanie zmiennej w PowerShell):
+```cmd
+$env:INSTALL_AI="true"; docker compose build
+```
+
 Aby włączyć pełne środowisko analityczne wymagane do działania tego modułu, należy uruchomić kontenery z parametrem profilu `ai`:
 ```cmd
 docker compose --profile ai up -d
@@ -64,3 +82,19 @@ Zwracany jest obiekt JSON z tablicą `results`. Zawiera ona podstawowe metadane 
 Podczas odpytywania systemu występują zauważalne różnice w czasie obsługi żądań:
 * **Pierwsze zapytanie (ok. 6-8 sekund):** Wymaga pełnego wczytania modeli do pamięci operacyjnej urządzenia oraz nawiązania pierwszego połączenia z bazą danych Qdrant.
 * **Kolejne zapytania (ok. 0.2 - 0.4 sekundy):** Struktury obliczeniowe i połączenia są już aktywne, co pozwala na bieżące przetwarzanie zapytań bez konieczności ponownej inicjalizacji systemu.
+
+
+## Panel Zarządzania Treścią (Directus)
+
+Do zarządzania treściami oraz strukturą bazy danych w projekcie wykorzystywany jest **Directus**. Jest to nowoczesny, elastyczny system CMS/API oparty na platformie Node.js, który automatycznie tworzy interfejs użytkownika oraz bezpieczne API dla istniejącej bazy danych PostgreSQL.
+
+### 1. Uruchamianie i Dostęp
+Directus działa jako w pełni skonteneryzowana usługa w Dockerze i uruchamia się automatycznie wraz z podstawowym pakietem aplikacji.
+
+* **Panel administracyjny:** `http://localhost:8055`
+* **Dane logowania (domyślne):**
+  * **Email:** `admin@example.com`
+  * **Hasło:** `admin`
+
+### 2. Przechowywanie danych
+Cała konfiguracja, struktura oraz treści wprowadzane w Directusie zapisują się bezpośrednio w docelowej bazie danych PostgreSQL (`postgres_data`). Przesyłane pliki i multimedia są natomiast bezpiecznie magazynowane w dedykowanym wolumenie dyskowym (`directus_uploads`), dzięki czemu dane są w pełni odporne na restarty czy aktualizacje kontenerów.

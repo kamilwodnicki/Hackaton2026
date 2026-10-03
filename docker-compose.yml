@@ -22,6 +22,32 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
+  directus:
+    image: directus/directus:latest
+    container_name: directus_app
+    restart: always
+    ports:
+      - "8055:8055"
+    volumes:
+      - directus_uploads:/directus/uploads
+      - directus_extensions:/directus/extensions
+    depends_on:
+      db:
+        condition: service_started
+    environment:
+      - DB_CLIENT=pg
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=mydb
+      - DB_USER=myuser
+      - DB_PASSWORD=mypassword
+      # Klucze bezpieczeństwa (w środowisku produkcyjnym należy je zmienić na silne hasła)
+      - KEY=b943d8c8-7013-40a1-8d23-2895ea3f40f1
+      - SECRET=4a413d90-b18e-4f7b-9442-990eef5f87be
+      # Dane pierwszego logowania administratora
+      - ADMIN_EMAIL=admin@example.com
+      - ADMIN_PASSWORD=admin
+
   web:
     build: 
       context: .
@@ -105,3 +131,5 @@ volumes:
   postgres_data:
   ollama_data:
   qdrant_data:
+  directus_uploads:
+  directus_extensions:
