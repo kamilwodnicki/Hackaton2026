@@ -113,6 +113,28 @@ if (problemFromUrl && problemInput) {
   problemInput.focus();
 }
 
+const countySelect = document.querySelector("#county-select");
+const countyName = document.querySelector("#county-name");
+const countyChart = document.querySelector("#county-chart");
+const countyData = {
+  krakowski: { name: "Powiat Krakowski", values: [19, 14, 15] },
+  wielicki: { name: "Powiat Wielicki", values: [13, 18, 10] },
+  tatrzanski: { name: "Powiat Tatrzański", values: [11, 9, 17] },
+};
+
+countySelect?.addEventListener("change", () => {
+  const selectedCounty = countyData[countySelect.value];
+  if (!selectedCounty || !countyChart || !countyName) return;
+
+  countyName.textContent = selectedCounty.name;
+  const maximum = Math.max(...selectedCounty.values);
+  countyChart.querySelectorAll("li").forEach((item, index) => {
+    const value = selectedCounty.values[index];
+    item.querySelector("strong").textContent = value;
+    item.querySelector(".chart-bar").style.setProperty("--bar-width", `${Math.round((value / maximum) * 92)}%`);
+  });
+});
+
 const ideaDialog = document.querySelector("#idea-dialog");
 const dialogTitle = document.querySelector("#dialog-title");
 const dialogAuthor = document.querySelector("#dialog-author");

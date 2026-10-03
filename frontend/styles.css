@@ -609,6 +609,170 @@ html.hide-decorations .hero {
   grid-template-columns: 1fr;
 }
 
+/* Panel pracownika ROPS */
+.rops-page {
+  padding: 10px max(0px, calc((100vw - var(--page-width)) / 2));
+  background: var(--color-white);
+  border-bottom: 10px solid var(--color-white);
+}
+
+.rops-layout {
+  display: grid;
+  grid-template-columns: minmax(440px, 1.1fr) minmax(420px, 0.9fr);
+  min-height: 378px;
+  overflow: hidden;
+  border: 1px solid var(--color-surface-strong);
+}
+
+.rops-control-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 30px 24px;
+  color: var(--color-white);
+  background: var(--color-cyan);
+}
+
+.rops-eyebrow {
+  margin: 0 0 10px;
+  font-size: 0.67rem;
+}
+
+.rops-control-panel h1 {
+  max-width: 680px;
+  margin: 0;
+  font-size: clamp(1.75rem, 3.1vw, 2.55rem);
+  line-height: 1.08;
+}
+
+.rops-intro {
+  margin: 12px 0;
+  font-size: 0.78rem;
+}
+
+.county-select {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 38px;
+  align-items: center;
+  max-width: 600px;
+  padding: 5px;
+  color: var(--color-ink);
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+}
+
+.county-select svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  justify-self: center;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.county-select select {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 6px;
+  color: var(--color-ink);
+  background: var(--color-surface-strong);
+  border: 0;
+  border-radius: 0;
+  font-size: 0.8rem;
+}
+
+.rops-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 3vw, 48px);
+  margin-top: 26px;
+}
+
+.rops-actions a {
+  min-height: 88px;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  color: var(--color-white);
+  background: var(--color-orange);
+  border: 2px solid var(--color-border);
+  font-size: 0.78rem;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.rops-actions a.is-light {
+  color: var(--color-orange);
+  background: var(--color-white);
+}
+
+.rops-actions a:hover {
+  color: var(--color-ink);
+  background: var(--color-focus);
+}
+
+.county-stats {
+  align-self: center;
+  padding: 26px 20px;
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+}
+
+.county-stats h2 {
+  margin: 0 0 22px;
+  color: #5c5c5c;
+  font-size: 1.1rem;
+}
+
+.county-stats > p {
+  margin: 0 0 18px;
+  color: #5c5c5c;
+  font-size: 0.75rem;
+}
+
+.county-chart {
+  margin: 0;
+  padding: 16px 20px 20px 38px;
+  background: #f4f4f4;
+  border: 1px solid #d3d3d3;
+  list-style-position: outside;
+}
+
+.county-chart li {
+  margin: 0 0 11px;
+  font-size: 0.76rem;
+}
+
+.county-chart li:last-child {
+  margin-bottom: 0;
+}
+
+.chart-label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.chart-label strong {
+  font-weight: 400;
+}
+
+.chart-track {
+  height: 13px;
+  display: block;
+}
+
+.chart-bar {
+  width: var(--bar-width);
+  height: 100%;
+  display: block;
+  transition: width 220ms ease;
+}
+
+.chart-bar--orange { background: #cf4c00; }
+.chart-bar--blue { background: #087d9c; }
+.chart-bar--gray { background: #8c8c8c; }
+
 .idea-page {
   padding: 12px max(16px, calc((100vw - var(--page-width)) / 2));
   background: var(--color-cyan);
@@ -1332,6 +1496,10 @@ html.hide-decorations .hero {
     grid-template-columns: 1fr;
   }
 
+  .rops-layout {
+    grid-template-columns: 1fr;
+  }
+
   .contact-inner {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1379,6 +1547,32 @@ html.hide-decorations .hero {
 
   .idea-page {
     padding: 12px;
+  }
+
+  .rops-page {
+    padding: 12px;
+  }
+
+  .rops-layout {
+    min-height: 0;
+  }
+
+  .rops-control-panel {
+    padding: 24px 16px;
+  }
+
+  .rops-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .rops-actions a {
+    min-height: 56px;
+  }
+
+  .county-stats {
+    padding: 24px 14px;
   }
 
   .idea-card,
