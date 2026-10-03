@@ -767,6 +767,155 @@ html.hide-decorations .hero {
   background: var(--color-white);
 }
 
+.ideas-page {
+  padding-bottom: 12px;
+  background: var(--color-cyan);
+}
+
+.ideas-page-title {
+  margin: 0;
+  padding: 7px 16px 9px;
+  color: var(--color-white);
+  background: var(--color-orange);
+  border-top: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  line-height: 1.15;
+  text-align: center;
+}
+
+.ideas-table-wrap {
+  max-width: 1040px;
+  margin: 18px auto 0;
+  padding: 0 16px;
+}
+
+.ideas-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--color-ink);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  font-family: Arial, sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.ideas-table th {
+  padding: 16px 14px;
+  color: var(--color-white);
+  background: var(--color-orange);
+  border-right: 1px solid var(--color-white);
+  text-align: left;
+}
+
+.ideas-table th:last-child {
+  border-right: 0;
+}
+
+.ideas-table td {
+  padding: 11px 14px;
+  background: #f4f4f6;
+  border-top: 1px solid #979797;
+  border-right: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.ideas-table td:last-child {
+  border-right: 0;
+  text-align: center;
+}
+
+.ideas-table tbody tr:nth-child(even) td {
+  background: var(--color-white);
+}
+
+.idea-status {
+  white-space: nowrap;
+}
+
+.idea-status--approved {
+  color: #159432;
+}
+
+.idea-status--rejected {
+  color: #e50000;
+}
+
+.idea-status--pending {
+  color: #4a1fc2;
+}
+
+.decision-button {
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.decision-button:hover {
+  color: var(--color-orange-dark);
+}
+
+.idea-preview-button {
+  min-width: 94px;
+  min-height: 38px;
+  padding: 8px 13px;
+  color: var(--color-white);
+  background: var(--color-orange);
+  border: 1px solid var(--color-border);
+  font-weight: 700;
+}
+
+.idea-preview-button:hover {
+  color: var(--color-ink);
+  background: var(--color-white);
+}
+
+.idea-dialog {
+  width: min(560px, calc(100% - 32px));
+  padding: 0;
+  color: var(--color-ink);
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+}
+
+.idea-dialog::backdrop {
+  background: rgb(0 0 0 / 65%);
+}
+
+.idea-dialog-inner {
+  padding: 22px;
+}
+
+.idea-dialog h2 {
+  margin: 0 0 16px;
+  color: var(--color-cyan-dark);
+  font-size: 1.3rem;
+}
+
+.idea-dialog p {
+  margin: 9px 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.idea-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.idea-dialog-close {
+  min-height: 40px;
+  padding: 8px 18px;
+  color: var(--color-white);
+  background: var(--color-cyan);
+  border: 1px solid var(--color-border);
+}
+
 @media (max-width: 1050px) {
   .utility-bar {
     flex-direction: column;
@@ -880,6 +1029,75 @@ html.hide-decorations .hero {
     float: none;
     display: block;
     margin-top: 5px;
+  }
+
+  .ideas-page-title {
+    font-size: 1.35rem;
+  }
+
+  .ideas-table-wrap {
+    margin-top: 12px;
+    padding: 0 12px;
+  }
+
+  .ideas-table,
+  .ideas-table tbody,
+  .ideas-table tr,
+  .ideas-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .ideas-table {
+    background: transparent;
+    border: 0;
+  }
+
+  .ideas-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .ideas-table tr {
+    margin-bottom: 12px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+  }
+
+  .ideas-table td,
+  .ideas-table tbody tr:nth-child(even) td {
+    display: grid;
+    grid-template-columns: minmax(108px, 0.75fr) 1.25fr;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--color-white);
+    border: 0;
+    border-bottom: 1px solid #d0d0d0;
+    text-align: left;
+  }
+
+  .ideas-table td::before {
+    content: attr(data-label);
+    color: var(--color-orange-dark);
+    font-weight: 800;
+  }
+
+  .ideas-table td:last-child {
+    display: block;
+    padding: 12px;
+    border-bottom: 0;
+    text-align: right;
+  }
+
+  .ideas-table td:last-child::before {
+    content: none;
+  }
+
+  .idea-preview-button {
+    width: 100%;
   }
 
   .hero h1 {
