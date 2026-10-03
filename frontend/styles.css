@@ -1,8 +1,8 @@
 :root {
-  --color-cyan: #13abd2;
-  --color-cyan-dark: #0087ac;
-  --color-orange: #e96f00;
-  --color-orange-dark: #b95000;
+  --color-cyan: #0786a1;
+  --color-cyan-dark: #006d85;
+  --color-orange: #bf5c00;
+  --color-orange-dark: #934700;
   --color-ink: #121212;
   --color-white: #ffffff;
   --color-surface: #f1f2f3;
@@ -126,7 +126,7 @@ select {
 
 .utility-tools {
   gap: var(--space-2);
-  color: var(--color-ink);
+  color: var(--color-white);
   font-size: 0.67rem;
   letter-spacing: 0.02em;
 }
@@ -205,7 +205,7 @@ select {
 }
 
 .main-navigation-wrap {
-  min-height: 68px;
+  min-height: 60px;
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr) auto;
   align-items: stretch;
@@ -266,8 +266,14 @@ select {
   border-right: 1px solid var(--color-surface-strong);
 }
 
-.nav-link:hover,
 .nav-link.is-active {
+  margin-block: var(--space-2);
+  color: var(--color-cyan-dark);
+  background: var(--color-white);
+  border: 1px solid var(--color-cyan);
+}
+
+.nav-link:hover {
   color: var(--color-white);
   background: var(--color-cyan-dark);
 }
@@ -322,31 +328,41 @@ select {
   align-items: center;
   justify-content: center;
   padding: 0.6rem var(--space-3);
-  color: var(--color-muted);
+  color: var(--color-white);
   border-right: 1px solid var(--color-white);
   font-size: 0.63rem;
   white-space: nowrap;
 }
 
-.audience-link:hover,
 .audience-link.is-active {
+  color: var(--color-ink);
+  background: var(--color-white);
+}
+
+.audience-link:hover {
   color: var(--color-white);
-  background: var(--color-ink);
+  background: var(--color-cyan-dark);
 }
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(400px, 0.95fr);
-  gap: var(--space-5);
-  min-height: 410px;
-  padding: var(--space-5) max(var(--space-4), calc((100vw - var(--page-width)) / 2 + var(--space-3)));
+  grid-template-columns: minmax(0, 1.16fr) minmax(410px, 0.94fr);
+  gap: var(--space-1);
+  min-height: 328px;
+  padding: 10px max(2px, calc((100vw - var(--page-width)) / 2));
   color: var(--color-white);
-  background: var(--color-cyan);
+  background: var(--color-white);
   border-bottom: 10px solid var(--color-white);
 }
 
 .hero-content {
   align-self: center;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-4) 1.25rem;
+  background: var(--color-cyan);
 }
 
 .eyebrow {
@@ -439,14 +455,14 @@ select {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   gap: var(--space-3);
-  padding: var(--space-3);
+  padding: var(--space-4) var(--space-1);
   background: var(--color-white);
 }
 
 .stat-card {
-  min-height: 104px;
+  min-height: 78px;
   display: grid;
-  grid-template-columns: minmax(110px, 0.34fr) 1fr;
+  grid-template-columns: minmax(120px, 0.35fr) 1fr;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
@@ -462,13 +478,13 @@ select {
 }
 
 .stat-card strong {
-  font-size: clamp(3.6rem, 6vw, 5.25rem);
+  font-size: clamp(3.5rem, 5.7vw, 5rem);
   font-weight: 700;
   line-height: 1;
 }
 
 .stat-card span {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   line-height: 1.35;
 }
 
@@ -480,7 +496,7 @@ select {
 
 .contact-inner {
   max-width: var(--page-width);
-  min-height: 94px;
+  min-height: 68px;
   display: grid;
   grid-template-columns: 1.35fr 1fr 0.85fr 1.2fr;
   margin: 0 auto;
