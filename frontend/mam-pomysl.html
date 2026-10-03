@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Opisz swój pomysł na innowację społeczną i skorzystaj z pomocy asystenta." />
+    <title>Mam pomysł! | Dostępność</title>
+    <link rel="icon" href="assets/logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Przejdź do treści</a>
+
+    <header class="site-header">
+      <div class="utility-bar">
+        <a class="accessibility-link" href="#accessibility">Dostępność</a>
+        <div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności">
+          <div class="tool-group" aria-label="Kontrast">
+            <span>Kontrast</span>
+            <button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny"></button>
+            <button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast pomarańczowy"></button>
+            <button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Wysoki kontrast"></button>
+          </div>
+          <div class="tool-group" aria-label="Wielkość tekstu">
+            <span>Wielkość tekstu</span>
+            <button class="text-size-button" type="button" data-font-size="normal">A</button>
+            <button class="text-size-button" type="button" data-font-size="large">A+</button>
+            <button class="text-size-button" type="button" data-font-size="largest">A++</button>
+          </div>
+          <div class="tool-group language-control">
+            <span>Język strony</span>
+            <label class="sr-only" for="language">Wybierz język strony</label>
+            <select id="language"><option value="pl">polski</option><option value="en">English</option></select>
+          </div>
+          <button class="icon-button" type="button" id="toggle-visibility" aria-label="Ukryj elementy dekoracyjne"><svg aria-hidden="true"><use href="#icon-eye-off"></use></svg></button>
+          <button class="icon-button icon-button--accent" type="button" id="reset-accessibility" aria-label="Resetuj ustawienia dostępności"><svg aria-hidden="true"><use href="#icon-accessibility"></use></svg></button>
+        </div>
+      </div>
+
+      <div class="main-navigation-wrap">
+        <a class="brand" href="index.html" aria-label="Strona główna">
+          <span class="brand-placeholder" aria-hidden="true">LOGO</span>
+          <img class="brand-logo" src="assets/logo.ico" alt="" width="56" height="46" onerror="this.hidden = true" />
+          <span class="sr-only">Logo organizacji</span>
+        </a>
+        <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button>
+        <nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja">
+          <a class="nav-link" href="index.html">Strona główna</a>
+          <a class="nav-link is-active" href="mam-pomysl.html" aria-current="page">Mam pomysł!</a>
+          <a class="nav-link" href="zostan-testerem.html">Zostań testerem</a>
+          <a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a>
+          <a class="nav-link" href="wsparcie.html">Wsparcie</a>
+        </nav>
+        <div class="account-actions">
+          <a class="button button--primary" href="logowanie.html">Zaloguj się</a>
+          <a class="button button--secondary" href="rejestracja.html">Zarejestruj się</a>
+        </div>
+      </div>
+
+      <nav class="audience-navigation" aria-label="Nawigacja według grup odbiorców">
+        <a class="audience-link is-active" href="panel.html">Twój panel</a>
+        <a class="audience-link" href="mieszkancy.html">Mieszkańcy i NGO</a>
+        <a class="audience-link" href="samorzady.html">Jednostki samorządu terytorialnego</a>
+        <a class="audience-link" href="pracownicy-rops.html">Pracownicy ROPS</a>
+        <a class="audience-link" href="eksperci.html">Eksperci branżowi i mentorzy</a>
+      </nav>
+    </header>
+
+    <main id="main-content" class="idea-page">
+      <div class="idea-layout">
+        <section class="idea-card" aria-labelledby="idea-title">
+          <h1 class="section-heading" id="idea-title">Zacznijmy od początku...</h1>
+          <p class="section-intro">Napisz krótko, pomożemy Ci dopracować szczegóły później</p>
+          <form class="idea-form" id="idea-form">
+            <label for="idea-title-input">Tytuł pomysłu</label>
+            <input id="idea-title-input" name="title" type="text" placeholder="Np. Sąsiedzka biblioteka rzeczy" required />
+            <fieldset class="audience-fieldset">
+              <legend>Dla kogo jest to rozwiązanie? <span class="legend-hint">Możesz wybrać kilka grup</span></legend>
+              <div class="audience-options">
+                <label class="audience-option"><input type="checkbox" name="audience" value="seniorzy" /><span>Seniorzy</span></label>
+                <label class="audience-option"><input type="checkbox" name="audience" value="rodzice" /><span>Rodzice / Opiekunowie</span></label>
+                <label class="audience-option"><input type="checkbox" name="audience" value="szkoly" /><span>Nauczyciele / Szkoły</span></label>
+                <label class="audience-option"><input type="checkbox" name="audience" value="mlodziez" /><span>Dzieci i młodzież</span></label>
+                <label class="audience-option"><input type="checkbox" name="audience" value="niepelnosprawnosci" /><span>Osoby z niepełnosprawnościami</span></label>
+                <label class="audience-option"><input type="checkbox" name="audience" value="mieszkancy" /><span>Mieszkańcy / Sąsiedzi</span></label>
+              </div>
+            </fieldset>
+            <div class="idea-actions"><button class="idea-next" type="submit">Dalej</button></div>
+            <p class="idea-form-message" id="idea-form-message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <aside class="assistant-card" aria-labelledby="assistant-title">
+          <h2 class="assistant-heading" id="assistant-title">Skorzystaj z pomocy naszego Asystenta AI<br />przy wypełnianiu formularza</h2>
+          <div class="assistant-workspace">
+            <button class="assistant-prompt" id="assistant-prompt" type="button">Sprawdź, czy Twój pomysł nie istnieje już w bazie innowacji, pytając o to naszego Asystenta...</button>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="contact-bar">
+      <div class="contact-inner">
+        <div class="contact-item contact-item--organization"><span class="contact-icon contact-icon--large"><svg aria-hidden="true"><use href="#icon-user-round"></use></svg></span><strong>Regionalny Ośrodek Polityki<br />Społecznej</strong></div>
+        <address class="contact-item"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-map-pin"></use></svg></span><span>ul. Piastowska 32,<br />30-070 Kraków</span></address>
+        <a class="contact-item" href="tel:+48124220636"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-phone"></use></svg></span><span>+48 12 422 06 36</span></a>
+        <a class="contact-item" href="mailto:biuro@rops.krakow.pl"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-mail"></use></svg></span><span>biuro@rops.krakow.pl</span></a>
+      </div>
+    </footer>
+
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="icon-user-round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5" /><path d="M4 21a8 8 0 0 1 16 0" /><circle cx="12" cy="12" r="10" /></symbol>
+      <symbol id="icon-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="3" /></symbol>
+      <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z" /></symbol>
+      <symbol id="icon-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-10 7L2 7" /></symbol>
+      <symbol id="icon-eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 4.2A10.4 10.4 0 0 1 12 4c7 0 10 8 10 8a17.7 17.7 0 0 1-2 3.1M6.6 6.6C3.5 8.6 2 12 2 12s3 8 10 8a10.5 10.5 0 0 0 4.1-.8" /></symbol>
+      <symbol id="icon-accessibility" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2" /><path d="M5 8h14M12 6v7M8 22l4-9 4 9M7 13h10" /></symbol>
+      <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></symbol>
+    </svg>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 :root {
-  --color-cyan: #0786a1;
+  --color-cyan: #037ea0;
   --color-cyan-dark: #006d85;
-  --color-orange: #bf5c00;
+  --color-orange: #bb5b02;
   --color-orange-dark: #934700;
   --color-ink: #121212;
   --color-white: #ffffff;
@@ -572,6 +572,201 @@ html.hide-decorations .hero {
   grid-template-columns: 1fr;
 }
 
+.idea-page {
+  padding: 12px max(16px, calc((100vw - var(--page-width)) / 2));
+  background: var(--color-cyan);
+}
+
+.idea-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(290px, 1fr);
+  gap: 20px;
+  max-width: var(--page-width);
+  min-height: 420px;
+  margin: 0 auto;
+}
+
+.idea-card,
+.assistant-card {
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+}
+
+.idea-card {
+  padding: 16px;
+}
+
+.section-heading {
+  margin: 0 0 12px;
+  padding: 16px;
+  color: var(--color-white);
+  background: var(--color-orange);
+  border: 1px solid var(--color-border);
+  font-size: clamp(1.25rem, 2.3vw, 1.65rem);
+  text-align: center;
+}
+
+.section-intro {
+  margin: 0 0 18px;
+  color: var(--color-cyan);
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+.idea-form label,
+.idea-form legend {
+  color: var(--color-ink);
+  font-size: 0.74rem;
+}
+
+.idea-form > label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.idea-form input[type="text"] {
+  width: 100%;
+  min-height: 42px;
+  margin-bottom: 18px;
+  padding: 10px 12px;
+  color: var(--color-ink);
+  background: var(--color-surface-strong);
+  border: 1px solid var(--color-border);
+  border-radius: 0;
+  font-size: 0.78rem;
+}
+
+.audience-fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.audience-fieldset legend {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.legend-hint {
+  float: right;
+  color: var(--color-cyan);
+  font-size: 0.62rem;
+}
+
+.audience-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 22px;
+}
+
+.audience-option {
+  position: relative;
+  min-height: 43px;
+}
+
+.audience-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.audience-option span {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 8px 10px;
+  color: var(--color-white);
+  background: var(--color-orange);
+  border: 1px solid var(--color-border);
+  font-size: 0.66rem;
+  line-height: 1.25;
+  text-align: center;
+  cursor: pointer;
+}
+
+.audience-option input:checked + span {
+  color: var(--color-white);
+  background: var(--color-cyan);
+  box-shadow: inset 0 0 0 3px var(--color-white);
+}
+
+.audience-option input:focus-visible + span {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.idea-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.idea-next {
+  min-width: 122px;
+  min-height: 40px;
+  color: var(--color-white);
+  background: var(--color-cyan);
+  border: 1px solid var(--color-border);
+}
+
+.idea-next:hover {
+  color: var(--color-ink);
+  background: var(--color-white);
+}
+
+.idea-form-message {
+  min-height: 1rem;
+  margin: 10px 0 0;
+  color: var(--color-cyan-dark);
+  font-size: 0.7rem;
+  text-align: right;
+}
+
+.assistant-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.assistant-heading {
+  margin: 0 0 14px;
+  padding: 13px;
+  color: var(--color-white);
+  background: var(--color-orange);
+  border: 1px solid var(--color-border);
+  font-size: 0.76rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.assistant-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 290px;
+  padding: 14px;
+  background: var(--color-surface-strong);
+  border: 1px solid var(--color-border);
+}
+
+.assistant-prompt {
+  width: 100%;
+  margin: 0;
+  padding: 13px;
+  color: var(--color-white);
+  background: var(--color-cyan);
+  border: 1px solid var(--color-border);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.assistant-prompt:hover {
+  color: var(--color-ink);
+  background: var(--color-white);
+}
+
 @media (max-width: 1050px) {
   .utility-bar {
     flex-direction: column;
@@ -630,6 +825,10 @@ html.hide-decorations .hero {
     grid-template-columns: 1fr;
   }
 
+  .idea-layout {
+    grid-template-columns: 1fr;
+  }
+
   .contact-inner {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -661,6 +860,26 @@ html.hide-decorations .hero {
 
   .hero {
     padding: var(--space-5) var(--space-3);
+  }
+
+  .idea-page {
+    padding: 12px;
+  }
+
+  .idea-card,
+  .assistant-card {
+    padding: 12px;
+  }
+
+  .audience-options {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .legend-hint {
+    float: none;
+    display: block;
+    margin-top: 5px;
   }
 
   .hero h1 {
