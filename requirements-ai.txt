@@ -1,4 +1,0 @@
-qdrant-client
-sentence-transformers
-PyMuPDF
-langchain-text-splitters
