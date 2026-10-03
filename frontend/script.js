@@ -112,3 +112,32 @@ if (problemFromUrl && problemInput) {
   problemInput.value = problemFromUrl;
   problemInput.focus();
 }
+
+const ideaDialog = document.querySelector("#idea-dialog");
+const dialogTitle = document.querySelector("#dialog-title");
+const dialogAuthor = document.querySelector("#dialog-author");
+const dialogMunicipality = document.querySelector("#dialog-municipality");
+const dialogDescription = document.querySelector("#dialog-description");
+
+document.querySelectorAll(".idea-preview-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    dialogTitle.textContent = button.dataset.title;
+    dialogAuthor.textContent = button.dataset.author;
+    dialogMunicipality.textContent = button.dataset.municipality;
+    dialogDescription.textContent = button.dataset.description;
+    ideaDialog.showModal();
+  });
+});
+
+document.querySelector("#idea-dialog-close")?.addEventListener("click", () => {
+  ideaDialog.close();
+});
+
+document.querySelectorAll(".decision-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const status = button.closest(".idea-status");
+    const isApproval = button.textContent.trim() === "Zatwierdź";
+    status.className = `idea-status ${isApproval ? "idea-status--approved" : "idea-status--rejected"}`;
+    status.textContent = isApproval ? "Zatwierdzone" : "Odrzucone";
+  });
+});
