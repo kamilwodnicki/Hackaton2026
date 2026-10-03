@@ -141,3 +141,95 @@ document.querySelectorAll(".decision-button").forEach((button) => {
     status.textContent = isApproval ? "Zatwierdzone" : "Odrzucone";
   });
 });
+
+const forumSearch = document.querySelector("#forum-search");
+const forumFilters = document.querySelectorAll(".forum-filter");
+const forumThreads = document.querySelector("#thread-list");
+const forumEmpty = document.querySelector("#forum-empty");
+let activeForumFilter = "all";
+
+const normalizeText = (value) => value.toLocaleLowerCase("pl").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const updateForumThreads = () => {
+  if (!forumThreads) return;
+  const query = normalizeText(forumSearch?.value.trim() || "");
+  let visibleCount = 0;
+
+  forumThreads.querySelectorAll(".forum-thread").forEach((thread) => {
+    const matchesCategory = activeForumFilter === "all" || thread.dataset.category === activeForumFilter;
+    const matchesQuery = !query || normalizeText(thread.textContent).includes(query);
+    const isVisible = matchesCategory && matchesQuery;
+    thread.hidden = !isVisible;
+    if (isVisible) visibleCount += 1;
+  });
+
+  if (forumEmpty) forumEmpty.hidden = visibleCount !== 0;
+};
+
+forumSearch?.addEventListener("input", updateForumThreads);
+forumFilters.forEach((button) => {
+  button.addEventListener("click", () => {
+    activeForumFilter = button.dataset.filter;
+    forumFilters.forEach((filter) => filter.classList.toggle("is-active", filter === button));
+    updateForumThreads();
+  });
+});
+
+const threadDialog = document.querySelector("#thread-dialog");
+const threadForm = document.querySelector("#thread-form");
+
+document.querySelector("#new-thread-button")?.addEventListener("click", () => {
+  threadDialog.showModal();
+  document.querySelector("#thread-title")?.focus();
+});
+
+document.querySelector("#thread-dialog-close")?.addEventListener("click", () => threadDialog.close());
+
+threadDialog?.addEventListener("click", (event) => {
+  if (event.target === threadDialog) threadDialog.close();
+});
+
+threadForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const titleInput = document.querySelector("#thread-title");
+  const contentInput = document.querySelector("#thread-content");
+  const categoryInput = document.querySelector("#thread-category");
+  const message = document.querySelector("#thread-form-message");
+
+  if (!titleInput.value.trim() || !contentInput.value.trim()) {
+    message.textContent = "Uzupełnij tytuł i treść pytania.";
+    (!titleInput.value.trim() ? titleInput : contentInput).focus();
+    return;
+  }
+
+  const thread = document.createElement("article");
+  thread.className = "forum-thread";
+  thread.dataset.category = categoryInput.value;
+  const summary = document.createElement("div");
+  const title = document.createElement("h3");
+  const link = document.createElement("a");
+  link.href = "#";
+  link.textContent = titleInput.value.trim();
+  title.append(link);
+  const author = document.createElement("p");
+  author.textContent = "Autor: Ty · Nowa dyskusja";
+  summary.append(title, author);
+  const meta = document.createElement("div");
+  meta.className = "thread-meta";
+  const replies = document.createElement("strong");
+  replies.textContent = "0 odp.";
+  const time = document.createElement("span");
+  time.textContent = "Opublikowano przed chwilą";
+  meta.append(replies, time);
+  thread.append(summary, meta);
+  forumThreads.prepend(thread);
+
+  threadForm.reset();
+  message.textContent = "";
+  activeForumFilter = "all";
+  forumFilters.forEach((filter) => filter.classList.toggle("is-active", filter.dataset.filter === "all"));
+  if (forumSearch) forumSearch.value = "";
+  updateForumThreads();
+  threadDialog.close();
+  thread.scrollIntoView({ behavior: "smooth", block: "center" });
+});
