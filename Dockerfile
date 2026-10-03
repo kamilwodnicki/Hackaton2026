@@ -1,21 +1,23 @@
-# Wybieramy oficjalny obraz Pythona
 FROM python:3.11-slim
 
-# Ustawiamy katalog roboczy wewnątrz kontenera
 WORKDIR /app
 
-# Instalujemy systemowe zależności wymagane m.in. przez sterowniki baz danych
 RUN apt-get update && apt-get install -y \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Kopiujemy plik z wymaganiami i instalujemy biblioteki Pythona
+# 1. Najpierw instalujemy lekką bazę
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kopiujemy pozostałe pliki projektu do kontenera
+# 2. Opcjonalna instalacja ciężkich paczek AI (domyślnie wyłączona)
+ARG INSTALL_AI=false
+COPY requirements-ai.txt .
+RUN if [ "$INSTALL_AI" = "true" ] ; then \
+      pip install --no-cache-dir -r requirements-ai.txt ; \
+    fi
+
 COPY . .
 
-# Domyślne polecenie uruchamiające aplikację (dostosuj do swojego projektu, np. main.py)
 CMD ["python", "main.py"]
