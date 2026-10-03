@@ -39,6 +39,8 @@ services:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
       - COMPUTE_DEVICE=cuda
+      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-SpeakLeash/bielik-minitron-7B-v3.0-instruct:Q4_K_M}
     deploy:
       resources:
         reservations:
@@ -46,10 +48,10 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-      - OLLAMA_HOST=http://ollama:11434
-      - OLLAMA_MODEL=${OLLAMA_MODEL:-SpeakLeash/bielik-minitron-7B-v3.0-instruct:Q4_K_M}
     depends_on:
       db:
+        condition: service_started
+      qdrant:
         condition: service_started
       ollama-pull:
         condition: service_completed_successfully
@@ -88,18 +90,19 @@ services:
       - OLLAMA_HOST=http://ollama:11434
     entrypoint: ["ollama", "pull", "${OLLAMA_MODEL:-SpeakLeash/bielik-minitron-7B-v3.0-instruct:Q4_K_M}"]
     restart: "no"
-      - qdrant
 
   ioss-scraper:
     build: .
     profiles: ["tools"]
-    command: python scrapers/ioss/main.py
+    command: python scrapers/ioss/main.py --interval-hours 48
+    restart: unless-stopped
     environment:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=mydb
       - DB_USER=myuser
       - DB_PASSWORD=mypassword
+      - IOSS_INTERVAL_HOURS=48
     depends_on:
       - db
 

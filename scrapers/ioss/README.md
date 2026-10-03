@@ -12,7 +12,7 @@ na jej stronie, a następnie zapisuje dane do jednej tabeli PostgreSQL `ioss`.
 
 ## Uruchomienie
 
-Z katalogu głównego projektu:
+Jednorazowo, z katalogu głównego projektu:
 
 ```bash
 pip install -r requirements.txt
@@ -23,9 +23,18 @@ Domyślne parametry połączenia są zgodne z `docker-compose.yml`. Można je zm
 przez `DATABASE_URL` albo zmienne `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` i
 `DB_PASSWORD`.
 
-Uruchomienie z Docker Compose po starcie bazy:
+Uruchomienie cykliczne z Docker Compose:
 
 ```bash
 docker compose up -d db
-docker compose run --rm ioss-scraper
+docker compose --profile tools up -d ioss-scraper
+```
+
+Kontener wykonuje import od razu po starcie, a następnie co 48 godzin. Interwał
+można zmienić przez `IOSS_INTERVAL_HOURS` lub argument `--interval-hours`.
+
+Jednorazowy import w Dockerze, bez uruchamiania harmonogramu:
+
+```bash
+docker compose run --rm ioss-scraper python scrapers/ioss/main.py
 ```
