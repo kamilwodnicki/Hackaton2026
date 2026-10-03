@@ -90,6 +90,19 @@ services:
     restart: "no"
       - qdrant
 
+  ioss-scraper:
+    build: .
+    profiles: ["tools"]
+    command: python scrapers/ioss/main.py
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=mydb
+      - DB_USER=myuser
+      - DB_PASSWORD=mypassword
+    depends_on:
+      - db
+
 volumes:
   postgres_data:
   ollama_data:
