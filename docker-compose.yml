@@ -22,7 +22,11 @@ services:
       - qdrant_data:/qdrant/storage
 
   web:
-    build: .
+    build: 
+      context: .
+      args:
+        # Zmień na "true" jeśli w danej chwili potrzebujesz zbudować obraz z AI
+        - INSTALL_AI=false
     container_name: python_app
     restart: always
     command: python app/main.py
