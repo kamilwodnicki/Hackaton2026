@@ -1,78 +1,98 @@
 import os
 from flask import Flask, request, jsonify
-from qdrant_client import QdrantClient
-from qdrant_client.http import models
-from sentence_transformers import SentenceTransformer, CrossEncoder
 
 app = Flask(__name__)
 
-# Konfiguracja środowiska i urządzeń
+# Konfiguracja środowiska
 QDRANT_HOST = os.getenv("QDRANT_HOST", "qdrant")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6333))
 COLLECTION_NAME = "teksty_kolekcja"
-
-# Pobranie argumentu urządzenia z konfiguracji Dockera (domyślnie 'cpu' jako zabezpieczenie)
 DEVICE = os.getenv("COMPUTE_DEVICE", "cpu")
 
-print(f"Inicjalizacja modeli na urządzeniu: {DEVICE.upper()}...")
+# Globalne zmienne, do których przypiszemy instancje przy pierwszym użyciu
+embedding_model = None
+reranker = None
+qdrant_client = None
 
-# Ładowanie głównego modelu do wektorów
-EMBEDDING_MODEL_NAME = "sdadas/mmlw-retrieval-roberta-base"
-embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME, device=DEVICE)
+def get_embedding_model():
+    global embedding_model
+    if embedding_model is None:
+        # Importujemy bibliotekę dopiero w momencie użycia
+        from sentence_transformers import SentenceTransformer
+        embedding_model = SentenceTransformer('sdadas/mmlw-retrieval-roberta-base', device=DEVICE)
+    return embedding_model
 
-# Ładowanie modelu Rerankera
-RERANKER_MODEL_NAME = "sdadas/polish-reranker-roberta-v3"
-reranker = CrossEncoder(RERANKER_MODEL_NAME, device=DEVICE)
+def get_reranker():
+    global reranker
+    if reranker is None:
+        from sentence_transformers import CrossEncoder
+        reranker = CrossEncoder("sdadas/polish-reranker-roberta-v3", device=DEVICE)
+    return reranker
 
-print("Modele załadowane pomyślnie.")
+def get_qdrant_client():
+    global qdrant_client
+    if qdrant_client is None:
+        from qdrant_client import QdrantClient
+        qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+    return qdrant_client
 
-qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
-
+@app.route('/')
+def home():
+    return "Serwer działa! Tutaj znajdzie się API wyszukiwarki."
+    
 @app.route("/search", methods=["POST"])
 def search():
     data = request.json
     query = data.get("query", "")
-    top_k = data.get("top_k", 5) # Ile wyników zwrócić użytkownikowi
-    fetch_k = 20 # Ile wyników pobrać z Qdranta do rerankowania
+    top_k = data.get("top_k", 5) 
+    fetch_k = 20 
 
     if not query:
         return jsonify({"error": "Brak zapytania"}), 400
 
-    # 1. Wektoryzacja zapytania
-    query_vector = embedding_model.encode(query).tolist()
+    # 1. Pobranie modeli i klienta bazy (załadowanie, jeśli to pierwsze użycie)
+    try:
+        model = get_embedding_model()
+        cross_encoder = get_reranker()
+        client = get_qdrant_client()
+    except Exception as e:
+        return jsonify({"error": f"Błąd inicjalizacji usług AI: {str(e)}"}), 500
 
-    # 2. Wstępne wyszukiwanie w Qdrant
-    # 2. Wstępne wyszukiwanie w Qdrant
-    search_result = qdrant_client.query_points(
-        collection_name=COLLECTION_NAME,
-        query=query_vector,
-        limit=fetch_k
-    ).points
+    # 2. Wektoryzacja zapytania
+    query_vector = model.encode(query).tolist()
+
+    # 3. Wstępne wyszukiwanie w Qdrant
+    try:
+        search_result = client.query_points(
+            collection_name=COLLECTION_NAME,
+            query=query_vector,
+            limit=fetch_k
+        ).points
+    except Exception as e:
+        return jsonify({"error": f"Błąd połączenia z bazą Qdrant: {str(e)}"}), 500
 
     if not search_result:
         return jsonify({"results": []})
 
-    # 3. Przygotowanie danych do rerankera
-    # Tworzymy pary: [zapytanie, fragment_tekstu_z_bazy]
+    # 4. Przygotowanie danych do modelu sortującego
     pairs = []
     for hit in search_result:
         fragment = hit.payload.get("fragment_tekstu", "")
         pairs.append([query, fragment])
 
-    # 4. Obliczenie nowych wyników przez reranker
-    rerank_scores = reranker.predict(pairs)
+    # 5. Obliczenie nowych wyników
+    rerank_scores = cross_encoder.predict(pairs)
 
-    # 5. Łączenie wyników ze strukturą Qdranta i sortowanie
+    # 6. Łączenie wyników i sortowanie
     reranked_results = []
     for idx, hit in enumerate(search_result):
         hit_dict = hit.model_dump()
         hit_dict['rerank_score'] = float(rerank_scores[idx])
         reranked_results.append(hit_dict)
 
-    # Sortowanie malejąco według wyniku rerankera
     reranked_results = sorted(reranked_results, key=lambda x: x['rerank_score'], reverse=True)
 
-    # 6. Zwrócenie najlepszych top_k wyników, usunięcie duplikatów dokumentów
+    # 7. Formatowanie danych końcowych z usunięciem duplikatów dokumentów
     final_results = []
     seen_docs = set()
 
