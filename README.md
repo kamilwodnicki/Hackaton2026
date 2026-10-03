@@ -2,8 +2,15 @@
 
 Ten komponent systemu odpowiada za analizę, przechowywanie oraz zaawansowane wyszukiwanie fragmentów tekstu w dokumentach PDF i danych strukturalnych. Pozwala on na precyzyjne odnajdywanie informacji na podstawie znaczenia zapytania, dostarczając niezbędny kontekst dla dalszych procesów w aplikacji.
 
-### 1. Architektura i wykorzystywane technologie
-Moduł działa w oparciu o konteneryzację (Docker) i składa się z następujących elementów:
+### 1. Architektura i uruchamianie modułu
+Moduł działa w oparciu o konteneryzację (Docker). W celu optymalizacji obciążenia systemu, elementy związane ze sztuczną inteligencją oraz bazą wektorową nie są uruchamiane domyślnie. 
+
+**Uruchamianie usług AI:** 
+Aby włączyć pełne środowisko analityczne wymagane do działania tego modułu, należy uruchomić kontenery z parametrem profilu `ai`:
+```cmd
+docker compose --profile ai up -d
+```
+Wykorzystywane technologie:
 * **Baza wektorowa Qdrant:** Przechowuje wektory (reprezentacje liczbowe tekstów) o wymiarze 768.
 * **Model wektoryzujący:** Przekształca tekst z dokumentów i zapytania użytkownika na wektory (`sdadas/mmlw-retrieval-roberta-base`).
 * **Model sortujący (Cross-Encoder):** Weryfikuje i precyzyjnie układa wyniki wyszukiwania od najbardziej trafnego (`sdadas/polish-reranker-roberta-v3`).
