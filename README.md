@@ -15,6 +15,7 @@ Przed rozpoczęciem wyszukiwania należy przetworzyć pliki źródłowe, co obej
 **Wymagania wstępne:**
 * Plik z metadanymi `innowacje_biblioteka.json` musi znajdować się w folderze `data/`.
 * Powiązane pliki PDF muszą znajdować się w podkatalogu `data/dokumenty/`.
+Dane pobierz z linka https://drive.google.com/file/d/1uCTI-b5s0RGgIjOS_qKEqo8x2-AfhE0i/view?usp=drive_link
 
 **Uruchomienie indeksacji:**
 Aby przetworzyć pliki, wykonaj w terminalu polecenie:
