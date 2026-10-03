@@ -2,3 +2,7 @@ flask
 psycopg2-binary
 beautifulsoup4==4.12.3
 requests==2.32.3
+qdrant-client
+sentence-transformers
+PyMuPDF
+langchain-text-splitters
