@@ -46,10 +46,51 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-SpeakLeash/bielik-minitron-7B-v3.0-instruct:Q4_K_M}
     depends_on:
-      - db
+      db:
+        condition: service_started
+      ollama-pull:
+        condition: service_completed_successfully
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=-1        # model zostaje w pamięci po pierwszym załadowaniu
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # GPU (NVIDIA + Docker Desktop/WSL2) — odkomentuj, jeśli masz:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    container_name: ollama_pull
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: ["ollama", "pull", "${OLLAMA_MODEL:-SpeakLeash/bielik-minitron-7B-v3.0-instruct:Q4_K_M}"]
+    restart: "no"
       - qdrant
 
 volumes:
   postgres_data:
+  ollama_data:
   qdrant_data:
