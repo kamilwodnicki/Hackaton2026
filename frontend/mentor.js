@@ -1,7 +1,7 @@
 const submittedIdeasKey = "rops-proposed-ideas";
 const profileKey = "rops-account-profile";
 const mentorFeedbackKey = "rops-mentor-feedback";
-const numberFormat = new Intl.NumberFormat("pl-PL");
+const numberFormat = new Intl.NumberFormat(window.siteLocale || "pl-PL");
 
 const sampleIdeas = [
   {
@@ -95,7 +95,7 @@ const forumList = document.querySelector("#mentor-forum-list");
 const mentorForumSearch = document.querySelector("#mentor-forum-search");
 const mentorForumEmpty = document.querySelector("#mentor-forum-empty");
 const normalizeMentorText = (value) => value.toLocaleLowerCase("pl").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-const dateLabel = (value) => new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "long", year: "numeric" }).format(new Date(value));
+const dateLabel = (value) => new Intl.DateTimeFormat(window.siteLocale || "pl-PL", { day: "numeric", month: "long", year: "numeric" }).format(new Date(value));
 
 const renderMentorStats = () => {
   const reviewedCount = Object.values(feedbackByIdea).reduce((total, entries) => total + (Array.isArray(entries) ? entries.length : 0), 0);

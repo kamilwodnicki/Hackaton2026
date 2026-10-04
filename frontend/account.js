@@ -23,7 +23,7 @@ const ideasEmpty = document.querySelector("#account-empty");
 const ideaTotal = document.querySelector("#idea-total");
 const formatDate = (value) => {
   const date = new Date(value);
-  return Number.isNaN(date.valueOf()) ? "Data nieznana" : new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" }).format(date);
+  return Number.isNaN(date.valueOf()) ? "Data nieznana" : new Intl.DateTimeFormat(window.siteLocale || "pl-PL", { dateStyle: "medium" }).format(date);
 };
 
 if (ideasList) {

@@ -73,9 +73,9 @@ voiceButton?.addEventListener("click", () => {
   }
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = document.documentElement.lang || "pl-PL";
-  const polishVoice = window.speechSynthesis.getVoices().find((voice) => voice.lang.toLowerCase().startsWith("pl"));
-  if (polishVoice) utterance.voice = polishVoice;
+  utterance.lang = window.siteLocale || "pl-PL";
+  const languageVoice = window.speechSynthesis.getVoices().find((voice) => voice.lang.toLowerCase().startsWith(document.documentElement.lang));
+  if (languageVoice) utterance.voice = languageVoice;
   const finishReading = () => {
     voiceButton.setAttribute("aria-pressed", "false");
     voiceButton.setAttribute("aria-label", "Czytaj stronę na głos");
@@ -281,7 +281,7 @@ document.querySelectorAll(".idea-preview-button").forEach((button) => {
     lastIdeaPreviewButton = button;
     document.querySelector("#idea-detail-title").textContent = row.dataset.title;
     document.querySelector("#idea-detail-author").textContent = row.dataset.author;
-    document.querySelector("#idea-detail-date").textContent = new Intl.DateTimeFormat("pl-PL", { dateStyle: "long" }).format(new Date(`${row.dataset.date}T12:00:00`));
+    document.querySelector("#idea-detail-date").textContent = new Intl.DateTimeFormat(window.siteLocale || "pl-PL", { dateStyle: "long" }).format(new Date(`${row.dataset.date}T12:00:00`));
     document.querySelector("#idea-detail-municipality").textContent = row.dataset.municipality;
     document.querySelector("#idea-detail-category").textContent = row.dataset.category;
     document.querySelector("#idea-detail-description").textContent = row.dataset.description;

@@ -30,7 +30,7 @@ const mapCanvas = document.querySelector("#needs-map");
 const mapFrame = document.querySelector(".needs-map-frame");
 const selectedLocation = document.querySelector("#selected-location");
 const categoryList = document.querySelector("#category-list");
-const numberFormat = new Intl.NumberFormat("pl-PL");
+const numberFormat = new Intl.NumberFormat(window.siteLocale || "pl-PL");
 let liveMap;
 let mapMarkers = new Map();
 

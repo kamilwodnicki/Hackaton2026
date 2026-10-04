@@ -234,6 +234,7 @@ body > main {
     linear-gradient(-32deg, transparent 42%, #ffffff 42% 47%, #c8102e 47% 53%, #ffffff 53% 58%, transparent 58%);
 }
 
+
 .icon-button--accent {
   background: var(--color-orange);
 }
