@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Panel mentorów do przeglądania pomysłów mieszkańców, udzielania feedbacku i udziału w forum." />
+    <title>Panel mentorów | Dostępność</title>
+    <link rel="icon" href="assets/logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="mentor.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Przejdź do treści</a>
+    <header class="site-header">
+      <div class="utility-bar">
+        <a class="accessibility-link" href="#accessibility">Dostępność</a>
+        <div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności">
+          <div class="tool-group" aria-label="Kontrast"><span>Kontrast</span><button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny: białe tło, niebieski akcent" aria-pressed="true"></button><button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast: czarne tło, pomarańczowy akcent" aria-pressed="false"></button><button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Kontrast biało-czarny" aria-pressed="false"></button></div>
+          <div class="tool-group" aria-label="Wielkość tekstu"><span>Wielkość tekstu</span><button class="text-size-button" type="button" data-font-size="normal">A</button><button class="text-size-button" type="button" data-font-size="large">A+</button><button class="text-size-button" type="button" data-font-size="largest">A++</button></div>
+          <div class="tool-group language-control"><span>Język strony</span><label class="sr-only" for="language">Wybierz język strony</label><div class="language-select-wrap"><span class="language-flag" data-language="pl" aria-hidden="true"></span><select id="language"><option value="pl">Polski</option><option value="en">English</option><option value="uk">Українська</option></select></div></div>
+          <button class="icon-button" type="button" id="toggle-voice-assistant" aria-label="Czytaj stronę na głos" title="Czytaj stronę na głos" aria-pressed="false"><svg aria-hidden="true"><use href="#icon-eye-off"></use></svg></button>
+          <button class="icon-button" type="button" id="toggle-sign-language" aria-label="Otwórz wsparcie w Polskim Języku Migowym" title="Wsparcie w Polskim Języku Migowym" aria-expanded="false"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3l18 18M10 10a2 2 0 0 1 4 0c0 2-2 2-2 4m5-6a5 5 0 0 0-8-4M8 15a4 4 0 0 0 4 4h1l1 2" /></svg></button>
+        </div>
+      </div>
+      <div class="main-navigation-wrap">
+        <a class="brand" href="index.html" aria-label="Strona główna"><span class="brand-placeholder" aria-hidden="true">LOGO</span><img class="brand-logo" src="assets/logo.ico" alt="" width="56" height="46" onerror="this.hidden = true" /><span class="sr-only">Logo organizacji</span></a>
+        <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button>
+        <nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja"><a class="nav-link" href="index.html">Strona główna</a><a class="nav-link" href="my-idea.html">Mam pomysł!</a><a class="nav-link" href="zostan-testerem.html">Zostań testerem</a><a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a><a class="nav-link" href="forum.html">Forum</a><a class="nav-link" href="wsparcie.html">Wsparcie</a></nav>
+        <div class="account-actions"><a class="button button--account" href="ustawienia-konta.html"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Twoje konto</span></a></div>
+      </div>
+      <nav class="audience-navigation" aria-label="Nawigacja według grup odbiorców"><a class="audience-link audience-link--plain" href="panel.html">Twój panel</a><a class="audience-link" href="mieszkancy.html">Mieszkańcy i NGO</a><a class="audience-link" href="samorzady.html">Jednostki samorządu terytorialnego</a><a class="audience-link" href="rops-worker.html">Pracownicy ROPS</a><a class="audience-link is-active" href="eksperci.html" aria-current="page">Eksperci branżowi i mentorzy</a></nav>
+    </header>
+
+    <main id="main-content" class="mentor-page">
+      <header class="mentor-page-heading"><div><p class="mentor-eyebrow">Przestrzeń ekspercka</p><h1>Panel mentorów</h1><p class="mentor-intro">Przeglądaj pomysły mieszkańców, przekazuj rekomendacje i uczestnicz w rozmowach.</p></div><a class="mentor-primary-link" href="forum.html">Przejdź do forum</a></header>
+
+      <section class="mentor-stats" aria-label="Podsumowanie pracy mentora">
+        <article><span>Pomysły do przejrzenia</span><strong id="mentor-pending-count">0</strong><small>oczekujące na feedback</small></article>
+        <article><span>Udzielony feedback</span><strong id="mentor-feedback-count">0</strong><small>zapisane rekomendacje</small></article>
+        <article><span>Wątki o pomysłach</span><strong id="mentor-idea-thread-count">0</strong><small>dyskusje społeczności</small></article>
+      </section>
+
+      <div class="mentor-workspace">
+        <section class="mentor-ideas-panel" aria-labelledby="mentor-ideas-title">
+          <div class="mentor-panel-heading"><div><h2 id="mentor-ideas-title">Pomysły mieszkańców</h2><p>Otwórz zgłoszenie, aby dodać rekomendację.</p></div><span class="mentor-panel-count" id="mentor-ideas-total">0 pomysłów</span></div>
+          <div class="mentor-idea-controls">
+            <label class="mentor-search" for="mentor-idea-search"><span class="sr-only">Szukaj pomysłów</span><input id="mentor-idea-search" type="search" placeholder="Szukaj po tytule, autorze lub kategorii" /></label>
+            <div class="mentor-idea-filters" role="group" aria-label="Filtruj pomysły"><button type="button" class="mentor-filter is-active" data-idea-filter="all" aria-pressed="true">Wszystkie</button><button type="button" class="mentor-filter" data-idea-filter="needs-feedback" aria-pressed="false">Do opinii</button><button type="button" class="mentor-filter" data-idea-filter="feedback-sent" aria-pressed="false">Z moim feedbackiem</button></div>
+          </div>
+          <div class="mentor-idea-list" id="mentor-idea-list" aria-live="polite"></div>
+          <p class="mentor-empty" id="mentor-ideas-empty" hidden>Brak pomysłów pasujących do wybranego filtra.</p>
+
+          <section class="mentor-idea-detail" id="mentor-idea-detail" aria-labelledby="mentor-detail-title" tabindex="-1" hidden>
+            <div class="mentor-detail-toolbar"><button class="mentor-back-button" id="mentor-back-to-ideas" type="button">Wróć do listy pomysłów</button><span class="mentor-detail-status" id="mentor-detail-status"></span></div>
+            <p class="mentor-detail-category" id="mentor-detail-category"></p>
+            <h2 id="mentor-detail-title" tabindex="-1"></h2>
+            <dl class="mentor-detail-facts"><div><dt>Autor</dt><dd id="mentor-detail-author"></dd></div><div><dt>Miejscowość</dt><dd id="mentor-detail-city"></dd></div><div><dt>Data propozycji</dt><dd id="mentor-detail-date"></dd></div></dl>
+            <section class="mentor-detail-description" aria-labelledby="mentor-description-title"><h3 id="mentor-description-title">Opis pomysłu</h3><p id="mentor-detail-description"></p></section>
+            <section class="mentor-feedback-history" aria-labelledby="mentor-feedback-history-title"><h3 id="mentor-feedback-history-title">Historia feedbacku</h3><div id="mentor-feedback-list"></div><p id="mentor-no-feedback">Nie dodano jeszcze rekomendacji.</p></section>
+            <form class="mentor-feedback-form" id="mentor-feedback-form"><label for="mentor-feedback-input">Twoja rekomendacja</label><textarea id="mentor-feedback-input" name="feedback" rows="5" required placeholder="Napisz autorowi, co warto rozwinąć lub sprawdzić..."></textarea><div class="mentor-feedback-actions"><a id="mentor-contact-author" href="#">Kontakt z autorem</a><button type="submit">Zapisz feedback</button></div><p id="mentor-feedback-message" role="status" aria-live="polite"></p></form>
+          </section>
+        </section>
+
+        <aside class="mentor-forum-panel" aria-labelledby="mentor-forum-title">
+          <div class="mentor-panel-heading"><div><h2 id="mentor-forum-title">Forum społeczności</h2><p>Wybierz temat i dołącz do rozmowy.</p></div><a href="forum.html">Wszystkie wątki</a></div>
+          <label class="mentor-search mentor-forum-search" for="mentor-forum-search"><span class="sr-only">Szukaj wątków</span><input id="mentor-forum-search" type="search" placeholder="Szukaj wątków" /></label>
+          <div class="mentor-forum-filters" role="group" aria-label="Filtruj wątki forum"><button class="mentor-forum-filter is-active" type="button" data-forum-filter="all" aria-pressed="true">Wszystkie</button><button class="mentor-forum-filter" type="button" data-forum-filter="pomysly" aria-pressed="false">Pomysły</button><button class="mentor-forum-filter" type="button" data-forum-filter="seniorzy" aria-pressed="false">Seniorzy</button><button class="mentor-forum-filter" type="button" data-forum-filter="wcag" aria-pressed="false">Dostępność</button><button class="mentor-forum-filter" type="button" data-forum-filter="jst" aria-pressed="false">JST</button></div>
+          <div class="mentor-forum-list" id="mentor-forum-list" aria-live="polite"></div>
+          <p class="mentor-empty" id="mentor-forum-empty" hidden>Brak wątków pasujących do wyszukiwania.</p>
+          <a class="mentor-forum-cta" href="forum.html">Otwórz forum</a>
+        </aside>
+      </div>
+      <p class="mentor-storage-note">Lista zawiera zgłoszenia przykładowe i dodane w tej przeglądarce. Feedback zapisuje się lokalnie; współdzielenie między mentorami wymaga backendu.</p>
+    </main>
+
+    <footer class="contact-bar"><div class="contact-inner"><div class="contact-item contact-item--organization"><span class="contact-icon contact-icon--large"><svg aria-hidden="true"><use href="#icon-user-round"></use></svg></span><strong>Regionalny Ośrodek Polityki<br />Społecznej</strong></div><address class="contact-item"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-map-pin"></use></svg></span><span>ul. Piastowska 32,<br />30-070 Kraków</span></address><a class="contact-item" href="tel:+48124220636"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-phone"></use></svg></span><span>+48 12 422 06 36</span></a><a class="contact-item" href="mailto:biuro@rops.krakow.pl"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-mail"></use></svg></span><span>biuro@rops.krakow.pl</span></a></div></footer>
+    <svg class="svg-sprite" aria-hidden="true"><symbol id="icon-user-round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M4 21a8 8 0 0 1 16 0"/><circle cx="12" cy="12" r="10"/></symbol><symbol id="icon-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol><symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z"/></symbol><symbol id="icon-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 7L2 7"/></symbol><symbol id="icon-eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 4.2A10.4 10.4 0 0 1 12 4c7 0 10 8 10 8a17.7 17.7 0 0 1-2 3.1M6.6 6.6C3.5 8.6 2 12 2 12s3 8 10 8a10.5 10.5 0 0 0 4.1-.8"/></symbol><symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol></svg>
+    <script src="script.js"></script>
+    <script src="mentor.js"></script>
+  </body>
+</html>

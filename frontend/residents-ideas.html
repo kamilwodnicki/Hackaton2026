@@ -17,44 +17,67 @@
       <div class="utility-bar">
         <a class="accessibility-link" href="#accessibility">Dostępność</a>
         <div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności">
-          <div class="tool-group" aria-label="Kontrast"><span>Kontrast</span><button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny"></button><button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast pomarańczowy"></button><button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Wysoki kontrast"></button></div>
+          <div class="tool-group" aria-label="Kontrast"><span>Kontrast</span><button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny: białe tło, niebieski akcent" aria-pressed="true"></button><button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast: czarne tło, pomarańczowy akcent" aria-pressed="false"></button><button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Kontrast biało-czarny" aria-pressed="false"></button></div>
           <div class="tool-group" aria-label="Wielkość tekstu"><span>Wielkość tekstu</span><button class="text-size-button" type="button" data-font-size="normal">A</button><button class="text-size-button" type="button" data-font-size="large">A+</button><button class="text-size-button" type="button" data-font-size="largest">A++</button></div>
-          <div class="tool-group language-control"><span>Język strony</span><label class="sr-only" for="language">Wybierz język strony</label><select id="language"><option value="pl">polski</option><option value="en">English</option></select></div>
-          <button class="icon-button" type="button" id="toggle-visibility" aria-label="Ukryj elementy dekoracyjne"><svg aria-hidden="true"><use href="#icon-eye-off"></use></svg></button>
-          <button class="icon-button icon-button--accent" type="button" id="reset-accessibility" aria-label="Resetuj ustawienia dostępności"><svg aria-hidden="true"><use href="#icon-accessibility"></use></svg></button>
+          <div class="tool-group language-control"><span>Język strony</span><label class="sr-only" for="language">Wybierz język strony</label><div class="language-select-wrap"><span class="language-flag" data-language="pl" aria-hidden="true"></span><select id="language"><option value="pl">Polski</option><option value="en">English</option><option value="uk">Українська</option></select></div></div>
+          <button class="icon-button" type="button" id="toggle-voice-assistant" aria-label="Czytaj stronę na głos" title="Czytaj stronę na głos" aria-pressed="false"><svg aria-hidden="true"><use href="#icon-eye-off"></use></svg></button>
+          <button class="icon-button" type="button" id="toggle-sign-language" aria-label="Otwórz wsparcie w Polskim Języku Migowym" title="Wsparcie w Polskim Języku Migowym" aria-expanded="false"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3l18 18M10 10a2 2 0 0 1 4 0c0 2-2 2-2 4m5-6a5 5 0 0 0-8-4M8 15a4 4 0 0 0 4 4h1l1 2" /></svg></button>
         </div>
       </div>
       <div class="main-navigation-wrap">
         <a class="brand" href="index.html" aria-label="Strona główna"><span class="brand-placeholder" aria-hidden="true">LOGO</span><img class="brand-logo" src="assets/logo.ico" alt="" width="56" height="46" onerror="this.hidden = true" /><span class="sr-only">Logo organizacji</span></a>
         <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button>
         <nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja">
-          <a class="nav-link" href="index.html">Strona główna</a><a class="nav-link" href="my-idea.html">Mam pomysł!</a><a class="nav-link" href="zostan-testerem.html">Zostań testerem</a><a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a><a class="nav-link" href="wsparcie.html">Wsparcie</a>
+          <a class="nav-link" href="index.html">Strona główna</a><a class="nav-link" href="my-idea.html">Mam pomysł!</a><a class="nav-link" href="zostan-testerem.html">Zostań testerem</a><a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a><a class="nav-link" href="forum.html">Forum</a><a class="nav-link" href="wsparcie.html">Wsparcie</a>
         </nav>
         <div class="account-actions"><a class="button button--primary" href="logowanie.html">Zaloguj się</a><a class="button button--secondary" href="rejestracja.html">Zarejestruj się</a></div>
       </div>
       <nav class="audience-navigation" aria-label="Nawigacja według grup odbiorców">
-        <a class="audience-link" href="panel.html">Twój panel</a><span class="audience-menu"><a class="audience-link" href="mieszkancy.html">Mieszkańcy i NGO</a><a class="audience-sub-link" href="forum.html">Forum</a></span><a class="audience-link" href="samorzady.html">Jednostki samorządu terytorialnego</a><a class="audience-link is-active" href="rops-worker.html" aria-current="page">Pracownicy ROPS</a><a class="audience-link" href="eksperci.html">Eksperci branżowi i mentorzy</a>
+        <a class="audience-link audience-link--plain" href="panel.html">Twój panel</a><a class="audience-link" href="mieszkancy.html">Mieszkańcy i NGO</a><a class="audience-link" href="samorzady.html">Jednostki samorządu terytorialnego</a><a class="audience-link is-active" href="rops-worker.html" aria-current="page">Pracownicy ROPS</a><a class="audience-link" href="eksperci.html">Eksperci branżowi i mentorzy</a>
       </nav>
     </header>
 
     <main id="main-content" class="ideas-page">
       <h1 class="ideas-page-title">Pomysły mieszkańców</h1>
-      <div class="ideas-table-wrap">
+      <div class="ideas-table-wrap" id="ideas-list-view">
         <table class="ideas-table">
-          <thead><tr><th scope="col">Nazwa pomysłu</th><th scope="col">Autor</th><th scope="col">Gmina</th><th scope="col">Decyzja administratora</th><th scope="col">Szczegóły</th></tr></thead>
+          <thead><tr><th scope="col">Tytuł pomysłu</th><th scope="col">Autor</th><th scope="col">Gmina</th><th scope="col">Status</th><th scope="col">Szczegóły</th></tr></thead>
           <tbody>
-            <tr><td data-label="Nazwa pomysłu">Mobilny opiekun sąsiedzki</td><td data-label="Autor">Janina Kos</td><td data-label="Gmina">Krzeszowice</td><td data-label="Decyzja"><span class="idea-status idea-status--approved">Zatwierdzone</span></td><td data-label="Szczegóły"><button class="idea-preview-button" type="button" data-title="Mobilny opiekun sąsiedzki" data-author="Janina Kos" data-municipality="Krzeszowice" data-description="Sieć lokalnego wsparcia pomagająca seniorom i osobom o ograniczonej mobilności w codziennych sprawach.">Podgląd</button></td></tr>
-            <tr><td data-label="Nazwa pomysłu">Senioralny klub cyfrowy</td><td data-label="Autor">Stanisław Maciejczak</td><td data-label="Gmina">Skała</td><td data-label="Decyzja"><span class="idea-status idea-status--pending"><button class="decision-button" type="button">Zatwierdź</button> | <button class="decision-button" type="button">Odrzuć</button></span></td><td data-label="Szczegóły"><button class="idea-preview-button" type="button" data-title="Senioralny klub cyfrowy" data-author="Stanisław Maciejczak" data-municipality="Skała" data-description="Regularne spotkania rozwijające kompetencje cyfrowe seniorów przy wsparciu lokalnych wolontariuszy.">Podgląd</button></td></tr>
-            <tr><td data-label="Nazwa pomysłu">Młodzieżowa eko-świetlica</td><td data-label="Autor">Grupa Lokalna</td><td data-label="Gmina">m. Kraków</td><td data-label="Decyzja"><span class="idea-status idea-status--rejected">Odrzucone</span></td><td data-label="Szczegóły"><button class="idea-preview-button" type="button" data-title="Młodzieżowa eko-świetlica" data-author="Grupa Lokalna" data-municipality="m. Kraków" data-description="Miejsce spotkań młodzieży łączące edukację ekologiczną, warsztaty i sąsiedzkie inicjatywy.">Podgląd</button></td></tr>
-            <tr><td data-label="Nazwa pomysłu">Sąsiedzka spółdzielnia usług</td><td data-label="Autor">Piotr Rak</td><td data-label="Gmina">Zabierzów</td><td data-label="Decyzja"><span class="idea-status idea-status--pending"><button class="decision-button" type="button">Zatwierdź</button> | <button class="decision-button" type="button">Odrzuć</button></span></td><td data-label="Szczegóły"><button class="idea-preview-button" type="button" data-title="Sąsiedzka spółdzielnia usług" data-author="Piotr Rak" data-municipality="Zabierzów" data-description="Lokalna platforma wymiany drobnych usług, umiejętności i sąsiedzkiej pomocy.">Podgląd</button></td></tr>
+            <tr data-idea-id="mobilny-opiekun" data-title="Mobilny opiekun sąsiedzki" data-author="Janina Kos" data-email="janina.kos@example.org" data-municipality="Krzeszowice" data-date="2026-09-18" data-category="Wsparcie seniorów i osób z ograniczoną mobilnością" data-description="Sieć lokalnego wsparcia pomagająca seniorom i osobom o ograniczonej mobilności w codziennych sprawach.">
+              <td data-label="Tytuł">Mobilny opiekun sąsiedzki</td><td data-label="Autor">Janina Kos</td><td data-label="Gmina">Krzeszowice</td><td data-label="Status"><span class="idea-status idea-status--approved" data-idea-status="approved">Zatwierdzone</span></td><td data-label="Szczegóły"><button class="idea-preview-button" type="button">Otwórz</button></td>
+            </tr>
+            <tr data-idea-id="senioralny-klub" data-title="Senioralny klub cyfrowy" data-author="Stanisław Maciejczak" data-email="stanislaw.maciejczak@example.org" data-municipality="Skała" data-date="2026-09-26" data-category="Aktywność seniorów i kompetencje cyfrowe" data-description="Regularne spotkania rozwijające kompetencje cyfrowe seniorów przy wsparciu lokalnych wolontariuszy.">
+              <td data-label="Tytuł">Senioralny klub cyfrowy</td><td data-label="Autor">Stanisław Maciejczak</td><td data-label="Gmina">Skała</td><td data-label="Status"><span class="idea-status idea-status--pending" data-idea-status="pending">Oczekuje na decyzję</span></td><td data-label="Szczegóły"><button class="idea-preview-button" type="button">Otwórz</button></td>
+            </tr>
+            <tr data-idea-id="eko-swietlica" data-title="Młodzieżowa eko-świetlica" data-author="Grupa Lokalna" data-email="grupa.lokalna@example.org" data-municipality="m. Kraków" data-date="2026-09-29" data-category="Młodzież i edukacja ekologiczna" data-description="Miejsce spotkań młodzieży łączące edukację ekologiczną, warsztaty i sąsiedzkie inicjatywy.">
+              <td data-label="Tytuł">Młodzieżowa eko-świetlica</td><td data-label="Autor">Grupa Lokalna</td><td data-label="Gmina">m. Kraków</td><td data-label="Status"><span class="idea-status idea-status--rejected" data-idea-status="rejected">Odrzucone</span></td><td data-label="Szczegóły"><button class="idea-preview-button" type="button">Otwórz</button></td>
+            </tr>
+            <tr data-idea-id="spoldzielnia-uslug" data-title="Sąsiedzka spółdzielnia usług" data-author="Piotr Rak" data-email="piotr.rak@example.org" data-municipality="Zabierzów" data-date="2026-10-02" data-category="Sąsiedzka pomoc i usługi lokalne" data-description="Lokalna platforma wymiany drobnych usług, umiejętności i sąsiedzkiej pomocy.">
+              <td data-label="Tytuł">Sąsiedzka spółdzielnia usług</td><td data-label="Autor">Piotr Rak</td><td data-label="Gmina">Zabierzów</td><td data-label="Status"><span class="idea-status idea-status--pending" data-idea-status="pending">Oczekuje na decyzję</span></td><td data-label="Szczegóły"><button class="idea-preview-button" type="button">Otwórz</button></td>
+            </tr>
           </tbody>
         </table>
       </div>
+
+      <section class="idea-detail-view" id="idea-detail-view" aria-labelledby="idea-detail-title" tabindex="-1" hidden>
+        <div class="idea-detail-topbar"><button class="idea-back-button" id="idea-back-to-list" type="button">Wróć do listy pomysłów</button><span class="idea-detail-status" id="idea-detail-status"></span></div>
+        <header class="idea-detail-heading"><p class="idea-detail-kicker">Szczegóły zgłoszenia</p><h2 id="idea-detail-title" tabindex="-1"></h2></header>
+        <dl class="idea-detail-facts">
+          <div><dt>Autor</dt><dd id="idea-detail-author"></dd></div>
+          <div><dt>Data zaproponowania</dt><dd id="idea-detail-date"></dd></div>
+          <div><dt>Gmina</dt><dd id="idea-detail-municipality"></dd></div>
+          <div><dt>Kategoria</dt><dd id="idea-detail-category"></dd></div>
+        </dl>
+        <section class="idea-detail-description" aria-labelledby="idea-description-title"><h3 id="idea-description-title">Opis pomysłu</h3><p id="idea-detail-description"></p></section>
+        <div class="idea-detail-actions" aria-label="Działania pracownika ROPS">
+          <a class="idea-contact-author" id="idea-contact-author" href="#">Skontaktuj się z autorem</a>
+          <div class="idea-decision-actions"><button class="idea-decision-button idea-decision-button--approve" id="idea-approve" type="button">Zaakceptuj pomysł</button><button class="idea-decision-button idea-decision-button--reject" id="idea-reject" type="button">Odrzuć pomysł</button></div>
+        </div>
+        <p class="idea-detail-feedback" id="idea-detail-feedback" role="status" aria-live="polite"></p>
+      </section>
     </main>
 
     <footer class="contact-bar"><div class="contact-inner"><div class="contact-item contact-item--organization"><span class="contact-icon contact-icon--large"><svg aria-hidden="true"><use href="#icon-user-round"></use></svg></span><strong>Regionalny Ośrodek Polityki<br />Społecznej</strong></div><address class="contact-item"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-map-pin"></use></svg></span><span>ul. Piastowska 32,<br />30-070 Kraków</span></address><a class="contact-item" href="tel:+48124220636"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-phone"></use></svg></span><span>+48 12 422 06 36</span></a><a class="contact-item" href="mailto:biuro@rops.krakow.pl"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-mail"></use></svg></span><span>biuro@rops.krakow.pl</span></a></div></footer>
-
-    <dialog class="idea-dialog" id="idea-dialog"><div class="idea-dialog-inner"><h2 id="dialog-title"></h2><p><strong>Autor:</strong> <span id="dialog-author"></span></p><p><strong>Gmina:</strong> <span id="dialog-municipality"></span></p><p id="dialog-description"></p><div class="idea-dialog-actions"><button class="idea-dialog-close" id="idea-dialog-close" type="button">Zamknij</button></div></div></dialog>
 
     <svg class="svg-sprite" aria-hidden="true"><symbol id="icon-user-round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5" /><path d="M4 21a8 8 0 0 1 16 0" /><circle cx="12" cy="12" r="10" /></symbol><symbol id="icon-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="3" /></symbol><symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z" /></symbol><symbol id="icon-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-10 7L2 7" /></symbol><symbol id="icon-eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 4.2A10.4 10.4 0 0 1 12 4c7 0 10 8 10 8a17.7 17.7 0 0 1-2 3.1M6.6 6.6C3.5 8.6 2 12 2 12s3 8 10 8a10.5 10.5 0 0 0 4.1-.8" /></symbol><symbol id="icon-accessibility" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2" /><path d="M5 8h14M12 6v7M8 22l4-9 4 9M7 13h10" /></symbol><symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></symbol></svg>
     <script src="script.js"></script>
