@@ -73,24 +73,16 @@
     <main id="main-content" class="idea-page">
       <div class="idea-layout">
         <section class="idea-card" aria-labelledby="idea-title">
-          <h1 class="section-heading" id="idea-title">Zacznijmy od początku...</h1>
-          <p class="section-intro">Napisz krótko, pomożemy Ci dopracować szczegóły później</p>
-          <form class="idea-form" id="idea-form">
-            <label for="idea-title-input">Tytuł pomysłu</label>
-            <input id="idea-title-input" name="title" type="text" placeholder="Np. Sąsiedzka biblioteka rzeczy" required />
-            <fieldset class="audience-fieldset">
-              <legend>Dla kogo jest to rozwiązanie? <span class="legend-hint">Możesz wybrać kilka grup</span></legend>
-              <div class="audience-options">
-                <label class="audience-option"><input type="checkbox" name="audience" value="seniorzy" /><span>Seniorzy</span></label>
-                <label class="audience-option"><input type="checkbox" name="audience" value="rodzice" /><span>Rodzice / Opiekunowie</span></label>
-                <label class="audience-option"><input type="checkbox" name="audience" value="szkoly" /><span>Nauczyciele / Szkoły</span></label>
-                <label class="audience-option"><input type="checkbox" name="audience" value="mlodziez" /><span>Dzieci i młodzież</span></label>
-                <label class="audience-option"><input type="checkbox" name="audience" value="niepelnosprawnosci" /><span>Osoby z niepełnosprawnościami</span></label>
-                <label class="audience-option"><input type="checkbox" name="audience" value="mieszkancy" /><span>Mieszkańcy / Sąsiedzi</span></label>
-              </div>
-            </fieldset>
-            <div class="idea-actions"><button class="idea-next" type="submit">Dalej</button></div>
-            <p class="idea-form-message" id="idea-form-message" role="status" aria-live="polite"></p>
+          <h1 class="section-heading" id="idea-title">Opowiedz nam o swoim pomyśle</h1>
+          <div class="idea-wizard-heading"><strong id="idea-wizard-progress">Strona 1 z 3</strong><span>Krótki formularz oparty na Social Innovation Canvas</span></div>
+          <form class="idea-form idea-wizard-form" id="idea-wizard-form">
+            <fieldset class="idea-wizard-step" data-idea-step="problem"><legend class="sr-only">Problem i odbiorcy</legend><h2 tabindex="-1">Problem i osoby, których dotyczy</h2><div class="idea-wizard-fields"><label>Tytuł pomysłu<input id="idea-wizard-title" name="title" type="text" maxlength="140" placeholder="Np. Sąsiedzka biblioteka rzeczy" required /></label><label>Jaki problem chcesz rozwiązać?<textarea name="problem" rows="5" maxlength="1000" placeholder="Opisz konkretną sytuację i dlaczego wymaga zmiany" required></textarea></label><div class="idea-wizard-two"><label>Jak często występuje problem?<select name="frequency" required><option value="">Wybierz</option><option>Rzadko — raz w roku lub rzadziej</option><option>Czasami — kilka razy w roku lub miesiącu</option><option>Często — co tydzień lub regularnie</option><option>Bardzo często — codziennie lub prawie codziennie</option></select></label><label>Jak poważny jest problem?<select name="intensity" required><option value="">Wybierz</option><option>Lekko przeszkadza</option><option>Utrudnia działanie</option><option>Mocno przeszkadza i blokuje działania</option><option>Bardzo poważny — powoduje wykluczenie lub krzywdę</option></select></label></div><fieldset class="audience-fieldset"><legend>Dla kogo jest to rozwiązanie? <span class="legend-hint">Wybierz co najmniej jedną grupę</span></legend><div class="audience-options"><label class="audience-option"><input type="checkbox" name="audience" value="seniorzy" /><span>Seniorzy</span></label><label class="audience-option"><input type="checkbox" name="audience" value="rodzice" /><span>Rodzice / Opiekunowie</span></label><label class="audience-option"><input type="checkbox" name="audience" value="szkoly" /><span>Nauczyciele / Szkoły</span></label><label class="audience-option"><input type="checkbox" name="audience" value="mlodziez" /><span>Dzieci i młodzież</span></label><label class="audience-option"><input type="checkbox" name="audience" value="niepelnosprawnosci" /><span>Osoby z niepełnosprawnościami</span></label><label class="audience-option"><input type="checkbox" name="audience" value="mieszkancy" /><span>Mieszkańcy / Sąsiedzi</span></label></div></fieldset></div></fieldset>
+
+            <fieldset class="idea-wizard-step" data-idea-step="solution" hidden><legend class="sr-only">Rozwiązanie i wartość</legend><h2 tabindex="-1">Rozwiązanie i jego wartość</h2><div class="idea-wizard-fields"><label>Jak działa Twoje rozwiązanie?<textarea name="solution" rows="6" maxlength="1200" placeholder="Opisz najważniejsze działanie krok po kroku" required></textarea></label><div class="idea-wizard-two"><label>Na jakim etapie jest pomysł?<select name="readiness" required><option value="">Wybierz</option><option>Pomysł — mamy koncepcję</option><option>Prototyp — mamy pierwszą wersję</option><option>Przetestowane rozwiązanie</option><option>Gotowe do wdrożenia</option></select></label><label>Jak duża jest grupa odbiorców?<select name="scale" required><option value="">Wybierz</option><option>Pojedyncze osoby</option><option>Wąska, konkretna grupa</option><option>Duża grupa w mieście lub regionie</option><option>Bardzo szeroka grupa</option></select></label></div><fieldset class="idea-value-options"><legend>Jaką najważniejszą wartość daje rozwiązanie? <span>Wybierz maksymalnie 3</span></legend><div><label><input type="checkbox" name="value" value="oszczedza-czas" />Oszczędza czas</label><label><input type="checkbox" name="value" value="obniza-koszty" />Obniża koszty</label><label><input type="checkbox" name="value" value="zwieksza-dostepnosc" />Zwiększa dostępność</label><label><input type="checkbox" name="value" value="poprawia-bezpieczenstwo" />Poprawia bezpieczeństwo</label><label><input type="checkbox" name="value" value="zmniejsza-wykluczenie" />Zmniejsza wykluczenie</label><label><input type="checkbox" name="value" value="wzmacnia-sprawczosc" />Wzmacnia sprawczość</label></div></fieldset></div></fieldset>
+
+            <fieldset class="idea-wizard-step" data-idea-step="impact" hidden><legend class="sr-only">Wpływ i wdrożenie</legend><h2 tabindex="-1">Wpływ i możliwość wdrożenia</h2><div class="idea-wizard-fields"><label>Co zmieni się dla pojedynczej osoby?<textarea name="impact_person" rows="4" maxlength="700" placeholder="Co stanie się łatwiejsze, bezpieczniejsze lub bardziej dostępne?" required></textarea></label><label>Co zmieni się dla społeczności lub otoczenia?<textarea name="impact_community" rows="4" maxlength="700" placeholder="Np. mniejsze wykluczenie, lepsza współpraca, oszczędność zasobów" required></textarea></label><label>Kto może pomóc we wdrożeniu?<textarea name="partners" rows="4" maxlength="700" placeholder="Osoby, organizacje lub instytucje wspierające zmianę" required></textarea></label><label>Jakiego wsparcia potrzebujesz na początku?<textarea name="support_needed" rows="4" maxlength="700" placeholder="Np. partnera, miejsca, finansowania, konsultacji lub testerów" required></textarea></label></div></fieldset>
+
+            <p class="idea-form-message" id="idea-wizard-message" role="status" aria-live="polite"></p><div class="idea-wizard-actions"><button class="idea-wizard-back" id="idea-wizard-back" type="button" hidden>Cofnij</button><span></span><button class="idea-next" id="idea-wizard-next" type="button">Dalej</button><button class="idea-next" id="idea-wizard-submit" type="submit" hidden>Wyślij pomysł</button></div>
           </form>
         </section>
 
@@ -108,6 +100,9 @@
         </aside>
       </div>
     </main>
+
+    <dialog class="tester-dialog" id="idea-confirm-dialog"><div><h2>Czy na pewno chcesz wysłać pomysł?</h2><p>Sprawdź, czy wszystkie odpowiedzi opisują problem i proponowane rozwiązanie.</p><div class="tester-dialog-actions"><button id="idea-confirm-cancel" type="button">Wróć do formularza</button><button id="idea-confirm-submit" type="button">Tak, wyślij</button></div></div></dialog>
+    <dialog class="tester-dialog" id="idea-success-dialog"><div><h2>Pomysł został wysłany</h2><p>Dziękujemy. Możesz śledzić jego status w swoim panelu.</p><div class="tester-dialog-actions"><button id="idea-success-close" type="button">Przejdź do panelu</button></div></div></dialog>
 
     <footer class="contact-bar">
       <div class="contact-inner">
@@ -129,5 +124,6 @@
     </svg>
     <script src="vendor/react.production.min.js" crossorigin></script><script src="vendor/react-dom.production.min.js" crossorigin></script><script src="vendor/i18next.min.js" crossorigin></script><script src="vendor/react-i18next.min.js" crossorigin></script><script src="i18n.js"></script>
     <script src="script.js"></script>
+    <script src="idea-wizard.js"></script>
   </body>
 </html>

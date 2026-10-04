@@ -1,85 +1,107 @@
-# Dokumentacja Projektu
-Projekt został podzielony na dwa środowiska pracy. W zależności od sprzętu oraz celu uruchomienia, możesz wybrać tryb lekki (do pracy nad interfejsem i bazą danych) lub tryb pełny (wymagający mocnego sprzętu, uruchamiający modele sztucznej inteligencji).
+# ROPS — innowacje społeczne
+Responsywny portal wspierający rozwój innowacji społecznych. Projekt zawiera frontend demonstracyjny, backend napisany w środowisku Flask z bazą PostgreSQL, system zarządzania treścią Directus (Headless CMS) oraz wyszukiwanie semantyczne z wykorzystaniem wektorowej bazy Qdrant i modeli sztucznej inteligencji.
 
-## 1. Uruchamianie aplikacji (Wybór trybu)
-### Opcja A: Tryb lekki (Bez modułu AI)
-Przeznaczony do standardowej pracy nad kodem, panelem Directus i bazą danych PostgreSQL. Działa płynnie na każdym komputerze, nie obciążając procesora ani pamięci. Nie uruchamia bazy wektorowej Qdrant ani modeli sztucznej inteligencji.
+## 1. Najszybsze uruchomienie strony (Tylko Frontend) 
+Do obejrzenia samego interfejsu nie jest potrzebna instalacja zależności, Dockera ani bazy danych. Logowanie, rejestracja i role działają w trybie demonstracyjnym (dane zapisywane są w localStorage przeglądarki).
 
-Aby uruchomić projekt w trybie lekkim, wpisz w terminalu:
+Linux / macOS:
+```Bash
+python3 -m http.server 8000 --directory frontend
+```
 
+Windows 10/11 (PowerShell):
+```PowerShell
+py -m http.server 8000 --directory frontend
+```
+
+Frontend będzie dostępny pod adresem http://localhost:8000. Serwer zatrzymasz skrótem Ctrl+C. Uwaga: Wysyłka formularzy oraz funkcje AI wymagają uruchomienia backendu.
+
+## 2. Pełne uruchomienie z Dockerem (Backend + Baza danych)
+Wymagania: zainstalowany Docker Desktop (Windows/macOS) lub Docker Engine (Linux). Projekt podzielono na dwa tryby, aby oszczędzać zasoby komputera, gdy funkcje AI nie są potrzebne.
+
+Tryb lekki (Bez modułu AI)
+Przeznaczony do standardowej pracy nad kodem, panelem Directus i bazą danych PostgreSQL. Działa płynnie, nie obciążając procesora ani pamięci. Nie uruchamia bazy Qdrant ani modeli AI.
 ```Bash
 docker compose up -d
 ```
-### Opcja B: Tryb pełny (Sztuczna Inteligencja / Wymagana karta NVIDIA)
-Uruchamia pełne środowisko analityczne, w tym modele językowe oraz wyszukiwanie semantyczne. Ten tryb wymaga wydajnego sprzętu, w szczególności dedykowanej karty graficznej NVIDIA.
+API będzie dostępne pod adresem ```http://localhost:5000```. Frontend należy uruchomić równolegle (zgodnie z instrukcją z punktu 1).
 
-Aby uruchomić pełną infrastrukturę projektu, użyj polecenia:
-
+## Tryb pełny (Wymagany mocny sprzęt / Karta NVIDIA)
+Uruchamia pełne środowisko analityczne, w tym modele językowe Ollama, Qdrant oraz wyszukiwanie semantyczne. Pierwsze uruchomienie pobiera kilka gigabajtów danych modeli.
 ```Bash
 docker compose --profile ai up -d
 ```
-## 2. Zarządzanie Treścią (Directus)
-Directus pełni w projekcie rolę głównego panelu administracyjnego (Headless CMS). Służy do wprowadzania i edycji danych, zarządzania plikami oraz automatycznego wyzwalania indeksacji tekstów do bazy wektorowej.
+Uwaga: Domyślnie system wykorzystuje kartę graficzną ```(COMPUTE_DEVICE=cuda)```. Jeśli nie posiadasz dedykowanej karty, zmień w pliku ```docker-compose.yml``` wartość na ```COMPUTE_DEVICE=cpu```.
+## 3. Zarządzanie Treścią (Directus)
+Directus służy do wprowadzania danych o innowacjach, zarządzania plikami PDF oraz wyzwalania indeksacji tekstów do bazy wektorowej za pomocą webhooków. Działa w obu trybach Dockera.
+ - Adres: ```http://localhost:8055```
+ - Login: ```admin@example.com```
+ - Hasło: ```admin```
 
-Po uruchomieniu kontenerów (w dowolnym z dwóch trybów), panel graficzny jest dostępny w przeglądarce internetowej pod adresem:
-
-Adres: ``` http://localhost:8055 ```
-
-Login: ``` admin@example.com ```
-
-Hasło: ``` password ```
-
-### Wdrożenie bazy przy pierwszym uruchomieniu
-Jeżeli pobierasz repozytorium na swój komputer po raz pierwszy, musisz załadować strukturę bazy danych (kolekcje, relacje, webhooki i uprawnienia), aby panel Directus zadziałał poprawnie.
-
-Wykonaj kolejno te trzy polecenia w terminalu:
-
-Zresetuj środowisko i uruchom kontenery (upewnia się, że plik SQL został prawidłowo podpięty):
-
-```Bash
-docker compose down
+ # Wdrożenie bazy przy pierwszym uruchomieniu
+ Jeśli pobierasz repozytorium po raz pierwszy, musisz załadować strukturę kolekcji i uprawnień. Wykonaj poniższe polecenia w terminalu:
+ Zresetuj środowisko i uruchom kontenery:
+ ```Bash
+ docker compose down
 docker compose up -d
 ```
-Zaimportuj gotową konfigurację do bazy PostgreSQL:
-
+Zaimportuj gotową konfigurację Directusa:
 ```Bash
 docker exec postgres_db psql -U myuser -d mydb -f /docker-entrypoint-initdb.d/init-directus.sql
 ```
-Zrestartuj system Directus, aby odczytał zaktualizowane tabele:
-
+Zrestartuj panel, aby odczytał zaktualizowane tabele:
 ```Bash
 docker compose restart directus
 ```
-Panel jest teraz gotowy do pracy i uzupełniania danych.
-
-## 3. Wyszukiwanie Semantyczne i Baza Wektorowa
-### Uwaga: Te funkcje działają wyłącznie, jeśli projekt został uruchomiony w "Trybie pełnym" (Opcja B).
-
-Moduł ten służy do odnajdywania informacji w dokumentach tekstowych (PDF) na podstawie znaczenia słów.
+## 4. Konfiguracja wysyłki zgłoszeń wsparcia
+Formularz wsparcia wysyła wiadomości e-mail. W głównym katalogu projektu utwórz plik .env (nie dodawaj go do Git) o następującej strukturze:
+```
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=twoj_adres@gmail.com
+SMTP_PASSWORD=haslo_aplikacji_gmail
+SMTP_FROM=twoj_adres@gmail.com
+```
+Po zmianie konfiguracji zrestartuj kontener backendu: 
+```
+docker compose restart web
+```
+## 5. Wyszukiwanie Semantyczne i Asystent AI
+Funkcje te działają wyłącznie w "Trybie pełnym" z uruchomionym profilem AI.
 
 ### Inicjalizacja i wczytanie dokumentów
-Zanim będzie można cokolwiek wyszukać, pliki PDF muszą zostać przetworzone i zapisane w bazie Qdrant. Skrypt automatycznie podmieni stare dane przy każdym uruchomieniu.
-
-Pobierz pliki PDF i umieść je w folderze data/dokumenty/ oraz upewnij się, że plik innowacje_biblioteka.json znajduje się w folderze data/.
-
-### Uruchom proces indeksacji wpisując polecenie:
-
+Przed wyszukiwaniem należy umieścić plik innowacje_biblioteka.json w katalogu data/ oraz powiązane pliki PDF w data/dokumenty/. Następnie wykonaj indeksację (proces ten nadpisze stare zbiory w Qdrant):
 ```Bash
 docker compose exec web python app/ingest.py
 ```
-Korzystanie z punktu dostępowego (Endpoint API)
-Aplikacja pozwala na wyszukiwanie przetworzonych informacji poprzez lokalne API.
+### Najważniejsze adresy API
 
-Adres: ``` http://localhost:5000/search ```
+| Funkcja | Metoda | Adres |
+|---|---|---|
+| Kontrola działania API | GET | `http://localhost:5000/` |
+| Wyszukiwanie semantyczne | POST | `http://localhost:5000/search` |
+| Asystent AI | POST | `http://localhost:5000/chat` |
+| Zgłoszenie wsparcia | POST | `http://localhost:5000/support` |
 
-Metoda: ``` POST ```
-
-Wymagany nagłówek: ``` Content-Type: application/json ```
-
-Przykładowe wywołanie zapytania z terminala Windows (PowerShell):
-
-```PowerShell
-curl.exe -X POST http://localhost:5000/search -H "Content-Type: application/json" -d "{\`"query\`": \`"projekty dla seniorów\`", \`"top_k\`": 3}"
+**Przykładowe zapytanie (PowerShell):**
+```powershell
+Invoke-RestMethod -Method Post -Uri "http://localhost:5000/search" -ContentType "application/json" -Body '{"query":"projekty dla seniorów","top_k":3}'
 ```
-Struktura odpowiedzi:
-Endpoint zwraca obiekt JSON z wynikami posortowanymi według najwyższej trafności. Zawiera tytuł, link do innowacji oraz dokładny cytat z załączonego dokumentu PDF. Pierwsze wyszukiwanie po uruchomieniu komputera trwa dłużej (wczytywanie modeli do pamięci), natomiast kolejne odpowiedzi generowane są natychmiastowo.
+
+## 6. Struktura projektu
+```
+Plaintextapp/                 backend Flask, wyszukiwanie i asystent
+frontend/            strony HTML, CSS, JavaScript i zasoby
+scrapers/            pobieranie danych IOSS
+data/                lokalne dane do indeksacji
+Dockerfile           obraz aplikacji backendu
+docker-compose.yml   usługi aplikacji, Directus, PostgreSQL i AI
+init-directus.sql    struktura początkowa bazy danych CMS
+requirements*.txt    zależności środowiska Python
+```
+## 7. Typowe problemy
+- Port 8000, 8055 lub 5000 jest zajęty: Zatrzymaj inną usługę używającą portu lub zmień jego mapowanie w pliku docker-compose.yml.
+- Docker nie odpowiada: Upewnij się, że usługa Docker Desktop lub Docker Engine jest włączona.
+- Brak odpowiedzi AI / Endpoint nie działa: Sprawdź, czy uruchomiono projekt z flagą --profile ai i czy wykonano indeksację skryptem ingest.py.
+- Pierwsze zapytanie do AI trwa bardzo długo: To standardowe zachowanie (ładowanie modeli do pamięci RAM/VRAM). Kolejne zapytania są przetwarzane natychmiastowo.
+- Formularz nie wysyła e-maili: Sprawdź poprawność danych w pliku .env oraz logi backendu poleceniem docker compose logs web. W przypadku Gmaila wymagane jest wygenerowanie specjalnego "Hasła aplikacji" w ustawieniach konta Google.
