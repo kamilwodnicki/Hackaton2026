@@ -15,6 +15,9 @@ const readResources = () => {
 };
 
 let resources = readResources();
+// Innowacje z Directusa trzymamy osobno — nie mogą trafić do localStorage razem z materiałami ROPS
+let directusResources = [];
+const allResources = () => [...directusResources, ...resources];
 const list = document.querySelector("#resource-list");
 const empty = document.querySelector("#resource-empty");
 const search = document.querySelector("#resource-search");
@@ -22,9 +25,10 @@ const categoryFilter = document.querySelector("#resource-category-filter");
 const addPanel = document.querySelector("#resource-admin-panel");
 const addForm = document.querySelector("#resource-form");
 const addMessage = document.querySelector("#resource-form-message");
-const assistantForm = document.querySelector("#resource-assistant-form");
-const assistantInput = document.querySelector("#resource-assistant-input");
-const assistantAnswer = document.querySelector("#resource-assistant-answer");
+
+// Link z Asystenta Zasobnika (?q=tytuł) otwiera Zasobnik z wpisanym wyszukiwaniem
+const initialQuery = new URLSearchParams(location.search).get("q");
+if (initialQuery) search.value = initialQuery;
 
 const session = (() => {
   try { return JSON.parse(localStorage.getItem("rops-auth-session") || "null"); } catch { return null; }
@@ -35,7 +39,7 @@ if (roles.includes("rops")) addPanel.hidden = false;
 const renderResources = () => {
   const query = search.value.trim().toLocaleLowerCase("pl");
   const category = categoryFilter.value;
-  const visible = resources.filter((resource) => {
+  const visible = allResources().filter((resource) => {
     const content = `${resource.title} ${resource.description} ${resource.category} ${resource.type}`.toLocaleLowerCase("pl");
     return (!query || content.includes(query)) && (!category || resource.category === category);
   });
@@ -64,12 +68,37 @@ const renderResources = () => {
     description.textContent = resource.description;
     const meta = document.createElement("p");
     meta.className = "resource-meta";
-    meta.textContent = `${resource.type}${resource.fileName ? ` · ${resource.fileName}` : ""}`;
-    const link = document.createElement("a");
-    link.href = resource.url || "#";
-    link.textContent = resource.url && resource.url !== "#" ? "Otwórz materiał" : "Plik będzie dostępny po podłączeniu magazynu dokumentów";
-    if (!resource.url || resource.url === "#") link.setAttribute("aria-disabled", "true");
-    details.append(description, meta, link);
+    if (resource.thumbnail) {
+      const thumbnail = document.createElement("img");
+      thumbnail.className = "resource-thumbnail";
+      thumbnail.src = resource.thumbnail;
+      thumbnail.alt = "";
+      thumbnail.loading = "lazy";
+      details.append(thumbnail);
+    }
+    if (resource.files) {
+      meta.textContent = `${resource.type} · Dostępne dokumenty: ${resource.files.length}`;
+      const files = document.createElement("ul");
+      files.className = "resource-files";
+      resource.files.forEach((file) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = file.url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = file.name;
+        item.append(link);
+        files.append(item);
+      });
+      details.append(description, meta, files);
+    } else {
+      meta.textContent = `${resource.type}${resource.fileName ? ` · ${resource.fileName}` : ""}`;
+      const link = document.createElement("a");
+      link.href = resource.url || "#";
+      link.textContent = resource.url && resource.url !== "#" ? "Otwórz materiał" : "Plik będzie dostępny po podłączeniu magazynu dokumentów";
+      if (!resource.url || resource.url === "#") link.setAttribute("aria-disabled", "true");
+      details.append(description, meta, link);
+    }
     toggle.addEventListener("click", () => {
       const open = toggle.getAttribute("aria-expanded") === "true";
       toggle.setAttribute("aria-expanded", String(!open));
@@ -85,6 +114,22 @@ const renderResources = () => {
 search.addEventListener("input", renderResources);
 categoryFilter.addEventListener("change", renderResources);
 renderResources();
+
+fetch("/api/innowacje")
+  .then((response) => (response.ok ? response.json() : { items: [] }))
+  .then((data) => {
+    directusResources = data.items.map((item) => ({
+      id: `innowacja-${item.id}`,
+      title: item.title,
+      category: "Innowacje",
+      description: item.description,
+      type: "Innowacja społeczna",
+      thumbnail: item.thumbnail,
+      files: item.files,
+    }));
+    renderResources();
+  })
+  .catch(() => {}); // bez Directusa zasobnik pokazuje same lokalne materiały
 
 addForm?.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -112,16 +157,4 @@ addForm?.addEventListener("submit", (event) => {
   addForm.reset();
   addMessage.textContent = "Materiał został dodany do katalogu w trybie demonstracyjnym.";
   renderResources();
-});
-
-assistantForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const query = assistantInput.value.trim().toLocaleLowerCase("pl");
-  if (!query) return;
-  const words = query.split(/\s+/).filter((word) => word.length > 2);
-  const matches = resources.filter((resource) => words.some((word) => `${resource.title} ${resource.description} ${resource.category}`.toLocaleLowerCase("pl").includes(word))).slice(0, 3);
-  assistantAnswer.replaceChildren();
-  const response = document.createElement("p");
-  response.textContent = matches.length ? `Znalazłem ${matches.length} pasujące materiały: ${matches.map((item) => item.title).join(", ")}.` : "Nie znalazłem bezpośredniego dopasowania. Spróbuj użyć innych słów kluczowych.";
-  assistantAnswer.append(response);
 });
