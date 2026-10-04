@@ -21,8 +21,8 @@ qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
 # Przekazanie parametru device do modelu wektorowego
 model = SentenceTransformer(MODEL_NAME, device=DEVICE)
 
-JSON_PATH = "data/innowacje_biblioteka.json"
-PDF_DIR = "data/dokumenty"
+JSON_PATH = "data/innovation-library.json"
+PDF_DIR = "data/documents"
 
 print("Inicjalizacja klienta Qdrant i modelu...")
 qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)

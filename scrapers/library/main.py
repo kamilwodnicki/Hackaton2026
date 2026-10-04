@@ -7,10 +7,10 @@ import sys
 import time
 
 if __package__ in {None, ""}:
-    # Allows: python scrapers/biblioteka/main.py
+    # Allows: python scrapers/library/main.py
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from scrapers.biblioteka.scraper import Scraper, save_csv
+from scrapers.library.scraper import Scraper, save_csv
 
 
 def run_import(args) -> None:
@@ -33,9 +33,9 @@ def run_import(args) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Scraper Biblioteki Innowacji Społecznych ROPS Kraków.")
-    parser.add_argument("-o", "--output", default="data/innowacje_biblioteka.json")
+    parser.add_argument("-o", "--output", default="data/innovation-library.json")
     parser.add_argument("--csv", help="opcjonalnie zapisz także do CSV")
-    parser.add_argument("--docs-dir", default="data/dokumenty", help="katalog na pobrane PDF-y")
+    parser.add_argument("--docs-dir", default="data/documents", help="katalog na pobrane PDF-y")
     parser.add_argument("--delay", type=float, default=0.5, help="przerwa między zapytaniami [s]")
     parser.add_argument(
         "--interval-hours",

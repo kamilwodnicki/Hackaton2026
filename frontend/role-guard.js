@@ -9,7 +9,7 @@
   } catch {}
   if (!session) {
     const target = encodeURIComponent(location.pathname.split("/").pop());
-    location.replace(`logowanie.html?reason=login-required&redirect=${target}`);
+    location.replace(`login.html?reason=login-required&redirect=${target}`);
     return;
   }
   const roles = Array.isArray(session.roles) ? session.roles : [session.role || "resident"];

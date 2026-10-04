@@ -31,10 +31,10 @@ if (new URLSearchParams(location.search).get("access") === "denied") {
 if (currentSession) {
   const allowedRoles = new Set(Array.isArray(currentSession.roles) ? currentSession.roles : [currentSession.role || "resident"]);
   const rolePages = {
-    "mieszkancy.html": "resident",
-    "samorzady.html": "jst",
+    "residents.html": "resident",
+    "local-governments.html": "jst",
     "rops-worker.html": "rops",
-    "eksperci.html": "expert",
+    "experts.html": "expert",
   };
 
   document.querySelectorAll(".audience-navigation .audience-link").forEach((link) => {
@@ -43,12 +43,12 @@ if (currentSession) {
   });
 
   document.querySelectorAll(".account-actions").forEach((actions) => {
-    const hasGuestActions = actions.querySelector('a[href="logowanie.html"], a[href="rejestracja.html"]');
+    const hasGuestActions = actions.querySelector('a[href="login.html"], a[href="register.html"]');
     if (!hasGuestActions) return;
 
     const accountLink = document.createElement("a");
     accountLink.className = "button button--account";
-    accountLink.href = "ustawienia-konta.html";
+    accountLink.href = "account-settings.html";
     accountLink.textContent = "Twoje konto";
 
     const logoutButton = document.createElement("button");
@@ -63,17 +63,17 @@ if (currentSession) {
 
 document.querySelectorAll([
   'a[href="panel.html"]',
-  'a[href="ustawienia-konta.html"]',
-  'a[href="mieszkancy.html"]',
-  'a[href="samorzady.html"]',
+  'a[href="account-settings.html"]',
+  'a[href="residents.html"]',
+  'a[href="local-governments.html"]',
   'a[href="rops-worker.html"]',
-  'a[href="eksperci.html"]',
+  'a[href="experts.html"]',
 ].join(", ")).forEach((link) => {
   link.addEventListener("click", (event) => {
     if (getCurrentSession()) return;
     event.preventDefault();
     const target = encodeURIComponent(link.getAttribute("href"));
-    location.href = `logowanie.html?reason=login-required&redirect=${target}`;
+    location.href = `login.html?reason=login-required&redirect=${target}`;
   });
 });
 
@@ -81,7 +81,7 @@ document.querySelectorAll("[data-logout]").forEach((button) => {
   button.addEventListener("click", async () => {
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     localStorage.removeItem("rops-auth-session");
-    location.href = "index.html";
+    location.href = "/";
   });
 });
 

@@ -53,7 +53,7 @@ const renderMentorChat = () => {
 
 const openMentorChat = (button) => {
   if (!currentForumUser()) {
-    location.href = `logowanie.html?reason=login-required&redirect=${encodeURIComponent(`forum.html?mentor=${button.dataset.mentorId}`)}`;
+    location.href = `login.html?reason=login-required&redirect=${encodeURIComponent(`forum.html?mentor=${button.dataset.mentorId}`)}`;
     return;
   }
   activeMentor = {

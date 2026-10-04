@@ -121,7 +121,7 @@ document.querySelector("#idea-wizard-assistant").addEventListener("click", () =>
     document.querySelector("#idea-wizard-title").focus();
     return;
   }
-  location.href = `index.html?problem=${encodeURIComponent(title)}`;
+  location.href = `/?problem=${encodeURIComponent(title)}`;
 });
 
 showIdeaStep();

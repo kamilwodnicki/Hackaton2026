@@ -22,7 +22,7 @@ ROLE_CODES = {name: code for code, name in ROLE_NAMES.items()}
 PROTECTED_PAGES = {
     "/rops-worker.html": "rops",
     "/residents-ideas.html": "rops",
-    "/eksperci.html": "expert",
+    "/experts.html": "expert",
 }
 
 _role_ids = {}
@@ -151,7 +151,7 @@ def guard_protected_pages():
         return None
     user = session.get("user")
     if not user:
-        return redirect(f"/logowanie.html?reason=login-required&redirect={request.path.lstrip('/')}")
+        return redirect(f"/login.html?reason=login-required&redirect={request.path.lstrip('/')}")
     if required not in user["roles"]:
         return redirect("/panel.html?access=denied")
     return None

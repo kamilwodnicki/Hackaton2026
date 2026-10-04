@@ -77,7 +77,7 @@ docker compose restart web
 Funkcje te działają wyłącznie w "Trybie pełnym" z uruchomionym profilem AI.
 
 ### Inicjalizacja i wczytanie dokumentów
-Przed wyszukiwaniem należy umieścić plik innowacje_biblioteka.json w katalogu data/ oraz powiązane pliki PDF w data/dokumenty/. Następnie wykonaj indeksację (proces ten nadpisze stare zbiory w Qdrant):
+Przed wyszukiwaniem należy umieścić plik innovation-library.json w katalogu data/ oraz powiązane pliki PDF w data/documents/. Następnie wykonaj indeksację (proces ten nadpisze stare zbiory w Qdrant):
 ```Bash
 docker compose exec web python app/ingest.py
 ```

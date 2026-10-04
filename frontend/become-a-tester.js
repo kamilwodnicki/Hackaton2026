@@ -85,7 +85,7 @@ confirmButton.addEventListener("click", () => {
 
 document.querySelector("#tester-success-close").addEventListener("click", () => {
   successDialog.close();
-  location.href = "index.html";
+  location.href = "/";
 });
 
 nextButton.disabled = true;
