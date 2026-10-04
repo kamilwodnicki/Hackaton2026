@@ -24,7 +24,7 @@
 .mentor-eyebrow {
   margin: 0 0 7px;
   color: var(--color-cyan-dark);
-  font-size: 0.66rem;
+  font-size: 1rem;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -38,7 +38,7 @@
 .mentor-intro {
   margin: 8px 0 0;
   color: var(--color-muted);
-  font-size: 0.76rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
@@ -52,7 +52,7 @@
   color: var(--color-white);
   background: var(--color-cyan);
   border: 1px solid var(--color-border);
-  font-size: 0.67rem;
+  font-size: 1rem;
   font-weight: 700;
   text-align: center;
 }
@@ -84,7 +84,7 @@
 .mentor-stats article > span {
   grid-column: 2;
   grid-row: 1;
-  font-size: 0.66rem;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1.35;
 }
@@ -102,7 +102,7 @@
   grid-row: 2;
   margin-top: 4px;
   color: var(--color-muted);
-  font-size: 0.58rem;
+  font-size: 1rem;
   line-height: 1.35;
 }
 
@@ -131,13 +131,13 @@
 
 .mentor-panel-heading h2 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .mentor-panel-heading p {
   margin: 5px 0 0;
   color: var(--color-muted);
-  font-size: 0.64rem;
+  font-size: 1rem;
   line-height: 1.4;
 }
 
@@ -145,7 +145,7 @@
 .mentor-panel-heading > a {
   flex: 0 0 auto;
   color: var(--color-cyan-dark);
-  font-size: 0.62rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -173,7 +173,7 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 0;
-  font-size: 0.67rem;
+  font-size: 1rem;
 }
 
 .mentor-idea-filters,
@@ -190,7 +190,7 @@
   color: var(--color-ink);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  font-size: 0.6rem;
+  font-size: 1rem;
 }
 
 .mentor-filter.is-active,
@@ -234,7 +234,7 @@
 .mentor-idea-category,
 .mentor-forum-category {
   color: var(--color-cyan-dark);
-  font-size: 0.56rem;
+  font-size: 1rem;
   font-weight: 800;
   line-height: 1.35;
   text-transform: uppercase;
@@ -242,7 +242,7 @@
 
 .mentor-idea-title,
 .mentor-forum-item strong {
-  font-size: 0.72rem;
+  font-size: 1rem;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
@@ -250,7 +250,7 @@
 .mentor-idea-author,
 .mentor-forum-meta {
   color: var(--color-muted);
-  font-size: 0.59rem;
+  font-size: 1rem;
   line-height: 1.4;
 }
 
@@ -260,7 +260,7 @@
   color: var(--color-orange-dark);
   background: var(--color-surface);
   border: 1px solid var(--color-orange-dark);
-  font-size: 0.55rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -273,7 +273,7 @@
   margin: 0;
   padding: 18px 10px;
   color: var(--color-muted);
-  font-size: 0.66rem;
+  font-size: 1rem;
   text-align: center;
 }
 
@@ -332,13 +332,13 @@
   color: var(--color-ink);
   background: var(--color-white);
   border: 1px solid var(--color-border);
-  font-size: 0.61rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .mentor-detail-status {
   color: var(--color-cyan-dark);
-  font-size: 0.59rem;
+  font-size: 1rem;
   font-weight: 800;
   text-align: right;
 }
@@ -346,7 +346,7 @@
 .mentor-detail-category {
   margin: 15px 0 5px;
   color: var(--color-cyan-dark);
-  font-size: 0.59rem;
+  font-size: 1rem;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -371,13 +371,13 @@
 
 .mentor-detail-facts dt {
   color: var(--color-muted);
-  font-size: 0.55rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .mentor-detail-facts dd {
   margin: 3px 0 0;
-  font-size: 0.61rem;
+  font-size: 1rem;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
@@ -385,12 +385,12 @@
 .mentor-detail-description h3,
 .mentor-feedback-history h3 {
   margin: 16px 0 6px;
-  font-size: 0.72rem;
+  font-size: 1rem;
 }
 
 .mentor-detail-description p {
   margin: 0;
-  font-size: 0.66rem;
+  font-size: 1rem;
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
@@ -414,7 +414,7 @@
 
 .mentor-feedback-entry p {
   margin: 0 0 5px;
-  font-size: 0.64rem;
+  font-size: 1rem;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
@@ -422,7 +422,7 @@
 .mentor-feedback-entry time,
 #mentor-no-feedback {
   color: var(--color-muted);
-  font-size: 0.56rem;
+  font-size: 1rem;
 }
 
 #mentor-no-feedback {
@@ -438,7 +438,7 @@
 }
 
 .mentor-feedback-form label {
-  font-size: 0.66rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -451,7 +451,7 @@
   border: 1px solid var(--color-border);
   border-radius: 0;
   font: inherit;
-  font-size: 0.65rem;
+  font-size: 1rem;
   line-height: 1.5;
   resize: vertical;
 }
@@ -465,7 +465,7 @@
 
 .mentor-feedback-actions > a {
   color: var(--color-cyan-dark);
-  font-size: 0.61rem;
+  font-size: 1rem;
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -477,7 +477,7 @@
   color: var(--color-white);
   background: var(--color-cyan);
   border: 1px solid var(--color-border);
-  font-size: 0.62rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -490,13 +490,13 @@
   min-height: 1rem;
   margin: 0;
   color: var(--color-cyan-dark);
-  font-size: 0.6rem;
+  font-size: 1rem;
 }
 
 .mentor-storage-note {
   margin-top: 12px;
   color: var(--color-muted);
-  font-size: 0.57rem;
+  font-size: 1rem;
   line-height: 1.45;
 }
 
@@ -538,11 +538,11 @@
   }
 
   .mentor-stats article > span {
-    font-size: 0.58rem;
+    font-size: 1rem;
   }
 
   .mentor-stats small {
-    font-size: 0.52rem;
+    font-size: 1rem;
   }
 
   .mentor-ideas-panel,

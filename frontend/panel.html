@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="auth-guard.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Przejdź do treści</a>
@@ -18,10 +19,9 @@
       <div class="main-navigation-wrap">
         <a class="brand" href="index.html" aria-label="Strona główna"><span class="brand-placeholder" aria-hidden="true">LOGO</span><img class="brand-logo" src="assets/logo.ico" alt="" width="56" height="46" onerror="this.hidden = true" /><span class="sr-only">Logo organizacji</span></a>
         <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button>
-        <nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja"><a class="nav-link" href="index.html">Strona główna</a><a class="nav-link" href="my-idea.html">Mam pomysł!</a><a class="nav-link" href="zostan-testerem.html">Zostań testerem</a><a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a><a class="nav-link" href="forum.html">Forum</a><a class="nav-link" href="wsparcie.html">Wsparcie</a></nav>
-        <div class="account-actions"><a class="button button--account" href="ustawienia-konta.html"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Twoje konto</span></a></div>
+        <nav class="main-navigation panel-navigation" id="main-navigation" aria-label="Główna nawigacja"><a class="nav-link" href="index.html">Strona główna</a></nav>
+        <div class="account-actions"><a class="button button--account" href="ustawienia-konta.html"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Twoje konto</span></a><button class="button button--secondary" type="button" data-logout>Wyloguj</button></div>
       </div>
-      <nav class="audience-navigation" aria-label="Nawigacja według grup odbiorców"><a class="audience-link audience-link--plain is-active" href="panel.html" aria-current="page">Twój panel</a><a class="audience-link" href="mieszkancy.html">Mieszkańcy i NGO</a><a class="audience-link" href="samorzady.html">Jednostki samorządu terytorialnego</a><a class="audience-link" href="rops-worker.html">Pracownicy ROPS</a><a class="audience-link" href="eksperci.html">Eksperci branżowi i mentorzy</a></nav>
     </header>
 
     <main id="main-content" class="account-page">

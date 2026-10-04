@@ -7,6 +7,76 @@ const formMessage = document.querySelector("#form-message");
 const languageSelect = document.querySelector("#language");
 const languageFlag = document.querySelector(".language-flag");
 
+const getCurrentSession = () => {
+  try {
+    return JSON.parse(localStorage.getItem("rops-auth-session") || "null");
+  } catch {
+    return null;
+  }
+};
+
+const currentSession = getCurrentSession();
+
+if (new URLSearchParams(location.search).get("access") === "denied") {
+  const main = document.querySelector("main");
+  if (main) {
+    const notice = document.createElement("p");
+    notice.className = "access-denied-notice";
+    notice.setAttribute("role", "alert");
+    notice.textContent = "To konto nie ma roli wymaganej do otwarcia wybranej sekcji.";
+    main.prepend(notice);
+  }
+}
+
+if (currentSession) {
+  const allowedRoles = new Set(Array.isArray(currentSession.roles) ? currentSession.roles : [currentSession.role || "resident"]);
+  const rolePages = {
+    "mieszkancy.html": "resident",
+    "samorzady.html": "jst",
+    "rops-worker.html": "rops",
+    "eksperci.html": "expert",
+  };
+
+  document.querySelectorAll(".audience-navigation .audience-link").forEach((link) => {
+    const requiredRole = rolePages[link.getAttribute("href")];
+    if (requiredRole && !allowedRoles.has(requiredRole)) link.remove();
+  });
+
+  document.querySelectorAll(".account-actions").forEach((actions) => {
+    const hasGuestActions = actions.querySelector('a[href="logowanie.html"], a[href="rejestracja.html"]');
+    if (!hasGuestActions) return;
+
+    const accountLink = document.createElement("a");
+    accountLink.className = "button button--account";
+    accountLink.href = "ustawienia-konta.html";
+    accountLink.textContent = "Twoje konto";
+
+    const logoutButton = document.createElement("button");
+    logoutButton.className = "button button--secondary";
+    logoutButton.type = "button";
+    logoutButton.dataset.logout = "";
+    logoutButton.textContent = "Wyloguj";
+
+    actions.replaceChildren(accountLink, logoutButton);
+  });
+}
+
+document.querySelectorAll('a[href="panel.html"], a[href="ustawienia-konta.html"]').forEach((link) => {
+  link.addEventListener("click", (event) => {
+    if (getCurrentSession()) return;
+    event.preventDefault();
+    const target = encodeURIComponent(link.getAttribute("href"));
+    location.href = `logowanie.html?reason=login-required&redirect=${target}`;
+  });
+});
+
+document.querySelectorAll("[data-logout]").forEach((button) => {
+  button.addEventListener("click", () => {
+    localStorage.removeItem("rops-auth-session");
+    location.href = "index.html";
+  });
+});
+
 languageSelect?.addEventListener("change", () => {
   languageFlag.dataset.language = languageSelect.value;
 });
