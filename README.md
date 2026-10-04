@@ -6,15 +6,15 @@ Do obejrzenia samego interfejsu nie jest potrzebna instalacja zależności, Dock
 
 Linux / macOS:
 ```Bash
-python3 -m http.server 8000 --directory frontend
+python3 -m http.server 8080 --directory frontend
 ```
 
 Windows 10/11 (PowerShell):
 ```PowerShell
-py -m http.server 8000 --directory frontend
+py -m http.server 8080 --directory frontend
 ```
 
-Frontend będzie dostępny pod adresem http://localhost:8000. Serwer zatrzymasz skrótem Ctrl+C. Uwaga: Wysyłka formularzy oraz funkcje AI wymagają uruchomienia backendu.
+Frontend będzie dostępny od razu na stronie głównej pod adresem `http://localhost:8080/` — bez dopisywania `/frontend`. Serwer zatrzymasz skrótem Ctrl+C. Uwaga: wysyłka formularzy oraz funkcje AI wymagają uruchomienia backendu.
 
 ## 2. Pełne uruchomienie z Dockerem (Backend + Baza danych)
 Wymagania: zainstalowany Docker Desktop (Windows/macOS) lub Docker Engine (Linux). Projekt podzielono na dwa tryby, aby oszczędzać zasoby komputera, gdy funkcje AI nie są potrzebne.
@@ -24,7 +24,14 @@ Przeznaczony do standardowej pracy nad kodem, panelem Directus i bazą danych Po
 ```Bash
 docker compose up -d
 ```
-API będzie dostępne pod adresem ```http://localhost:5000```. Frontend należy uruchomić równolegle (zgodnie z instrukcją z punktu 1).
+Cała aplikacja, wraz ze stroną główną i API, będzie dostępna pod adresem `http://localhost:8080/`. Nie trzeba osobno uruchamiać frontendu ani dopisywać `/frontend` do adresu.
+
+Po zmianie konfiguracji uruchom kontenery ponownie, aby Docker odtworzył usługę z właściwym portem:
+
+```bash
+docker compose down
+docker compose up -d --build
+```
 
 ## Tryb pełny (Wymagany mocny sprzęt / Karta NVIDIA)
 Uruchamia pełne środowisko analityczne, w tym modele językowe Ollama, Qdrant oraz wyszukiwanie semantyczne. Pierwsze uruchomienie pobiera kilka gigabajtów danych modeli.
@@ -70,7 +77,7 @@ docker compose restart web
 Funkcje te działają wyłącznie w "Trybie pełnym" z uruchomionym profilem AI.
 
 ### Inicjalizacja i wczytanie dokumentów
-Przed wyszukiwaniem należy umieścić plik innowacje_biblioteka.json w katalogu data/ oraz powiązane pliki PDF w data/dokumenty/. Następnie wykonaj indeksację (proces ten nadpisze stare zbiory w Qdrant):
+Przed wyszukiwaniem należy umieścić plik innovation-library.json w katalogu data/ oraz powiązane pliki PDF w data/documents/. Następnie wykonaj indeksację (proces ten nadpisze stare zbiory w Qdrant):
 ```Bash
 docker compose exec web python app/ingest.py
 ```
@@ -78,14 +85,14 @@ docker compose exec web python app/ingest.py
 
 | Funkcja | Metoda | Adres |
 |---|---|---|
-| Kontrola działania API | GET | `http://localhost:5000/` |
-| Wyszukiwanie semantyczne | POST | `http://localhost:5000/search` |
-| Asystent AI | POST | `http://localhost:5000/chat` |
-| Zgłoszenie wsparcia | POST | `http://localhost:5000/support` |
+| Strona główna | GET | `http://localhost:8080/` |
+| Wyszukiwanie semantyczne | POST | `http://localhost:8080/search` |
+| Asystent AI | POST | `http://localhost:8080/chat` |
+| Zgłoszenie wsparcia | POST | `http://localhost:8080/support` |
 
 **Przykładowe zapytanie (PowerShell):**
 ```powershell
-Invoke-RestMethod -Method Post -Uri "http://localhost:5000/search" -ContentType "application/json" -Body '{"query":"projekty dla seniorów","top_k":3}'
+Invoke-RestMethod -Method Post -Uri "http://localhost:8080/search" -ContentType "application/json" -Body '{"query":"projekty dla seniorów","top_k":3}'
 ```
 
 ## 6. Struktura projektu
@@ -100,7 +107,7 @@ init-directus.sql    struktura początkowa bazy danych CMS
 requirements*.txt    zależności środowiska Python
 ```
 ## 7. Typowe problemy
-- Port 8000, 8055 lub 5000 jest zajęty: Zatrzymaj inną usługę używającą portu lub zmień jego mapowanie w pliku docker-compose.yml.
+- Port 8080 lub 8055 jest zajęty: zatrzymaj inną usługę używającą portu albo zmień jego mapowanie w pliku docker-compose.yml.
 - Docker nie odpowiada: Upewnij się, że usługa Docker Desktop lub Docker Engine jest włączona.
 - Brak odpowiedzi AI / Endpoint nie działa: Sprawdź, czy uruchomiono projekt z flagą --profile ai i czy wykonano indeksację skryptem ingest.py.
 - Pierwsze zapytanie do AI trwa bardzo długo: To standardowe zachowanie (ładowanie modeli do pamięci RAM/VRAM). Kolejne zapytania są przetwarzane natychmiastowo.

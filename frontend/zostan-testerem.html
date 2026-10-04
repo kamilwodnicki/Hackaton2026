@@ -3,42 +3,506 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Zgłoś się jako tester innowacji społecznych." />
+    <meta name="description" content="Dołącz do grona testerów innowacji społecznych. Zgłoś się jako osoba fizyczna lub organizacja NGO." />
     <title>Zostań testerem | Dostępność</title>
     <link rel="icon" href="assets/logo.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Layout strony */
+      .tester-page {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px 20px;
+        background-color: #0083a0;
+        min-height: calc(100vh - 200px);
+      }
+
+      .idea-layout {
+        display: flex;
+        gap: 30px;
+        max-width: 1200px;
+        width: 100%;
+        justify-content: center;
+        align-items: stretch;
+      }
+
+      .idea-card, .assistant-card {
+        background-color: #ffffff;
+        border: 2px solid #000000;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+
+      .idea-card {
+        flex: 1.2;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        min-height: 480px;
+      }
+
+      .assistant-card {
+        flex: 0.8;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .tester-header-box {
+        background-color: #c65300;
+        color: #ffffff;
+        text-align: center;
+        padding: 16px;
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+      }
+
+      .section-intro {
+        text-align: center;
+        color: #0083a0;
+        font-weight: 600;
+        margin-bottom: 30px;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      /* STYLE WYBORU OPCJI */
+      .entity-selection-group {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 40px;
+      }
+
+      .entity-button-label {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 16px 24px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 2px solid #767676;
+        border-radius: 0; /* Brak zaokrągleń ramek */
+        min-width: 200px;
+        transition: all 0.2s ease-in-out;
+        opacity: 0.65;
+        background-color: #f3f4f6;
+        color: #333333;
+        position: relative;
+      }
+
+      .entity-button-label span {
+        width: 100%;
+        text-align: center; /* Wyśrodkowanie tekstu w guziku */
+      }
+
+      .entity-button-label:hover {
+        opacity: 0.9;
+        border-color: #000000;
+      }
+
+      .entity-button-label input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      /* STYL DLA WYBRANEJ OPCJI */
+      .entity-button-label.is-selected {
+        opacity: 1;
+        border: 4px solid #000000;
+        box-shadow: 0 0 0 3px #ffffff, 0 8px 16px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+        font-weight: 800;
+      }
+
+      .entity-button-label--blue.is-selected {
+        background-color: #0083a0;
+        color: #ffffff;
+      }
+
+      .entity-button-label--orange.is-selected {
+        background-color: #c65300;
+        color: #ffffff;
+      }
+
+      /* Napis WYBRANO pod wybraną opcją */
+      .selection-badge {
+        display: none;
+        margin-top: 6px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background-color: #ffffff;
+        color: #000000;
+        padding: 2px 10px;
+        border-radius: 0; /* Brak zaokrągleń ramek */
+        font-weight: 800;
+      }
+
+      .entity-button-label.is-selected .selection-badge {
+        display: inline-block;
+      }
+
+      /* Pozostałe przyciski nawigacyjne */
+      .idea-actions-bottom-right {
+        margin-top: auto;
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+      }
+
+      .idea-next {
+        background-color: #0083a0;
+        color: #ffffff;
+        border: 2px solid #000000;
+        border-radius: 0; /* Brak zaokrągleń ramek */
+        padding: 12px 36px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .button--warning {
+        background-color: #c65300;
+        color: #ffffff;
+        border: 2px solid #000000;
+        border-radius: 0; /* Brak zaokrągleń ramek */
+        padding: 12px 36px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      /* Asystent AI */
+      .assistant-header-box {
+        background-color: #c65300;
+        color: #ffffff;
+        text-align: center;
+        padding: 12px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      .assistant-workspace {
+        background-color: #e5e5e5;
+        border: 1px solid #000;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 16px;
+      }
+
+      .assistant-prompt {
+        background-color: #0083a0;
+        color: #ffffff;
+        border: none;
+        border-radius: 0; /* Brak zaokrągleń ramek */
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      /* Modale */
+      .modal-dialog {
+        border: 2px solid #000;
+        border-radius: 0; /* Brak zaokrągleń ramek */
+        padding: 24px;
+        max-width: 450px;
+        width: 90%;
+      }
+      .modal-dialog::backdrop {
+        background: rgba(0, 0, 0, 0.6);
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 20px;
+      }
+    </style>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Przejdź do treści</a>
+
     <header class="site-header">
-      <div class="utility-bar"><a class="accessibility-link" href="#accessibility">Dostępność</a><div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności"><div class="tool-group" aria-label="Kontrast"><span>Kontrast</span><button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny" aria-pressed="true"></button><button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast pomarańczowy" aria-pressed="false"></button><button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Kontrast czarno-biały" aria-pressed="false"></button></div><div class="tool-group" aria-label="Wielkość tekstu"><span>Wielkość tekstu</span><button class="text-size-button" type="button" data-font-size="normal">A</button><button class="text-size-button" type="button" data-font-size="large">A+</button><button class="text-size-button" type="button" data-font-size="largest">A++</button></div><div class="tool-group language-control"><span>Język strony</span><label class="sr-only" for="language">Wybierz język strony</label><div class="language-select-wrap"><span class="language-flag" data-language="pl" aria-hidden="true"></span><select id="language"><option value="pl">Polski</option><option value="en">English</option><option value="uk">Українська</option></select></div></div></div></div>
-      <div class="main-navigation-wrap"><a class="brand" href="index.html" aria-label="Strona główna"><span class="brand-placeholder" aria-hidden="true">LOGO</span><img class="brand-logo" src="assets/logo.ico" alt="" /><span class="sr-only">Logo organizacji</span></a><button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button><nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja"><a class="nav-link" href="index.html">Strona główna</a><a class="nav-link" href="my-idea.html">Mam pomysł!</a><a class="nav-link is-active" href="zostan-testerem.html" aria-current="page">Zostań testerem</a><a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a><a class="nav-link" href="forum.html">Forum</a><a class="nav-link" href="wsparcie.html">Wsparcie</a></nav><div class="account-actions"><a class="button button--primary" href="logowanie.html">Zaloguj się</a><a class="button button--secondary" href="rejestracja.html">Zarejestruj się</a></div></div>
-      <nav class="audience-navigation" aria-label="Nawigacja według grup odbiorców"><a class="audience-link audience-link--plain" href="panel.html">Twój panel</a><a class="audience-link" href="mieszkancy.html">Mieszkańcy i NGO</a><a class="audience-link" href="samorzady.html">Jednostki samorządu terytorialnego</a><a class="audience-link" href="rops-worker.html">Pracownicy ROPS</a><a class="audience-link" href="eksperci.html">Eksperci branżowi i mentorzy</a></nav>
+      <div class="utility-bar">
+        <a class="accessibility-link" href="#accessibility">Dostępność</a>
+        <div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności">
+          <div class="tool-group" aria-label="Kontrast">
+            <span>Kontrast</span>
+            <button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny" aria-pressed="true"></button>
+            <button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast pomarańczowy" aria-pressed="false"></button>
+            <button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Kontrast ciemny" aria-pressed="false"></button>
+          </div>
+          <div class="tool-group" aria-label="Wielkość tekstu">
+            <span>Wielkość tekstu</span>
+            <button class="text-size-button" type="button" data-font-size="normal">A</button>
+            <button class="text-size-button" type="button" data-font-size="large">A+</button>
+            <button class="text-size-button" type="button" data-font-size="largest">A++</button>
+          </div>
+          <div class="tool-group language-control">
+            <span>Język strony</span>
+            <div class="language-select-wrap"><select id="language"><option value="pl">Polski</option><option value="en">English</option></select></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-navigation-wrap">
+        <a class="brand" href="index.html" aria-label="Strona główna">
+          <img class="brand-logo" src="assets/logo.ico" alt="Logo" width="56" height="46" onerror="this.hidden = true" />
+        </a>
+        <nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja">
+          <a class="nav-link" href="index.html">Strona główna</a>
+          <a class="nav-link" href="my-idea.html">Mam pomysł!</a>
+          <a class="nav-link is-active" href="zostan-testerem.html" aria-current="page">Zostań testerem</a>
+          <a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a>
+          <a class="nav-link" href="forum.html">Forum</a>
+          <a class="nav-link" href="wsparcie.html">Wsparcie</a>
+        </nav>
+        <div class="account-actions">
+          <a class="button button--primary" href="logowanie.html">Zaloguj się</a>
+          <a class="button button--secondary" href="rejestracja.html">Zarejestruj się</a>
+        </div>
+      </div>
     </header>
 
     <main id="main-content" class="tester-page">
-      <h1 class="tester-title">Zostań testerem innowacji</h1>
-      <form class="tester-form" id="tester-form">
-        <div class="tester-form-heading"><p id="tester-progress">Strona 1 z 2</p><p>Wypełnij formularz i dołącz do testowania rozwiązań społecznych.</p></div>
-        <fieldset class="tester-step" data-tester-step="type"><legend class="sr-only">Typ zgłaszającego</legend><h2 tabindex="-1">Kim jesteś?</h2><p>Wybierz jedną opcję. Wybrana odpowiedź pojawi się wyraźnie pod kafelkami.</p><div class="tester-choices"><label class="tester-choice"><input type="radio" name="type" value="person" required /><strong>Osoba fizyczna</strong><span>Chcę osobiście testować innowacje i przekazywać opinię.</span></label><label class="tester-choice"><input type="radio" name="type" value="ngo" required /><strong>Organizacja pozarządowa (NGO)</strong><span>Chcemy zaangażować zespół lub społeczność naszej organizacji.</span></label></div><p class="tester-choice-status" id="tester-choice-status" role="status">Nie wybrano jeszcze żadnej opcji.</p></fieldset>
+      <div class="idea-layout">
+        
+        <section class="idea-card" aria-labelledby="tester-title">
+          <div class="tester-header-box" id="tester-title">Zostań testerem innowacji</div>
+          <p class="section-intro">Dołącz do naszej społeczności i pomagaj w testowaniu nowych rozwiązań społecznych.</p>
 
-        <fieldset class="tester-step" data-tester-step="person-details" hidden><legend class="sr-only">Dane osoby fizycznej</legend><h2 tabindex="-1">Twoje dane i zainteresowania</h2><div class="tester-fields two-columns"><label>Imię i nazwisko<input name="person_name" autocomplete="name" required /></label><label>Numer telefonu<input name="person_phone" type="tel" autocomplete="tel" required /></label><label class="full-width">Adres e-mail<input name="person_email" type="email" autocomplete="email" required /></label><label class="full-width">Jakie innowacje Cię interesują i w czym chcesz pomóc?<textarea name="person_interests" rows="7" maxlength="1000" required></textarea></label></div></fieldset>
+          <div id="step-type-selection" style="display: flex; flex-direction: column; flex: 1;">
+            <div class="section-subtitle">Kogo reprezentujesz?</div>
+            
+            <div class="entity-selection-group">
+              <label class="entity-button-label entity-button-label--blue is-selected" id="label-person">
+                <input type="radio" name="entity_type" value="person" checked />
+                <span>Osoba fizyczna</span>
+                <span class="selection-badge">WYBRANO</span>
+              </label>
 
-        <fieldset class="tester-step" data-tester-step="ngo-details" hidden><legend class="sr-only">Dane organizacji</legend><h2 tabindex="-1">Informacje o NGO</h2><div class="tester-fields two-columns"><label class="full-width">Nazwa organizacji<input name="ngo_name" required /></label><label>Kategoria działalności<select name="ngo_category" required><option value="">Wybierz kategorię</option><option>Pomoc społeczna</option><option>Zdrowie</option><option>Edukacja</option><option>Kultura</option><option>Ekologia</option><option>Aktywizacja zawodowa</option><option>Inna</option></select></label><label>Liczba osób możliwych do zaangażowania<input name="ngo_people" type="number" min="1" max="10000" required /></label><label class="full-width">W jakich innowacjach widzicie swoją organizację?<textarea name="ngo_interests" rows="7" maxlength="1000" required></textarea></label></div></fieldset>
+              <label class="entity-button-label entity-button-label--orange" id="label-ngo">
+                <input type="radio" name="entity_type" value="ngo" />
+                <span>Organizacja pozarządowa (NGO)</span>
+                <span class="selection-badge">WYBRANO</span>
+              </label>
+            </div>
 
-        <fieldset class="tester-step" data-tester-step="ngo-contact" hidden><legend class="sr-only">Osoba kontaktowa NGO</legend><h2 tabindex="-1">Osoba kontaktowa</h2><div class="tester-fields"><label>Imię i nazwisko osoby kontaktowej<input name="ngo_contact_name" autocomplete="name" required /></label><label>Numer telefonu<input name="ngo_phone" type="tel" autocomplete="tel" required /></label><label>Adres e-mail<input name="ngo_email" type="email" autocomplete="email" required /></label></div></fieldset>
+            <div class="idea-actions-bottom-right">
+              <button type="button" class="idea-next" id="btn-start-form">Dalej</button>
+            </div>
+          </div>
 
-        <div class="tester-actions"><button class="tester-back" id="tester-back" type="button" hidden>Cofnij</button><span></span><button class="tester-next" id="tester-next" type="button">Dalej</button><button class="tester-submit" id="tester-submit" type="submit" hidden>Wyślij</button></div>
-      </form>
+          <!-- Formularz: Osoba fizyczna -->
+          <form id="form-person" class="idea-form" style="display: none; flex-direction: column; flex: 1;">
+            <label for="person-name">Imię i nazwisko *</label>
+            <input id="person-name" name="name" type="text" placeholder="Jan Kowalski" required />
+
+            <label for="person-email">Adres e-mail *</label>
+            <input id="person-email" name="email" type="email" placeholder="jan.kowalski@example.com" required />
+
+            <label for="person-phone">Numer telefonu *</label>
+            <input id="person-phone" name="phone" type="tel" placeholder="+48 123 456 789" required />
+
+            <label for="person-interests">Interesujące Cię inicjatywy (opcjonalnie)</label>
+            <textarea id="person-interests" name="interests" rows="3" placeholder="Opisz swoje zainteresowania..."></textarea>
+
+            <div class="idea-actions-bottom-right" style="justify-content: space-between;">
+              <button type="button" class="button button--warning" id="btn-back-person">Cofnij</button>
+              <button type="submit" class="idea-next">Wyślij formularz</button>
+            </div>
+          </form>
+
+          <!-- Formularz: NGO -->
+          <form id="form-ngo" class="idea-form" style="display: none; flex-direction: column; flex: 1;">
+            <div id="ngo-page-1" style="display: flex; flex-direction: column; flex: 1;">
+              <label for="ngo-name">Nazwa organizacji *</label>
+              <input id="ngo-name" name="ngo_name" type="text" placeholder="Fundacja / Stowarzyszenie ..." required />
+
+              <label for="ngo-category">Kategoria NGO *</label>
+              <select id="ngo-category" name="ngo_category" required>
+                <option value="">-- Wybierz kategorię --</option>
+                <option value="edukacja">Edukacja i wychowanie</option>
+                <option value="pomoc_spoleczna">Pomoc społeczna</option>
+                <option value="ochrona_zdrowia">Ochrona i promocja zdrowia</option>
+              </select>
+
+              <div class="idea-actions-bottom-right" style="justify-content: space-between;">
+                <button type="button" class="button button--warning" id="btn-back-ngo-1">Cofnij</button>
+                <button type="button" class="idea-next" id="btn-ngo-next-page">Dalej</button>
+              </div>
+            </div>
+
+            <div id="ngo-page-2" style="display: none; flex-direction: column; flex: 1;">
+              <label for="ngo-contact-person">Osoba kontaktowa *</label>
+              <input id="ngo-contact-person" name="contact_person" type="text" placeholder="Imię i nazwisko" required />
+
+              <label for="ngo-email">Adres e-mail *</label>
+              <input id="ngo-email" name="email" type="email" placeholder="kontakt@organizacja.pl" required />
+
+              <label for="ngo-phone">Numer telefonu *</label>
+              <input id="ngo-phone" name="phone" type="tel" placeholder="+48 123 456 789" required />
+
+              <label for="ngo-address">Adres siedziby *</label>
+              <input id="ngo-address" name="address" type="text" placeholder="ul. Przykładowa 12, 00-000 Miasto" required />
+
+              <div class="idea-actions-bottom-right" style="justify-content: space-between;">
+                <button type="button" class="button button--warning" id="btn-back-ngo-2">Cofnij</button>
+                <button type="submit" class="idea-next">Wyślij formularz</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <!-- Prawa karta: Asystent AI -->
+        <aside class="assistant-card" aria-labelledby="assistant-title">
+          <div class="assistant-header-box" id="assistant-title">
+            Skorzystaj z pomocy naszego Asystenta AI przy wypełnianiu formularza
+          </div>
+          <div class="assistant-workspace">
+            <button class="assistant-prompt" id="assistant-prompt" type="button">
+              Dowiedz się więcej o roli testera i procedurach udziału, pytając naszego Asystenta...
+            </button>
+          </div>
+        </aside>
+
+      </div>
     </main>
 
-    <dialog class="tester-dialog" id="tester-confirm-dialog"><div><h2>Czy na pewno chcesz wysłać zgłoszenie?</h2><p>Po potwierdzeniu formularz zostanie przekazany do zespołu.</p><div class="tester-dialog-actions"><button id="tester-confirm-cancel" type="button">Wróć do formularza</button><button id="tester-confirm-submit" type="button">Tak, wyślij</button></div></div></dialog>
-    <dialog class="tester-dialog" id="tester-success-dialog"><div><h2>Zgłoszenie zostało wysłane</h2><p>Dziękujemy za chęć udziału w testowaniu innowacji społecznych.</p><div class="tester-dialog-actions"><button id="tester-success-close" type="button">Zamknij</button></div></div></dialog>
-    <footer class="contact-bar"><div class="contact-inner"><div class="contact-item contact-item--organization"><strong>Regionalny Ośrodek Polityki Społecznej</strong></div><address class="contact-item">ul. Piastowska 32, 30-070 Kraków</address><a class="contact-item" href="tel:+48124220636">+48 12 422 06 36</a><a class="contact-item" href="mailto:biuro@rops.krakow.pl">biuro@rops.krakow.pl</a></div></footer>
-    <svg class="svg-sprite" aria-hidden="true"><symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></symbol></svg>
-    <script src="vendor/i18next.min.js"></script><script src="i18n.js"></script><script src="script.js"></script><script src="zostan-testerem.js"></script>
+    <dialog id="modal-confirm" class="modal-dialog">
+      <h2>Potwierdzenie</h2>
+      <p>Czy na pewno chcesz wysłać formularz zgłoszeniowy?</p>
+      <div class="modal-actions">
+        <button type="button" id="btn-modal-cancel" class="button button--secondary">Anuluj</button>
+        <button type="button" id="btn-modal-confirm" class="button button--primary">Tak, wyślij</button>
+      </div>
+    </dialog>
+
+    <dialog id="modal-success" class="modal-dialog">
+      <h2>Dziękujemy!</h2>
+      <p>Formularz został pomyślnie wysłany. Wkrótce skontaktujemy się z Panem/Panią.</p>
+      <div class="modal-actions">
+        <button type="button" id="btn-modal-close" class="button button--primary">Zamknij</button>
+      </div>
+    </dialog>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const radios = document.querySelectorAll('input[name="entity_type"]');
+        const labels = document.querySelectorAll('.entity-button-label');
+
+        radios.forEach(radio => {
+          radio.addEventListener('change', (e) => {
+            labels.forEach(l => l.classList.remove('is-selected'));
+            if (e.target.checked) {
+              e.target.closest('.entity-button-label').classList.add('is-selected');
+            }
+          });
+        });
+
+        const stepSelection = document.getElementById('step-type-selection');
+        const formPerson = document.getElementById('form-person');
+        const formNgo = document.getElementById('form-ngo');
+        const ngoPage1 = document.getElementById('ngo-page-1');
+        const ngoPage2 = document.getElementById('ngo-page-2');
+
+        const modalConfirm = document.getElementById('modal-confirm');
+        const modalSuccess = document.getElementById('modal-success');
+
+        let currentActiveForm = null;
+
+        document.getElementById('btn-start-form').addEventListener('click', () => {
+          const selectedType = document.querySelector('input[name="entity_type"]:checked').value;
+          stepSelection.style.display = 'none';
+
+          if (selectedType === 'person') {
+            formPerson.style.display = 'flex';
+            currentActiveForm = formPerson;
+          } else {
+            formNgo.style.display = 'flex';
+            ngoPage1.style.display = 'flex';
+            ngoPage2.style.display = 'none';
+            currentActiveForm = formNgo;
+          }
+        });
+
+        document.getElementById('btn-back-person').addEventListener('click', () => {
+          formPerson.style.display = 'none';
+          stepSelection.style.display = 'flex';
+        });
+
+        document.getElementById('btn-back-ngo-1').addEventListener('click', () => {
+          formNgo.style.display = 'none';
+          stepSelection.style.display = 'flex';
+        });
+
+        document.getElementById('btn-ngo-next-page').addEventListener('click', () => {
+          const ngoName = document.getElementById('ngo-name');
+          const ngoCategory = document.getElementById('ngo-category');
+
+          if (ngoName.checkValidity() && ngoCategory.checkValidity()) {
+            ngoPage1.style.display = 'none';
+            ngoPage2.style.display = 'flex';
+          } else {
+            ngoName.reportValidity();
+            ngoCategory.reportValidity();
+          }
+        });
+
+        document.getElementById('btn-back-ngo-2').addEventListener('click', () => {
+          ngoPage2.style.display = 'none';
+          ngoPage1.style.display = 'flex';
+        });
+
+        [formPerson, formNgo].forEach(form => {
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (form.checkValidity()) {
+              currentActiveForm = form;
+              modalConfirm.showModal();
+            } else {
+              form.reportValidity();
+            }
+          });
+        });
+
+        document.getElementById('btn-modal-confirm').addEventListener('click', () => {
+          modalConfirm.close();
+          if (currentActiveForm) {
+            currentActiveForm.reset();
+            currentActiveForm.style.display = 'none';
+          }
+          stepSelection.style.display = 'flex';
+          modalSuccess.showModal();
+        });
+
+        document.getElementById('btn-modal-cancel').addEventListener('click', () => {
+          modalConfirm.close();
+        });
+
+        document.getElementById('btn-modal-close').addEventListener('click', () => {
+          modalSuccess.close();
+          stepSelection.style.display = 'flex';
+        });
+      });
+    </script>
   </body>
 </html>
