@@ -16,7 +16,7 @@ const issueCategories = [
   "Zdrowie psychiczne dzieci i młodzieży",
   "Samotność i integracja społeczna",
   "Transport i mobilność",
-];
+].map((category) => window.translateText ? window.translateText(category, window.getCurrentLanguage?.() || "pl") : category);
 const regionStats = {
   innovations: cities.reduce((sum, city) => sum + city.innovations, 0),
   proposals: cities.reduce((sum, city) => sum + city.proposals, 0),
@@ -40,7 +40,8 @@ const renderCityList = () => {
   regionButton.className = "city-choice city-choice--all";
   regionButton.dataset.city = "all";
   regionButton.setAttribute("aria-pressed", "true");
-  regionButton.innerHTML = "<span>Cała Małopolska</span><strong>148</strong>";
+  const allLabel = window.translateText ? window.translateText("Cała Małopolska", window.getCurrentLanguage?.() || "pl") : "Cała Małopolska";
+  regionButton.innerHTML = `<span>${allLabel}</span><strong>148</strong>`;
   cityList.append(regionButton);
 
   cities.forEach((city) => {
@@ -56,7 +57,8 @@ const renderCityList = () => {
     marker.type = "button";
     marker.className = "fallback-city-marker";
     marker.dataset.city = city.id;
-    marker.setAttribute("aria-label", `${city.name}: ${numberFormat.format(city.innovations)} wdrożonych innowacji`);
+    const innovationsLabel = window.translateText ? window.translateText("wdrożonych innowacji", window.getCurrentLanguage?.() || "pl") : "wdrożonych innowacji";
+    marker.setAttribute("aria-label", `${city.name}: ${numberFormat.format(city.innovations)} ${innovationsLabel}`);
     marker.style.left = `${((city.lon - 19.08) / (21.7 - 19.08)) * 100}%`;
     marker.style.top = `${((50.58 - city.lat) / (50.58 - 49.15)) * 100}%`;
     marker.innerHTML = `<span>${numberFormat.format(city.innovations)}</span>`;
@@ -86,13 +88,14 @@ const renderCategories = (values) => {
     item.append(row, track);
     categoryList.append(item);
   });
-  document.querySelector("#category-count").textContent = `${numberFormat.format(total)} zgłoszeń`;
+  document.querySelector("#category-count").textContent = `${numberFormat.format(total)} ${window.translateText ? window.translateText("zgłoszeń", window.getCurrentLanguage?.() || "pl") : "zgłoszeń"}`;
 };
 
 const updateSelection = (cityId) => {
   const city = cities.find((item) => item.id === cityId);
   const stats = city || regionStats;
-  selectedLocation.textContent = city ? city.name : "Cała Małopolska";
+  const selectedLabel = city ? city.name : (window.translateText ? window.translateText("Cała Małopolska", window.getCurrentLanguage?.() || "pl") : "Cała Małopolska");
+  selectedLocation.textContent = selectedLabel;
   document.querySelector("#innovation-total").textContent = numberFormat.format(stats.innovations);
   document.querySelector("#proposal-total").textContent = numberFormat.format(stats.proposals);
   document.querySelector("#problem-total").textContent = numberFormat.format(stats.problems);
@@ -142,8 +145,10 @@ if (window.L && mapCanvas) {
       iconSize: [42, 42],
       iconAnchor: [21, 21],
     });
-    const marker = L.marker([city.lat, city.lon], { icon, title: `${city.name}: ${city.innovations} wdrożonych innowacji`, alt: city.name }).addTo(liveMap);
-    marker.bindTooltip(`${city.name} · ${numberFormat.format(city.innovations)} innowacji`);
+    const innovationsLabel = window.translateText ? window.translateText("wdrożonych innowacji", window.getCurrentLanguage?.() || "pl") : "wdrożonych innowacji";
+    const innovationCountLabel = window.translateText ? window.translateText("innowacji", window.getCurrentLanguage?.() || "pl") : "innowacji";
+    const marker = L.marker([city.lat, city.lon], { icon, title: `${city.name}: ${city.innovations} ${innovationsLabel}`, alt: city.name }).addTo(liveMap);
+    marker.bindTooltip(`${city.name} · ${numberFormat.format(city.innovations)} ${innovationCountLabel}`);
     marker.on("click", () => updateSelection(city.id));
     mapMarkers.set(city.id, marker);
   });

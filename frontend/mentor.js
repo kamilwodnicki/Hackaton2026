@@ -3,6 +3,13 @@ const profileKey = "rops-account-profile";
 const mentorFeedbackKey = "rops-mentor-feedback";
 const numberFormat = new Intl.NumberFormat("pl-PL");
 
+const t = (value, fallback = value) => {
+  if (typeof window.translateText === "function") {
+    return window.translateText(value, window.getCurrentLanguage ? window.getCurrentLanguage() : "pl") || fallback;
+  }
+  return fallback;
+};
+
 const sampleIdeas = [
   {
     id: "mentor-senior-circle",
@@ -95,15 +102,23 @@ const forumList = document.querySelector("#mentor-forum-list");
 const mentorForumSearch = document.querySelector("#mentor-forum-search");
 const mentorForumEmpty = document.querySelector("#mentor-forum-empty");
 const normalizeMentorText = (value) => value.toLocaleLowerCase("pl").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-const dateLabel = (value) => new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "long", year: "numeric" }).format(new Date(value));
+const dateLabel = (value) => new Intl.DateTimeFormat(window.getCurrentLanguage ? { pl: "pl-PL", en: "en-US", uk: "uk-UA" }[window.getCurrentLanguage()] || "pl-PL" : "pl-PL", { day: "numeric", month: "long", year: "numeric" }).format(new Date(value));
 
 const renderMentorStats = () => {
   const reviewedCount = Object.values(feedbackByIdea).reduce((total, entries) => total + (Array.isArray(entries) ? entries.length : 0), 0);
   document.querySelector("#mentor-pending-count").textContent = numberFormat.format(ideas.filter((idea) => !(feedbackByIdea[idea.id] || []).length).length);
   document.querySelector("#mentor-feedback-count").textContent = numberFormat.format(reviewedCount);
   document.querySelector("#mentor-idea-thread-count").textContent = numberFormat.format(mentorForumThreads.filter((thread) => thread.category === "pomysly").length);
-  document.querySelector("#mentor-ideas-total").textContent = `${numberFormat.format(ideas.length)} ${ideas.length === 1 ? "pomysł" : ideas.length >= 2 && ideas.length <= 4 ? "pomysły" : "pomysłów"}`;
+  const ideaCount = `${numberFormat.format(ideas.length)} ${ideas.length === 1 ? t("pomysł", "pomysł") : ideas.length >= 2 && ideas.length <= 4 ? t("pomysły", "pomysły") : t("pomysłów", "pomysłów")}`;
+  document.querySelector("#mentor-ideas-total").textContent = ideaCount;
 };
+
+const rebuildMentorTranslations = () => {
+  renderIdeas();
+  renderForum();
+  renderMentorStats();
+};
+window.rebuildMentorTranslations = rebuildMentorTranslations;
 
 const renderIdeas = () => {
   if (!ideaList) return;
@@ -133,7 +148,7 @@ const renderIdeas = () => {
     author.textContent = `${idea.author} · ${idea.city}`;
     const status = document.createElement("span");
     status.className = `mentor-idea-status${feedbackByIdea[idea.id]?.length ? " is-reviewed" : ""}`;
-    status.textContent = feedbackByIdea[idea.id]?.length ? "Feedback dodany" : "Do opinii";
+    status.textContent = feedbackByIdea[idea.id]?.length ? t("Feedback dodany", "Feedback dodany") : t("Do opinii", "Do opinii");
     content.append(category, title, author);
     card.append(content, status);
     card.addEventListener("click", () => openIdea(idea));
@@ -162,7 +177,7 @@ const renderForum = () => {
     title.textContent = thread.title;
     const meta = document.createElement("span");
     meta.className = "mentor-forum-meta";
-    meta.textContent = `${thread.author} · ${thread.replies} odp. · ${thread.activity}`;
+    meta.textContent = `${thread.author} · ${thread.replies} ${t("odp.", "odp.")} · ${thread.activity}`;
     item.append(category, title, meta);
     forumList.append(item);
   });
@@ -196,16 +211,16 @@ const openIdea = (idea) => {
   document.querySelector("#mentor-detail-date").textContent = dateLabel(idea.date);
   document.querySelector("#mentor-detail-category").textContent = idea.category;
   document.querySelector("#mentor-detail-description").textContent = idea.description;
-  document.querySelector("#mentor-detail-status").textContent = feedbackByIdea[idea.id]?.length ? "Feedback dodany" : "Oczekuje na feedback";
+  document.querySelector("#mentor-detail-status").textContent = feedbackByIdea[idea.id]?.length ? t("Feedback dodany", "Feedback dodany") : t("Oczekuje na feedback", "Oczekuje na feedback");
   const contact = document.querySelector("#mentor-contact-author");
   const subject = `Informacja o pomyśle: ${idea.title}`;
   if (idea.email && !idea.email.endsWith("@example.org")) {
     contact.href = `mailto:${encodeURIComponent(idea.email)}?subject=${encodeURIComponent(subject)}`;
-    contact.textContent = "Napisz do autora";
+    contact.textContent = t("Napisz do autora", "Napisz do autora");
   } else {
     const body = `Proszę o przekazanie autorowi ${idea.author} wiadomości w sprawie pomysłu „${idea.title}”.`;
     contact.href = `mailto:biuro@rops.krakow.pl?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    contact.textContent = "Poproś ROPS o kontakt z autorem";
+    contact.textContent = t("Poproś ROPS o kontakt z autorem", "Poproś ROPS o kontakt z autorem");
   }
   renderFeedbackHistory(idea);
   document.querySelector("#mentor-feedback-input").value = "";
@@ -253,8 +268,8 @@ document.querySelector("#mentor-feedback-form")?.addEventListener("submit", (eve
   feedbackByIdea[selectedIdea.id] = entries;
   localStorage.setItem(mentorFeedbackKey, JSON.stringify(feedbackByIdea));
   input.value = "";
-  document.querySelector("#mentor-feedback-message").textContent = "Feedback został zapisany.";
-  document.querySelector("#mentor-detail-status").textContent = "Feedback dodany";
+  document.querySelector("#mentor-feedback-message").textContent = t("Feedback został zapisany.", "Feedback został zapisany.");
+  document.querySelector("#mentor-detail-status").textContent = t("Feedback dodany", "Feedback dodany");
   renderFeedbackHistory(selectedIdea);
   renderMentorStats();
 });

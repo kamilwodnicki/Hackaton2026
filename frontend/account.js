@@ -3,6 +3,13 @@ const profileKey = "rops-account-profile";
 const feedbackKey = "rops-mentor-feedback";
 const readFeedbackKey = "rops-account-read-feedback";
 
+const t = (value, fallback = value) => {
+  if (typeof window.translateText === "function") {
+    return window.translateText(value, window.getCurrentLanguage ? window.getCurrentLanguage() : "pl") || fallback;
+  }
+  return fallback;
+};
+
 const readJson = (key, fallback) => {
   try {
     return JSON.parse(localStorage.getItem(key)) ?? fallback;
@@ -23,19 +30,41 @@ const ideasEmpty = document.querySelector("#account-empty");
 const ideaTotal = document.querySelector("#idea-total");
 const formatDate = (value) => {
   const date = new Date(value);
-  return Number.isNaN(date.valueOf()) ? "Data nieznana" : new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" }).format(date);
+  const locale = window.getCurrentLanguage ? { pl: "pl-PL", en: "en-US", uk: "uk-UA" }[window.getCurrentLanguage()] || "pl-PL" : "pl-PL";
+  return Number.isNaN(date.valueOf()) ? t("Data nieznana", "Data nieznana") : new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(date);
 };
+
+const rebuildAccountTranslations = () => {
+  if (!ideasList) return;
+  ideasList.querySelectorAll("tr").forEach((row) => {
+    const title = row.querySelector("td:first-child");
+    if (title && title.dataset.originalText) title.textContent = t(title.dataset.originalText, title.dataset.originalText);
+    const status = row.querySelector("[data-idea-status]");
+    if (status && status.dataset.statusKey) status.textContent = t(status.dataset.statusKey, status.dataset.statusKey);
+  });
+
+  const total = document.querySelector("#idea-total");
+  if (total && total.dataset.baseText) {
+    total.textContent = `${ideas.length} ${t(total.dataset.baseText, total.dataset.baseText)}`;
+  }
+};
+
+window.rebuildAccountTranslations = rebuildAccountTranslations;
 
 if (ideasList) {
   ideasList.replaceChildren();
   ideas.forEach((idea) => {
     const row = document.createElement("tr");
     const title = document.createElement("td");
-    title.textContent = idea.title || "Pomysł mieszkańca";
+    const titleText = idea.title || "Pomysł mieszkańca";
+    title.dataset.originalText = titleText;
+    title.textContent = t(titleText, titleText);
     const statusCell = document.createElement("td");
     const status = document.createElement("span");
     status.className = "account-status account-status--submitted";
-    status.textContent = idea.status || "Przyjęty";
+    const statusText = idea.status || "Przyjęty";
+    status.dataset.statusKey = statusText;
+    status.textContent = t(statusText, statusText);
     statusCell.append(status);
     row.append(title);
 
@@ -48,7 +77,10 @@ if (ideasList) {
     ideasList.append(row);
   });
   if (ideasEmpty) ideasEmpty.hidden = ideas.length > 0;
-  if (ideaTotal) ideaTotal.textContent = `${ideas.length} ${ideas.length === 1 ? "pomysł" : ideas.length >= 2 && ideas.length <= 4 ? "pomysły" : "pomysłów"}`;
+  if (ideaTotal) {
+    ideaTotal.dataset.baseText = `${ideas.length === 1 ? "pomysł" : ideas.length >= 2 && ideas.length <= 4 ? "pomysły" : "pomysłów"}`;
+    ideaTotal.textContent = `${ideas.length} ${t(ideaTotal.dataset.baseText, ideaTotal.dataset.baseText)}`;
+  }
 }
 
 const profileForm = document.querySelector("#profile-form");
@@ -79,7 +111,7 @@ if (profileForm) {
     const data = Object.fromEntries(new FormData(profileForm).entries());
     localStorage.setItem(profileKey, JSON.stringify(data));
     updateProfileSummary(data);
-    profileMessage.textContent = "Dane konta zostały zapisane.";
+    profileMessage.textContent = t("Dane konta zostały zapisane.", "Dane konta zostały zapisane.");
   });
 }
 
@@ -128,7 +160,7 @@ const setMessageCounters = () => {
     badge.textContent = String(unread);
     badge.hidden = unread === 0;
   }
-  if (total) total.textContent = `${messages.length} ${messages.length === 1 ? "wiadomość" : "wiadomości"}`;
+  if (total) total.textContent = `${messages.length} ${t(messages.length === 1 ? "wiadomość" : "wiadomości", messages.length === 1 ? "wiadomość" : "wiadomości")}`;
 };
 
 const openAccountMessage = (message, button) => {
@@ -152,19 +184,19 @@ const openAccountMessage = (message, button) => {
   date.textContent = formatDate(message.createdAt);
   heading.append(sender, date);
   const title = document.createElement("h3");
-  title.textContent = `W sprawie: ${message.ideaTitle}`;
+  title.textContent = `${t("W sprawie:", "W sprawie:")} ${message.ideaTitle}`;
   const body = document.createElement("p");
   body.className = "account-open-message-body";
   body.textContent = message.message;
   const reply = document.createElement("a");
   reply.className = "account-reply-link";
-  const subject = `Odpowiedź: ${message.ideaTitle}`;
+  const subject = `${t("Odpowiedź:", "Odpowiedź:")} ${message.ideaTitle}`;
   if (message.email && !message.email.endsWith("@example.org")) {
     reply.href = `mailto:${encodeURIComponent(message.email)}?subject=${encodeURIComponent(subject)}`;
-    reply.textContent = "Odpowiedz ekspertowi";
+    reply.textContent = t("Odpowiedz ekspertowi", "Odpowiedz ekspertowi");
   } else {
     reply.href = `mailto:biuro@rops.krakow.pl?subject=${encodeURIComponent(subject)}`;
-    reply.textContent = "Odpowiedz przez ROPS";
+    reply.textContent = t("Odpowiedz przez ROPS", "Odpowiedz przez ROPS");
   }
   article.append(heading, title, body, reply);
   messageDetail.replaceChildren(article);
