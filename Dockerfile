@@ -26,4 +26,6 @@ RUN if [ "$INSTALL_AI" = "true" ]; then pip install --no-cache-dir -r requiremen
 # Kopiujemy pozostałe pliki projektu do kontenera
 COPY . .
 
-CMD ["python", "main.py"]
+EXPOSE 8080
+
+CMD ["python", "app/main.py"]

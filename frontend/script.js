@@ -61,7 +61,14 @@ if (currentSession) {
   });
 }
 
-document.querySelectorAll('a[href="panel.html"], a[href="ustawienia-konta.html"]').forEach((link) => {
+document.querySelectorAll([
+  'a[href="panel.html"]',
+  'a[href="ustawienia-konta.html"]',
+  'a[href="mieszkancy.html"]',
+  'a[href="samorzady.html"]',
+  'a[href="rops-worker.html"]',
+  'a[href="eksperci.html"]',
+].join(", ")).forEach((link) => {
   link.addEventListener("click", (event) => {
     if (getCurrentSession()) return;
     event.preventDefault();

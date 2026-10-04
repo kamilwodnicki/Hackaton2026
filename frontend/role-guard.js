@@ -1,5 +1,7 @@
 (() => {
-  const requiredRole = document.currentScript?.dataset.requiredRole;
+  const guardScript = document.currentScript;
+  const requiredRole = guardScript?.dataset.requiredRole;
+  const authenticatedRedirect = guardScript?.dataset.authenticatedRedirect;
   if (!requiredRole) return;
   let session = null;
   try {
@@ -11,5 +13,9 @@
     return;
   }
   const roles = Array.isArray(session.roles) ? session.roles : [session.role || "resident"];
-  if (!roles.includes(requiredRole)) location.replace("panel.html?access=denied");
+  if (!roles.includes(requiredRole)) {
+    location.replace("panel.html?access=denied");
+    return;
+  }
+  if (authenticatedRedirect) location.replace(authenticatedRedirect);
 })();
