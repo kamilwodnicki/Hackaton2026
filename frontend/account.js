@@ -2,6 +2,7 @@ const ideasKey = "rops-proposed-ideas";
 const profileKey = "rops-account-profile";
 const feedbackKey = "rops-mentor-feedback";
 const readFeedbackKey = "rops-account-read-feedback";
+const directMessagesKey = "rops-direct-messages";
 
 const readJson = (key, fallback) => {
   try {
@@ -18,6 +19,7 @@ const mentorFeedback = storedFeedback && typeof storedFeedback === "object" && !
 const storedReadIds = readJson(readFeedbackKey, []);
 const readMessageIds = new Set(Array.isArray(storedReadIds) ? storedReadIds : []);
 const profile = readJson(profileKey, {});
+const accountSession = readJson("rops-auth-session", {});
 const ideasList = document.querySelector("#account-ideas-list");
 const ideasEmpty = document.querySelector("#account-empty");
 const ideaTotal = document.querySelector("#idea-total");
@@ -113,6 +115,21 @@ ideas.forEach((idea, index) => {
     });
   });
 });
+const directMessages = readJson(directMessagesKey, []);
+if (Array.isArray(directMessages)) {
+  const accountEmail = String(accountSession.email || profile.email || "").trim().toLowerCase();
+  directMessages
+    .filter((entry) => entry.ownerEmail === accountEmail)
+    .forEach((entry) => messages.push({
+      id: entry.id,
+      ideaTitle: `Rozmowa z: ${entry.mentorName || "Mentor ROPS"}`,
+      sender: entry.sender === "mentor" ? (entry.mentorName || "Mentor ROPS") : "Wiadomość wysłana przez Ciebie",
+      message: entry.text,
+      createdAt: entry.createdAt,
+      read: entry.sender !== "mentor" || readMessageIds.has(entry.id),
+      mentorId: entry.mentorId,
+    }));
+}
 messages.sort((first, second) => new Date(second.createdAt) - new Date(first.createdAt));
 
 const messageList = document.querySelector("#account-message-list");
@@ -159,7 +176,10 @@ const openAccountMessage = (message, button) => {
   const reply = document.createElement("a");
   reply.className = "account-reply-link";
   const subject = `Odpowiedź: ${message.ideaTitle}`;
-  if (message.email && !message.email.endsWith("@example.org")) {
+  if (message.mentorId) {
+    reply.href = `forum.html?mentor=${encodeURIComponent(message.mentorId)}`;
+    reply.textContent = "Kontynuuj rozmowę";
+  } else if (message.email && !message.email.endsWith("@example.org")) {
     reply.href = `mailto:${encodeURIComponent(message.email)}?subject=${encodeURIComponent(subject)}`;
     reply.textContent = "Odpowiedz ekspertowi";
   } else {

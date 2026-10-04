@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Formularz kontaktu ze wsparciem technicznym platformy." />
+    <title>Wsparcie techniczne | Dostępność</title>
+    <link rel="icon" href="assets/logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="auth-guard.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Przejdź do treści</a>
+    <header class="site-header">
+      <div class="utility-bar"><a class="accessibility-link" href="#accessibility">Dostępność</a><div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności"><div class="tool-group" aria-label="Kontrast"><span>Kontrast</span><button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny" aria-pressed="true"></button><button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast pomarańczowy" aria-pressed="false"></button><button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Kontrast czarno-biały" aria-pressed="false"></button></div><div class="tool-group" aria-label="Wielkość tekstu"><span>Wielkość tekstu</span><button class="text-size-button" type="button" data-font-size="normal">A</button><button class="text-size-button" type="button" data-font-size="large">A+</button><button class="text-size-button" type="button" data-font-size="largest">A++</button></div><div class="tool-group language-control"><span>Język strony</span><label class="sr-only" for="language">Wybierz język strony</label><div class="language-select-wrap"><span class="language-flag" data-language="pl" aria-hidden="true"></span><select id="language"><option value="pl">Polski</option><option value="en">English</option><option value="uk">Українська</option></select></div></div></div></div>
+      <div class="main-navigation-wrap">
+        <a class="brand" href="index.html" aria-label="Strona główna"><span class="brand-placeholder" aria-hidden="true">LOGO</span><img class="brand-logo" src="assets/logo.ico" alt="" /><span class="sr-only">Logo organizacji</span></a>
+        <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button>
+        <nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja"><a class="nav-link" href="index.html">Strona główna</a><a class="nav-link" href="my-idea.html">Mam pomysł!</a><a class="nav-link" href="zostan-testerem.html">Zostań testerem</a><a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a><a class="nav-link" href="forum.html">Forum</a><a class="nav-link is-active" href="wsparcie.html" aria-current="page">Wsparcie</a></nav>
+        <div class="account-actions"><a class="button button--account" href="ustawienia-konta.html">Twoje konto</a><button class="button button--secondary" type="button" data-logout>Wyloguj</button></div>
+      </div>
+    </header>
+
+    <main id="main-content" class="support-page">
+      <h1 class="support-title">Wsparcie techniczne</h1>
+      <div class="support-shell"><section class="support-intro"><p class="account-eyebrow">Pomoc techniczna</p><h2>Opisz problem z działaniem platformy</h2><p>Podaj możliwie dokładny opis sytuacji. Zdjęcie ekranu jest opcjonalne.</p><p>Zgłoszenie zostanie wysłane do zespołu technicznego.</p></section>
+        <form class="support-form" id="support-form" enctype="multipart/form-data">
+          <label for="support-category">Kategoria problemu</label><select id="support-category" name="category" required><option value="">Wybierz kategorię</option><option value="logowanie">Logowanie i konto</option><option value="formularze">Formularze i zgłoszenia</option><option value="wyswietlanie">Wyświetlanie strony</option><option value="dostepnosc">Dostępność</option><option value="wydajnosc">Wydajność</option><option value="inna">Inna</option></select>
+          <div id="support-other-wrap" hidden><label for="support-other-category">Nazwa innej kategorii</label><input id="support-other-category" name="other_category" maxlength="80" /></div>
+          <div class="support-label-row"><label for="support-description">Opis sytuacji lub problemu</label><span id="support-counter">0/1000</span></div><textarea id="support-description" name="description" rows="9" maxlength="1000" required></textarea>
+          <label for="support-image">Zdjęcie ekranu <span>(opcjonalnie, JPG, PNG, GIF lub WEBP, maks. 5 MB)</span></label><div class="support-file"><input id="support-image" name="image" type="file" accept="image/jpeg,image/png,image/gif,image/webp" /><span id="support-file-name">Nie wybrano zdjęcia</span></div>
+          <p class="support-message" id="support-message" role="status" aria-live="polite"></p><button class="support-submit" type="submit">Wyślij zgłoszenie</button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="contact-bar"><div class="contact-inner"><div class="contact-item contact-item--organization"><strong>Regionalny Ośrodek Polityki Społecznej</strong></div><address class="contact-item">ul. Piastowska 32, 30-070 Kraków</address><a class="contact-item" href="tel:+48124220636">+48 12 422 06 36</a><a class="contact-item" href="mailto:biuro@rops.krakow.pl">biuro@rops.krakow.pl</a></div></footer>
+    <svg class="svg-sprite" aria-hidden="true"><symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></symbol></svg>
+    <script src="vendor/i18next.min.js"></script><script src="i18n.js"></script><script src="script.js"></script><script src="support.js"></script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Katalog gotowych innowacji społecznych dla jednostek samorządu terytorialnego." />
+    <title>Panel JST — katalog rozwiązań | Dostępność</title>
+    <link rel="icon" href="assets/logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="role-guard.js" data-required-role="jst"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Przejdź do treści</a>
+    <header class="site-header">
+      <div class="utility-bar"><a class="accessibility-link" href="#accessibility">Dostępność</a><div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności"><div class="tool-group" aria-label="Kontrast"><span>Kontrast</span><button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny" aria-pressed="true"></button><button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast pomarańczowy" aria-pressed="false"></button><button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Kontrast czarno-biały" aria-pressed="false"></button></div><div class="tool-group" aria-label="Wielkość tekstu"><span>Wielkość tekstu</span><button class="text-size-button" type="button" data-font-size="normal">A</button><button class="text-size-button" type="button" data-font-size="large">A+</button><button class="text-size-button" type="button" data-font-size="largest">A++</button></div><div class="tool-group language-control"><span>Język strony</span><label class="sr-only" for="language">Wybierz język strony</label><div class="language-select-wrap"><span class="language-flag" data-language="pl" aria-hidden="true"></span><select id="language"><option value="pl">Polski</option><option value="en">English</option><option value="uk">Українська</option></select></div></div></div></div>
+      <div class="main-navigation-wrap"><a class="brand" href="index.html" aria-label="Strona główna"><span class="brand-placeholder" aria-hidden="true">LOGO</span><img class="brand-logo" src="assets/logo.ico" alt="" /><span class="sr-only">Logo organizacji</span></a><button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button><nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja"><a class="nav-link" href="index.html">Strona główna</a><a class="nav-link" href="my-idea.html">Mam pomysł!</a><a class="nav-link" href="zostan-testerem.html">Zostań testerem</a><a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a><a class="nav-link" href="forum.html">Forum</a><a class="nav-link" href="wsparcie.html">Wsparcie</a></nav><div class="account-actions"><a class="button button--account" href="ustawienia-konta.html">Twoje konto</a><button class="button button--secondary" type="button" data-logout>Wyloguj</button></div></div>
+      <nav class="audience-navigation" aria-label="Nawigacja według grup odbiorców"><a class="audience-link audience-link--plain" href="panel.html">Twój panel</a><a class="audience-link" href="mieszkancy.html">Mieszkańcy i NGO</a><a class="audience-link is-active" href="samorzady.html" aria-current="page">Jednostki samorządu terytorialnego</a><a class="audience-link" href="rops-worker.html">Pracownicy ROPS</a><a class="audience-link" href="eksperci.html">Eksperci branżowi i mentorzy</a></nav>
+    </header>
+
+    <main id="main-content" class="jst-page">
+      <header class="jst-heading"><div><p>Panel jednostki samorządu terytorialnego</p><h1>Gotowe rozwiązania dla polityk lokalnych</h1><span>Przeglądaj sprawdzone innowacje i wykorzystuj je jako punkt wyjścia do wdrożeń w swojej jednostce.</span></div><a href="my-idea.html">Zgłoś własny pomysł</a></header>
+      <div class="jst-layout">
+        <aside class="jst-filters-panel" aria-labelledby="jst-filters-title"><h2 id="jst-filters-title">Wyszukaj rozwiązanie</h2><form id="jst-filters"><label>Słowa kluczowe<input name="query" type="search" placeholder="Np. seniorzy, dostępność" /></label><label>Kategoria<select name="category"><option value="">Wszystkie kategorie</option><option>Pomoc społeczna</option><option>Zdrowie</option><option>Środowisko</option><option>Dostępność</option><option>Edukacja</option></select></label><label>Powiat<select name="county"><option value="">Wszystkie powiaty</option><option value="krakowski">krakowski</option><option value="tarnowski">tarnowski</option><option value="wielicki">wielicki</option><option value="nowosadecki">nowosądecki</option><option value="olkuski">olkuski</option></select></label><fieldset><legend>Data zgłoszenia</legend><label>Od<input name="date_from" type="date" /></label><label>Do<input name="date_to" type="date" /></label></fieldset><button id="jst-reset-filters" type="button">Wyczyść filtry</button></form></aside>
+        <section class="jst-results" aria-labelledby="jst-results-title"><div class="jst-results-heading"><div><p class="account-eyebrow">Katalog wdrożeń</p><h2 id="jst-results-title">Innowacje gotowe do wykorzystania</h2></div><strong id="jst-result-count">0 rozwiązań</strong></div><div class="jst-solution-list" id="jst-solution-list"></div><p class="jst-empty" id="jst-empty" hidden>Nie znaleziono rozwiązań spełniających wybrane kryteria.</p></section>
+      </div>
+    </main>
+
+    <footer class="contact-bar"><div class="contact-inner"><div class="contact-item contact-item--organization"><strong>Regionalny Ośrodek Polityki Społecznej</strong></div><address class="contact-item">ul. Piastowska 32, 30-070 Kraków</address><a class="contact-item" href="tel:+48124220636">+48 12 422 06 36</a><a class="contact-item" href="mailto:biuro@rops.krakow.pl">biuro@rops.krakow.pl</a></div></footer>
+    <svg class="svg-sprite" aria-hidden="true"><symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></symbol></svg>
+    <script src="vendor/i18next.min.js"></script><script src="i18n.js"></script><script src="script.js"></script><script src="jst-catalog.js"></script>
+  </body>
+</html>
