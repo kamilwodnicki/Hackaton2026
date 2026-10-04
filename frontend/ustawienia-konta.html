@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Ustawienia danych osobowych i statusy pomysłów użytkownika." />
+    <title>Twoje konto | Dostępność</title>
+    <link rel="icon" href="assets/logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="auth-guard.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Przejdź do treści</a>
+    <header class="site-header">
+      <div class="utility-bar"><a class="accessibility-link" href="#accessibility">Dostępność</a><div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności"><div class="tool-group language-control"><span>Język strony</span><label class="sr-only" for="language">Wybierz język strony</label><div class="language-select-wrap"><span class="language-flag" data-language="pl" aria-hidden="true"></span><select id="language" aria-label="Język strony"><option value="pl">Polski</option><option value="en">English</option><option value="uk">Українська</option></select></div></div></div></div>
+      <div class="main-navigation-wrap">
+        <a class="brand" href="index.html" aria-label="Strona główna"><span class="brand-placeholder" aria-hidden="true">LOGO</span><img class="brand-logo" src="assets/logo.ico" alt="" width="56" height="46" onerror="this.hidden = true" /><span class="sr-only">Logo organizacji</span></a>
+        <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button>
+        <nav class="main-navigation panel-navigation" id="main-navigation" aria-label="Główna nawigacja"><a class="nav-link" href="index.html">Strona główna</a></nav>
+        <div class="account-actions"><a class="button button--account is-current" href="ustawienia-konta.html" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Twoje konto</span></a><button class="button button--secondary" type="button" data-logout>Wyloguj</button></div>
+      </div>
+    </header>
+
+    <main id="main-content" class="account-page">
+      <header class="account-page-heading"><div><p class="account-eyebrow">Strefa mieszkańca</p><h1>Twoje konto</h1><p class="account-intro">Pomysły, wiadomości i dane profilu w jednym miejscu.</p></div><a class="account-back-link" href="panel.html">Wróć do panelu</a></header>
+      <section class="account-profile-strip" aria-label="Podsumowanie konta"><span class="account-avatar" id="account-initials" aria-hidden="true">AK</span><div class="account-profile-summary"><strong id="account-display-name">Mieszkaniec Małopolski</strong><span id="account-profile-location">Uzupełnij miejscowość w danych profilu</span></div><p class="account-activity-summary"><span><strong id="account-activity-ideas">0</strong> zgłoszonych pomysłów</span><span><strong id="account-activity-unread">0</strong> nieprzeczytanych wiadomości</span></p></section>
+      <div class="account-dashboard-layout">
+        <aside class="account-sidebar" aria-label="Sekcje konta"><nav class="account-section-nav" role="group" aria-label="Wybierz sekcję konta"><button class="account-section-tab is-active" type="button" data-account-view="messages" aria-controls="account-view-messages" aria-pressed="true"><span class="account-nav-icon" aria-hidden="true">✉</span><span>Wiadomości</span><span class="account-unread-badge" id="account-unread-badge" hidden></span></button><button class="account-section-tab" type="button" data-account-view="ideas" aria-controls="account-view-ideas" aria-pressed="false"><span>Moje pomysły</span><span id="idea-total">0</span></button><button class="account-section-tab" type="button" data-account-view="profile" aria-controls="account-view-profile" aria-pressed="false"><span>Moje dane</span></button><a class="account-section-link" href="forum.html">Moje pytania</a><a class="account-section-link" href="mapa-potrzeb.html">Przegląd innowacji</a></nav></aside>
+        <div class="account-content">
+          <section class="account-view is-active" id="account-view-messages" data-account-view-panel="messages" aria-labelledby="account-messages-title">
+            <div class="account-view-heading"><div><h2 id="account-messages-title">Wiadomości</h2><p>Informacje zwrotne i kontakt w sprawie Twoich pomysłów.</p></div><span class="account-total" id="account-message-total">0 wiadomości</span></div>
+            <div class="account-inbox-layout"><div class="account-message-list" id="account-message-list" role="listbox" aria-label="Skrzynka wiadomości"></div><p class="account-empty account-messages-empty" id="account-messages-empty">Wiadomości od mentorów i ROPS pojawią się tutaj.</p><article class="account-message-detail" id="account-message-detail" aria-live="polite" hidden><div class="account-message-placeholder"><span aria-hidden="true">✉</span><p>Wybierz wiadomość z listy, aby ją przeczytać.</p></div></article></div>
+          </section>
+          <section class="account-view" id="account-view-ideas" data-account-view-panel="ideas" aria-labelledby="account-ideas-title" hidden><div class="account-view-heading"><div><h2 id="account-ideas-title">Moje pomysły</h2><p>Śledź status zgłoszeń.</p></div><a href="my-idea.html">Dodaj pomysł</a></div><div class="account-table-wrap"><table class="account-ideas-table"><thead><tr><th scope="col">Pomysł</th><th scope="col">Data zgłoszenia</th><th scope="col">Status</th></tr></thead><tbody id="account-ideas-list"></tbody></table><p class="account-empty" id="account-empty">Nie masz jeszcze zgłoszonych pomysłów.</p></div></section>
+          <section class="account-view" id="account-view-profile" data-account-view-panel="profile" aria-labelledby="profile-title" hidden><div class="account-view-heading"><div><h2 id="profile-title">Moje dane</h2><p>Możesz je zaktualizować w dowolnym momencie.</p></div></div><form class="profile-form" id="profile-form"><label for="profile-name">Imię i nazwisko</label><input id="profile-name" name="name" autocomplete="name" required /><label for="profile-email">Adres e-mail</label><input id="profile-email" name="email" type="email" autocomplete="email" required /><label for="profile-phone">Numer telefonu</label><input id="profile-phone" name="phone" type="tel" autocomplete="tel" /><label for="profile-city">Miejscowość</label><input id="profile-city" name="city" autocomplete="address-level2" /><div class="profile-form-actions"><p class="profile-message" id="profile-message" role="status" aria-live="polite"></p><button class="button button--primary" type="submit">Zapisz zmiany</button></div></form></section>
+        </div>
+      </div>
+      <p class="account-storage-note">Wiadomości i dane konta są przechowywane lokalnie w tej przeglądarce.</p>
+    </main>
+
+    <footer class="contact-bar"><div class="contact-inner"><div class="contact-item contact-item--organization"><span class="contact-icon contact-icon--large"><svg aria-hidden="true"><use href="#icon-user-round"></use></svg></span><strong>Regionalny Ośrodek Polityki<br />Społecznej</strong></div><address class="contact-item"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-map-pin"></use></svg></span><span>ul. Piastowska 32,<br />30-070 Kraków</span></address><a class="contact-item" href="tel:+48124220636"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-phone"></use></svg></span><span>+48 12 422 06 36</span></a><a class="contact-item" href="mailto:biuro@rops.krakow.pl"><span class="contact-icon"><svg aria-hidden="true"><use href="#icon-mail"></use></svg></span><span>biuro@rops.krakow.pl</span></a></div></footer>
+    <svg class="svg-sprite" aria-hidden="true"><symbol id="icon-user-round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M4 21a8 8 0 0 1 16 0"/><circle cx="12" cy="12" r="10"/></symbol><symbol id="icon-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol><symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z"/></symbol><symbol id="icon-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 7L2 7"/></symbol><symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol></svg>
+    <script src="vendor/react.production.min.js" crossorigin></script><script src="vendor/react-dom.production.min.js" crossorigin></script><script src="vendor/i18next.min.js" crossorigin></script><script src="vendor/react-i18next.min.js" crossorigin></script><script src="i18n.js"></script>
+    <script src="script.js"></script>
+    <script src="account.js"></script>
+  </body>
+</html>
