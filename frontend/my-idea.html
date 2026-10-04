@@ -97,7 +97,13 @@
         <aside class="assistant-card" aria-labelledby="assistant-title">
           <h2 class="assistant-heading" id="assistant-title">Skorzystaj z pomocy naszego Asystenta AI<br />przy wypełnianiu formularza</h2>
           <div class="assistant-workspace">
+            <div class="chat-log" id="assistant-chat-log" aria-live="polite" hidden></div>
             <button class="assistant-prompt" id="assistant-prompt" type="button">Sprawdź, czy Twój pomysł nie istnieje już w bazie innowacji, pytając o to naszego Asystenta...</button>
+            <form class="assistant-form" id="assistant-form">
+              <label class="sr-only" for="assistant-input">Zadaj pytanie asystentowi</label>
+              <input id="assistant-input" type="text" placeholder="Zapytaj asystenta…" autocomplete="off" />
+              <button type="submit">Wyślij</button>
+            </form>
           </div>
         </aside>
       </div>
