@@ -209,23 +209,108 @@ if (signLanguageButton) {
   });
 }
 
-problemForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const query = problemInput.value.trim();
+// Czat z asystentem (POST /chat) — każde wywołanie tworzy osobną rozmowę z własną historią
+const createChat = ({ form, input, log, onStart, onEmpty }) => {
+  const history = [];
+  const submitButton = form.querySelector("button[type=submit]");
 
-  if (!query) {
-    formMessage.textContent = "Najpierw opisz problem, który chcesz rozwiązać.";
-    problemInput.focus();
-    return;
-  }
+  const append = (role, text, sources = []) => {
+    const bubble = document.createElement("div");
+    bubble.className = `chat-message chat-message--${role}`;
+    const body = document.createElement("p");
+    body.textContent = text;
+    bubble.append(body);
 
-  formMessage.textContent = "Opis zapisany. Moduł asystenta można podłączyć w tym miejscu.";
+    if (sources.length) {
+      const list = document.createElement("ul");
+      list.className = "chat-sources";
+      sources.forEach((source) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = source.url;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = source.tytul || source.url;
+        item.append(link);
+        list.append(item);
+      });
+      bubble.append(list);
+    }
+
+    log.hidden = false;
+    log.append(bubble);
+    bubble.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    return bubble;
+  };
+
+  const send = async (message) => {
+    onStart?.();
+    append("user", message);
+    const pending = append("assistant", "Asystent analizuje Twoją wiadomość…");
+    input.value = "";
+    submitButton.disabled = true;
+
+    try {
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, history }),
+      });
+      const data = await response.json().catch(() => ({}));
+      pending.remove();
+
+      if (!response.ok) {
+        append("error", data.error || "Asystent jest chwilowo niedostępny. Spróbuj ponownie.");
+        return;
+      }
+
+      // Linki do projektów pokazujemy jako listę — usuwamy ich tekstową wersję z odpowiedzi
+      const answer = data.answer.split("\n\nPowiązane projekty z bazy:")[0];
+      append("assistant", answer, data.sources || []);
+      history.push({ role: "user", content: message }, { role: "assistant", content: data.answer });
+    } catch (error) {
+      pending.remove();
+      append("error", "Nie udało się połączyć z asystentem. Sprawdź połączenie i spróbuj ponownie.");
+    } finally {
+      submitButton.disabled = false;
+      input.focus();
+    }
+  };
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const message = input.value.trim();
+    if (!message) {
+      onEmpty?.();
+      input.focus();
+      return;
+    }
+    send(message);
+  });
+
+  return send;
+};
+
+const sendProblem = problemForm && createChat({
+  form: problemForm,
+  input: problemInput,
+  log: document.querySelector("#chat-log"),
+  onStart: () => (formMessage.textContent = ""),
+  onEmpty: () => (formMessage.textContent = "Najpierw opisz problem, który chcesz rozwiązać."),
 });
 
 const ideaForm = document.querySelector("#idea-form");
 const ideaTitleInput = document.querySelector("#idea-title-input");
 const ideaFormMessage = document.querySelector("#idea-form-message");
 const assistantPrompt = document.querySelector("#assistant-prompt");
+const assistantForm = document.querySelector("#assistant-form");
+
+const askAssistant = assistantForm && createChat({
+  form: assistantForm,
+  input: document.querySelector("#assistant-input"),
+  log: document.querySelector("#assistant-chat-log"),
+  onStart: () => (assistantPrompt.hidden = true),
+});
 
 ideaForm?.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -262,7 +347,9 @@ assistantPrompt?.addEventListener("click", () => {
     return;
   }
 
-  window.location.href = `index.html?problem=${encodeURIComponent(title)}`;
+  const groups = [...ideaForm.querySelectorAll('input[name="audience"]:checked')].map((item) => item.nextElementSibling.textContent);
+  const audience = groups.length ? ` (dla: ${groups.join(", ")})` : "";
+  askAssistant(`Mam pomysł: „${title}”${audience}. Czy podobny projekt już istnieje?`);
 });
 
 const savedTheme = localStorage.getItem("site-theme");
@@ -284,9 +371,8 @@ if (savedFontSize) {
 }
 
 const problemFromUrl = new URLSearchParams(window.location.search).get("problem");
-if (problemFromUrl && problemInput) {
-  problemInput.value = problemFromUrl;
-  problemInput.focus();
+if (problemFromUrl && sendProblem) {
+  sendProblem(problemFromUrl);
 }
 
 const countySelect = document.querySelector("#county-select");

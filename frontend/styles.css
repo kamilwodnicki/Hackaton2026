@@ -1358,6 +1358,49 @@ canvas {
   display: block;
 }
 
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 50vh;
+  margin-top: var(--space-2);
+  overflow-y: auto;
+}
+
+.chat-log[hidden] {
+  display: none;
+}
+
+.chat-message {
+  max-width: 90%;
+  padding: 10px 13px;
+  color: var(--color-ink);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.chat-message p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.chat-message--user {
+  align-self: flex-end;
+  color: var(--color-white);
+  background: var(--color-cyan);
+}
+
+.chat-message--error {
+  border-color: var(--color-orange);
+}
+
+.chat-sources {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
 .stats-panel {
   align-self: stretch;
   display: grid;
@@ -1946,6 +1989,40 @@ html.hide-decorations .hero {
 .assistant-prompt:hover {
   color: var(--color-ink);
   background: var(--color-white);
+}
+
+.assistant-workspace .chat-log {
+  flex: 1;
+  max-height: 420px;
+  margin: 0 0 10px;
+}
+
+.assistant-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.assistant-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.assistant-form button {
+  padding: 10px 14px;
+  color: var(--color-white);
+  background: var(--color-orange);
+  border: 1px solid var(--color-border);
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.assistant-form button:disabled {
+  opacity: 0.6;
 }
 
 .ideas-page {

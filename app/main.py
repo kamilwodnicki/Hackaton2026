@@ -2,7 +2,8 @@ import os
 from flask import Flask, request, jsonify
 from chat import chat_bp
 
-app = Flask(__name__)
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
+app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 app.register_blueprint(chat_bp)
 
 # Konfiguracja środowiska
@@ -40,7 +41,7 @@ def get_qdrant_client():
 
 @app.route('/')
 def home():
-    return "Serwer działa! Tutaj znajdzie się API wyszukiwarki."
+    return app.send_static_file("index.html")
     
 @app.route("/search", methods=["POST"])
 def search():
