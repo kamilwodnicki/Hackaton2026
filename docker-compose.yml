@@ -103,10 +103,19 @@ services:
       - DB_NAME=mydb
       - DB_USER=myuser
       - DB_PASSWORD=mypassword
-      - IOSS_INTERVAL_HOURS=48
     depends_on:
       db:
         condition: service_started
+
+  biblioteka-scraper:
+    build: .
+    profiles: ["tools"]
+    command: python scrapers/biblioteka/main.py --interval-hours 48
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data          # JSON i PDF-y muszą trafić na hosta, żeby widział je ingest
+    environment:
+      - PYTHONUNBUFFERED=1        # bez tego print() nie pojawia się w docker logs
 
 volumes:
   postgres_data:
