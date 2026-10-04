@@ -9,6 +9,8 @@ from werkzeug.utils import secure_filename
 from chat import chat_bp
 from flask import Flask, request, jsonify
 from auth import auth_bp
+from innowacje import innowacje_bp
+from zasobnik_chat import zasobnik_chat_bp
 from datetime import timedelta
 
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
@@ -17,6 +19,8 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-secret-zmien-mnie")
 app.permanent_session_lifetime = timedelta(days=7)
 app.register_blueprint(chat_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(innowacje_bp)
+app.register_blueprint(zasobnik_chat_bp)
 
 SUPPORT_RECIPIENT = "thecookedhan@gmail.com"
 SUPPORT_CATEGORIES = {
@@ -181,10 +185,18 @@ def search():
 
     query_vector = model.encode(query).tolist()
 
+    # Opcjonalne zawężenie do jednego źródła, np. "directus" dla Asystenta Zasobnika
+    zrodlo = data.get("zrodlo")
+    query_filter = None
+    if zrodlo:
+        from qdrant_client.http import models
+        query_filter = models.Filter(must=[models.FieldCondition(key="zrodlo", match=models.MatchValue(value=zrodlo))])
+
     try:
         search_result = client.query_points(
             collection_name=COLLECTION_NAME,
             query=query_vector,
+            query_filter=query_filter,
             limit=fetch_k
         ).points
     except Exception as e:

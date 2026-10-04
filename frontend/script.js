@@ -218,7 +218,7 @@ if (signLanguageButton) {
 }
 
 // Czat z asystentem (POST /chat) — każde wywołanie tworzy osobną rozmowę z własną historią
-const createChat = ({ form, input, log, onStart, onEmpty }) => {
+const createChat = ({ form, input, log, onStart, onEmpty, endpoint = "/chat" }) => {
   const history = [];
   const submitButton = form.querySelector("button[type=submit]");
 
@@ -259,7 +259,7 @@ const createChat = ({ form, input, log, onStart, onEmpty }) => {
     submitButton.disabled = true;
 
     try {
-      const response = await fetch("/chat", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, history }),
@@ -311,10 +311,10 @@ const ideaForm = document.querySelector("#idea-form");
 const ideaTitleInput = document.querySelector("#idea-title-input");
 const ideaFormMessage = document.querySelector("#idea-form-message");
 const assistantPrompt = document.querySelector("#assistant-prompt");
-const assistantForm = document.querySelector("#assistant-form");
+const ideaAssistantForm = document.querySelector("#assistant-form");
 
-const askAssistant = assistantForm && createChat({
-  form: assistantForm,
+const askAssistant = ideaAssistantForm && createChat({
+  form: ideaAssistantForm,
   input: document.querySelector("#assistant-input"),
   log: document.querySelector("#assistant-chat-log"),
   onStart: () => (assistantPrompt.hidden = true),
