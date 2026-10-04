@@ -75,6 +75,11 @@ services:
       - SMTP_USER=${SMTP_USER:-}
       - SMTP_PASSWORD=${SMTP_PASSWORD:-}
       - SMTP_FROM=${SMTP_FROM:-}
+      - DIRECTUS_URL=http://directus:8055
+      - DIRECTUS_ADMIN_EMAIL=admin@example.com
+      - DIRECTUS_ADMIN_PASSWORD=admin
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY:-dev-secret-zmien-mnie}
+      - EXPERT_INVITE_CODE=${EXPERT_INVITE_CODE:-mentor2026}
     deploy:
       resources:
         reservations:

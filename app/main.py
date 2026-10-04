@@ -7,11 +7,16 @@ from flask import Flask, request, jsonify
 from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename
 from chat import chat_bp
+from flask import Flask, request, jsonify
+from auth import auth_bp
+from datetime import timedelta
 
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-secret-zmien-mnie")
+app.permanent_session_lifetime = timedelta(days=7)
 app.register_blueprint(chat_bp)
-app.config["MAX_CONTENT_LENGTH"] = 6 * 1024 * 1024
+app.register_blueprint(auth_bp)
 
 SUPPORT_RECIPIENT = "thecookedhan@gmail.com"
 SUPPORT_CATEGORIES = {
