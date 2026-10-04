@@ -74,7 +74,11 @@
     "Możesz je zaktualizować w dowolnym momencie.": "You can update them at any time.", "Imię i nazwisko": "Full name", "Adres e-mail": "Email address",
     "Numer telefonu": "Phone number", "Miejscowość": "Town / city", "Zapisz zmiany": "Save changes",
     "Czytaj stronę na głos": "Read page aloud", "Zatrzymaj czytanie strony na głos": "Stop reading page aloud", "Zamknij": "Close",
-    "Ustawienia dostępności": "Accessibility settings", "Główna nawigacja": "Main navigation", "Nawigacja według grup odbiorców": "Navigation by audience group"
+    "Ustawienia dostępności": "Accessibility settings", "Główna nawigacja": "Main navigation", "Nawigacja według grup odbiorców": "Navigation by audience group",
+    "Wyślij": "Send", "Zapytaj asystenta…": "Ask the assistant…", "Zadaj pytanie asystentowi": "Ask the assistant a question",
+    "Asystent analizuje Twoją wiadomość…": "The assistant is analysing your message…",
+    "Asystent jest chwilowo niedostępny. Spróbuj ponownie.": "The assistant is temporarily unavailable. Please try again.",
+    "Nie udało się połączyć z asystentem. Sprawdź połączenie i spróbuj ponownie.": "Could not connect to the assistant. Check your connection and try again."
   };
 
   const uk = Object.assign({}, en, {
@@ -147,7 +151,11 @@
     "Zadaj szybkie pytanie do Bazy RAG ROPS": "Поставте коротке запитання базі RAG ROPS", "Zapytaj AI Bazy Wiedzy": "Запитати ШІ бази знань",
     "dyskusje społeczności": "обговорення спільноти", "nieprzeczytanych wiadomości": "непрочитаних повідомлень", "oczekujące na feedback": "очікують на відгук",
     "pomysłów)": "ідей)", "powiat krakowski": "Краківський повіт", "powiat tatrzański": "Татранський повіт", "powiat wielicki": "Велицький повіт",
-    "zapisane rekomendacje": "збережені рекомендації", "zgłoszonych pomysłów": "поданих ідей", "Śledź status zgłoszeń.": "Відстежуйте статус заявок."
+    "zapisane rekomendacje": "збережені рекомендації", "zgłoszonych pomysłów": "поданих ідей", "Śledź status zgłoszeń.": "Відстежуйте статус заявок.",
+    "Wyślij": "Надіслати", "Zapytaj asystenta…": "Запитайте асистента…", "Zadaj pytanie asystentowi": "Поставте запитання асистенту",
+    "Asystent analizuje Twoją wiadomość…": "Асистент аналізує ваше повідомлення…",
+    "Asystent jest chwilowo niedostępny. Spróbuj ponownie.": "Асистент тимчасово недоступний. Спробуйте ще раз.",
+    "Nie udało się połączyć z asystentem. Sprawdź połączenie i spróbuj ponownie.": "Не вдалося з’єднатися з асистентом. Перевірте з’єднання та спробуйте ще раз."
   });
 
   const resources = { pl: { translation: {} }, en: { translation: en }, uk: { translation: uk } };
