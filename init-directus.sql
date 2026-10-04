@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 40erBTgqQuADNyztwiMibtV9KfKLoTRnhW3gOl7qaeFmola4hgaA8qcYCN9Jtbb
+\restrict iyC0QFpZK8JPM1FIqUS40rCkKsGjM4PTv5BeGaVTDKMpEGkxGlHPe4DZC15SiAr
 
 -- Dumped from database version 15.19
 -- Dumped by pg_dump version 15.19
@@ -1979,8 +1979,8 @@ e09b4d2b-fb23-4cd9-b57e-9c3ac713b46e	Administrator	verified	$t:admin_description
 --
 
 COPY public.directus_sessions (token, "user", expires, ip, user_agent, share, origin, next_token, oauth_client) FROM stdin;
-v0A-xIu3LaIW0yLDOMtwKeQxn4_9LO_405cHNDtzVoirAQoWjPqYUdQ0B9qP7VY5	19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	2026-10-04 05:53:01.414+00	172.18.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36	\N	http://localhost:8055	ui9vIVW0FgQ-nBWbr7DpJyeuoC41YiYzijTb_VdDlCHXOqhjFCqnDKfqPyfTNlsD	\N
-ui9vIVW0FgQ-nBWbr7DpJyeuoC41YiYzijTb_VdDlCHXOqhjFCqnDKfqPyfTNlsD	19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	2026-10-05 05:52:51.414+00	172.18.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36	\N	http://localhost:8055	\N	\N
+ui9vIVW0FgQ-nBWbr7DpJyeuoC41YiYzijTb_VdDlCHXOqhjFCqnDKfqPyfTNlsD	19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	2026-10-04 06:32:29.707+00	172.18.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36	\N	http://localhost:8055	eBUxIgxjVuqEbHotoPxB-E2pAQHyRr-3Y4v0vmGQxUo_u019gNVXx4z9ZrQ2RTLH	\N
+eBUxIgxjVuqEbHotoPxB-E2pAQHyRr-3Y4v0vmGQxUo_u019gNVXx4z9ZrQ2RTLH	19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	2026-10-05 06:32:19.707+00	172.18.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36	\N	http://localhost:8055	\N	\N
 \.
 
 
@@ -2014,7 +2014,7 @@ COPY public.directus_translations (id, language, key, value) FROM stdin;
 --
 
 COPY public.directus_users (id, first_name, last_name, email, password, location, title, description, tags, avatar, language, tfa_secret, status, role, token, last_access, last_page, provider, external_identifier, auth_data, email_notifications, appearance, theme_dark, theme_light, theme_light_overrides, theme_dark_overrides, text_direction) FROM stdin;
-19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	Admin	User	admin@example.com	$argon2id$v=19$m=65536,t=3,p=4$Qyrr9chuv5bGDCGdD1ChBg$3huS89Z58oag0E1h3ukvX8F81/tKcNBhoXFrRPHpNjo	\N	\N	\N	\N	\N	\N	\N	active	e09b4d2b-fb23-4cd9-b57e-9c3ac713b46e	\N	2026-10-04 05:52:51.487+00	/content/innowacje	default	\N	\N	t	\N	\N	\N	\N	\N	auto
+19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	Admin	User	admin@example.com	$argon2id$v=19$m=65536,t=3,p=4$Qyrr9chuv5bGDCGdD1ChBg$3huS89Z58oag0E1h3ukvX8F81/tKcNBhoXFrRPHpNjo	\N	\N	\N	\N	\N	\N	\N	active	e09b4d2b-fb23-4cd9-b57e-9c3ac713b46e	\N	2026-10-04 06:32:19.806+00	/content/innowacje	default	\N	\N	t	\N	\N	\N	\N	\N	auto
 \.
 
 
@@ -3046,5 +3046,5 @@ ALTER TABLE ONLY public.innowacje
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 40erBTgqQuADNyztwiMibtV9KfKLoTRnhW3gOl7qaeFmola4hgaA8qcYCN9Jtbb
+\unrestrict iyC0QFpZK8JPM1FIqUS40rCkKsGjM4PTv5BeGaVTDKMpEGkxGlHPe4DZC15SiAr
 
