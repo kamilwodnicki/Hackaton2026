@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict iyC0QFpZK8JPM1FIqUS40rCkKsGjM4PTv5BeGaVTDKMpEGkxGlHPe4DZC15SiAr
+\restrict gMaWM0qOL38CegVJfDWjxgcoGu6aOXuQqXNYXWpnotLHWb3S2mLYXGijqWYLQyD
 
 -- Dumped from database version 15.19
 -- Dumped by pg_dump version 15.19
@@ -19,6 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 ALTER TABLE ONLY public.innowacje DROP CONSTRAINT innowacje_user_created_foreign;
+ALTER TABLE ONLY public.innowacje DROP CONSTRAINT innowacje_thumbnail_foreign;
 ALTER TABLE ONLY public.innowacje_files DROP CONSTRAINT innowacje_files_innowacje_id_foreign;
 ALTER TABLE ONLY public.innowacje_files DROP CONSTRAINT innowacje_files_directus_files_id_foreign;
 ALTER TABLE ONLY public.directus_versions DROP CONSTRAINT directus_versions_user_updated_foreign;
@@ -1119,7 +1120,8 @@ CREATE TABLE public.innowacje (
     user_created uuid,
     date_created timestamp with time zone,
     tytul character varying(255) DEFAULT NULL::character varying,
-    opis character varying(255)
+    opis character varying(255),
+    thumbnail uuid
 );
 
 
@@ -1469,6 +1471,7 @@ COPY public.directus_activity (id, action, "user", "timestamp", ip, user_agent, 
 200	delete	19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	2026-10-04 06:09:24.307+00	172.18.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36	innowacje	35	http://localhost:8055
 201	delete	19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	2026-10-04 06:09:24.308+00	172.18.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36	innowacje	36	http://localhost:8055
 202	delete	19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	2026-10-04 06:09:24.309+00	172.18.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36	innowacje	37	http://localhost:8055
+203	create	19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	2026-10-04 07:00:16.932+00	172.18.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36	directus_fields	11	http://localhost:8055
 \.
 
 
@@ -1544,6 +1547,7 @@ COPY public.directus_fields (id, collection, field, special, interface, options,
 8	innowacje_files	id	\N	\N	\N	\N	\N	f	t	1	full	\N	\N	\N	f	\N	\N	\N	t
 9	innowacje_files	innowacje_id	\N	\N	\N	\N	\N	f	t	2	full	\N	\N	\N	f	\N	\N	\N	t
 10	innowacje_files	directus_files_id	\N	\N	\N	\N	\N	f	t	3	full	\N	\N	\N	f	\N	\N	\N	t
+11	innowacje	thumbnail	file	file-image	\N	\N	\N	f	f	7	full	\N	\N	\N	f	\N	\N	\N	t
 \.
 
 
@@ -1800,6 +1804,7 @@ COPY public.directus_relations (id, many_collection, many_field, one_collection,
 1	innowacje	user_created	directus_users	\N	\N	\N	\N	\N	nullify
 2	innowacje_files	directus_files_id	directus_files	\N	\N	\N	innowacje_id	\N	nullify
 3	innowacje_files	innowacje_id	innowacje	pliki	\N	\N	directus_files_id	\N	nullify
+4	innowacje	thumbnail	directus_files	\N	\N	\N	\N	\N	nullify
 \.
 
 
@@ -1962,6 +1967,7 @@ COPY public.directus_revisions (id, activity, collection, item, data, delta, par
 153	198	innowacje	37	{"tytul":"eeeeeeeeeeeeeeeee","opis":"eeeeeeeeeeeeeeeeeeeee"}	{"tytul":"eeeeeeeeeeeeeeeee","opis":"eeeeeeeeeeeeeeeeeeeee"}	\N	\N
 152	197	innowacje_files	14	\N	\N	153	\N
 154	199	directus_flows	496f23da-37b3-43c3-a5c3-8fae090128df	{"steps":[{"operation":"590ecdd4-3f68-4b83-8c7b-35bbb5f560be","key":"webhook","status":"resolve","options":{"method":"POST","url":"http://web:5000/webhook/index","headers":[{"header":"Content-Type","value":"application/json"}],"body":"{\\n  \\"id_create\\": \\"37\\",\\n  \\"id_update\\": \\"undefined\\"\\n}"}}],"data":{"$trigger":{"event":"innowacje.items.create","payload":{"tytul":"eeeeeeeeeeeeeeeee","opis":"eeeeeeeeeeeeeeeeeeeee","pliki":{"create":[{"innowacje_id":"+","directus_files_id":{"id":"31ccd840-2c44-4053-b7c8-0a0006998b97"}}],"update":[],"delete":[]}},"key":37,"collection":"innowacje"},"$last":{"status":200,"statusText":"OK","headers":{"server":"Werkzeug/3.1.9 Python/3.11.17","date":"Sun, 04 Oct 2026 06:08:38 GMT","content-type":"application/json","content-length":"68","connection":"close"},"data":{"chunks_count":6,"message":"Zapisano w Qdrant","status":"success"}},"$accountability":{"role":"e09b4d2b-fb23-4cd9-b57e-9c3ac713b46e","user":"19d2ce3a-6fbd-41ec-8e94-ea4c2172615b","roles":["e09b4d2b-fb23-4cd9-b57e-9c3ac713b46e"],"admin":true,"app":true,"ip":"172.18.0.1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36","origin":"http://localhost:8055","session":"ui9vIVW0FgQ-nBWbr7DpJyeuoC41YiYzijTb_VdDlCHXOqhjFCqnDKfqPyfTNlsD"},"$env":{},"webhook":{"status":200,"statusText":"OK","headers":{"server":"Werkzeug/3.1.9 Python/3.11.17","date":"Sun, 04 Oct 2026 06:08:38 GMT","content-type":"application/json","content-length":"68","connection":"close"},"data":{"chunks_count":6,"message":"Zapisano w Qdrant","status":"success"}}}}	\N	\N	\N
+155	203	directus_fields	11	{"sort":7,"interface":"file-image","special":["file"],"field":"thumbnail"}	{"sort":7,"interface":"file-image","special":["file"],"field":"thumbnail"}	\N	\N
 \.
 
 
@@ -2014,7 +2020,7 @@ COPY public.directus_translations (id, language, key, value) FROM stdin;
 --
 
 COPY public.directus_users (id, first_name, last_name, email, password, location, title, description, tags, avatar, language, tfa_secret, status, role, token, last_access, last_page, provider, external_identifier, auth_data, email_notifications, appearance, theme_dark, theme_light, theme_light_overrides, theme_dark_overrides, text_direction) FROM stdin;
-19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	Admin	User	admin@example.com	$argon2id$v=19$m=65536,t=3,p=4$Qyrr9chuv5bGDCGdD1ChBg$3huS89Z58oag0E1h3ukvX8F81/tKcNBhoXFrRPHpNjo	\N	\N	\N	\N	\N	\N	\N	active	e09b4d2b-fb23-4cd9-b57e-9c3ac713b46e	\N	2026-10-04 06:32:19.806+00	/content/innowacje	default	\N	\N	t	\N	\N	\N	\N	\N	auto
+19d2ce3a-6fbd-41ec-8e94-ea4c2172615b	Admin	User	admin@example.com	$argon2id$v=19$m=65536,t=3,p=4$Qyrr9chuv5bGDCGdD1ChBg$3huS89Z58oag0E1h3ukvX8F81/tKcNBhoXFrRPHpNjo	\N	\N	\N	\N	\N	\N	\N	active	e09b4d2b-fb23-4cd9-b57e-9c3ac713b46e	\N	2026-10-04 06:32:19.806+00	/settings/data-model/innowacje	default	\N	\N	t	\N	\N	\N	\N	\N	auto
 \.
 
 
@@ -2030,7 +2036,7 @@ COPY public.directus_versions (id, key, name, collection, item, hash, date_creat
 -- Data for Name: innowacje; Type: TABLE DATA; Schema: public; Owner: myuser
 --
 
-COPY public.innowacje (id, user_created, date_created, tytul, opis) FROM stdin;
+COPY public.innowacje (id, user_created, date_created, tytul, opis, thumbnail) FROM stdin;
 \.
 
 
@@ -2060,14 +2066,14 @@ COPY public.innowacje_files (id, innowacje_id, directus_files_id) FROM stdin;
 -- Name: directus_activity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: myuser
 --
 
-SELECT pg_catalog.setval('public.directus_activity_id_seq', 202, true);
+SELECT pg_catalog.setval('public.directus_activity_id_seq', 203, true);
 
 
 --
 -- Name: directus_fields_id_seq; Type: SEQUENCE SET; Schema: public; Owner: myuser
 --
 
-SELECT pg_catalog.setval('public.directus_fields_id_seq', 10, true);
+SELECT pg_catalog.setval('public.directus_fields_id_seq', 11, true);
 
 
 --
@@ -2095,14 +2101,14 @@ SELECT pg_catalog.setval('public.directus_presets_id_seq', 1, false);
 -- Name: directus_relations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: myuser
 --
 
-SELECT pg_catalog.setval('public.directus_relations_id_seq', 3, true);
+SELECT pg_catalog.setval('public.directus_relations_id_seq', 4, true);
 
 
 --
 -- Name: directus_revisions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: myuser
 --
 
-SELECT pg_catalog.setval('public.directus_revisions_id_seq', 154, true);
+SELECT pg_catalog.setval('public.directus_revisions_id_seq', 155, true);
 
 
 --
@@ -3035,6 +3041,14 @@ ALTER TABLE ONLY public.innowacje_files
 
 
 --
+-- Name: innowacje innowacje_thumbnail_foreign; Type: FK CONSTRAINT; Schema: public; Owner: myuser
+--
+
+ALTER TABLE ONLY public.innowacje
+    ADD CONSTRAINT innowacje_thumbnail_foreign FOREIGN KEY (thumbnail) REFERENCES public.directus_files(id) ON DELETE SET NULL;
+
+
+--
 -- Name: innowacje innowacje_user_created_foreign; Type: FK CONSTRAINT; Schema: public; Owner: myuser
 --
 
@@ -3046,5 +3060,5 @@ ALTER TABLE ONLY public.innowacje
 -- PostgreSQL database dump complete
 --
 
-\unrestrict iyC0QFpZK8JPM1FIqUS40rCkKsGjM4PTv5BeGaVTDKMpEGkxGlHPe4DZC15SiAr
+\unrestrict gMaWM0qOL38CegVJfDWjxgcoGu6aOXuQqXNYXWpnotLHWb3S2mLYXGijqWYLQyD
 

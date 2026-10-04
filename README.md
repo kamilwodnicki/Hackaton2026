@@ -1,174 +1,107 @@
 # ROPS — innowacje społeczne
+Responsywny portal wspierający rozwój innowacji społecznych. Projekt zawiera frontend demonstracyjny, backend napisany w środowisku Flask z bazą PostgreSQL, system zarządzania treścią Directus (Headless CMS) oraz wyszukiwanie semantyczne z wykorzystaniem wektorowej bazy Qdrant i modeli sztucznej inteligencji.
 
-Responsywny portal wspierający rozwój innowacji społecznych. Projekt zawiera frontend demonstracyjny, formularze i panele użytkowników oraz backend Flask z PostgreSQL, wyszukiwaniem semantycznym, Qdrantem i opcjonalnym lokalnym modelem językowym Ollama.
+## 1. Najszybsze uruchomienie strony (Tylko Frontend) 
+Do obejrzenia samego interfejsu nie jest potrzebna instalacja zależności, Dockera ani bazy danych. Logowanie, rejestracja i role działają w trybie demonstracyjnym (dane zapisywane są w localStorage przeglądarki).
 
-## Najszybsze uruchomienie strony
-
-Do obejrzenia interfejsu nie jest potrzebna instalacja zależności ani baza danych. Logowanie, rejestracja i role działają obecnie w trybie demonstracyjnym i zapisują dane wyłącznie w pamięci przeglądarki (`localStorage`).
-
-### Linux / Ubuntu / macOS
-
-1. Otwórz terminal w katalogu projektu.
-2. Uruchom lokalny serwer:
-
-```bash
+Linux / macOS:
+```Bash
 python3 -m http.server 8000 --directory frontend
 ```
 
-3. Wejdź w przeglądarce na [http://localhost:8000](http://localhost:8000).
-4. Serwer zatrzymasz skrótem `Ctrl+C`.
-
-Jeśli polecenie `python3` nie istnieje, spróbuj `python`.
-
-### Windows 10/11
-
-1. Otwórz folder projektu w Eksploratorze plików.
-2. Kliknij pasek adresu, wpisz `powershell` i naciśnij Enter.
-3. Uruchom:
-
-```powershell
+Windows 10/11 (PowerShell):
+```PowerShell
 py -m http.server 8000 --directory frontend
 ```
 
-4. Wejdź w przeglądarce na [http://localhost:8000](http://localhost:8000).
-5. Serwer zatrzymasz skrótem `Ctrl+C`.
+Frontend będzie dostępny pod adresem http://localhost:8000. Serwer zatrzymasz skrótem Ctrl+C. Uwaga: Wysyłka formularzy oraz funkcje AI wymagają uruchomienia backendu.
 
-Jeśli polecenie `py` nie istnieje, zainstaluj [Python 3](https://www.python.org/downloads/) i podczas instalacji zaznacz opcję **Add Python to PATH**, a następnie użyj `python` zamiast `py`.
+## 2. Pełne uruchomienie z Dockerem (Backend + Baza danych)
+Wymagania: zainstalowany Docker Desktop (Windows/macOS) lub Docker Engine (Linux). Projekt podzielono na dwa tryby, aby oszczędzać zasoby komputera, gdy funkcje AI nie są potrzebne.
 
-> Sam frontend wystarcza do prezentacji widoków i funkcji mock. Wysyłka zgłoszeń wsparcia oraz funkcje AI wymagają backendu.
-
-## Pełne uruchomienie z Dockerem
-
-Ta metoda działa na Linuxie, Ubuntu, macOS i Windows. Wymaga:
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) na Windowsie lub macOS,
-- Docker Engine z wtyczką Compose na Linuxie,
-- co najmniej 8 GB wolnej pamięci RAM; moduły AI mogą wymagać znacznie więcej.
-
-Sprawdź instalację:
-
-```text
-docker --version
-docker compose version
+Tryb lekki (Bez modułu AI)
+Przeznaczony do standardowej pracy nad kodem, panelem Directus i bazą danych PostgreSQL. Działa płynnie, nie obciążając procesora ani pamięci. Nie uruchamia bazy Qdrant ani modeli AI.
+```Bash
+docker compose up -d
 ```
+API będzie dostępne pod adresem ```http://localhost:5000```. Frontend należy uruchomić równolegle (zgodnie z instrukcją z punktu 1).
 
-### Backend bez modułów AI
-
-Ten wariant uruchamia Flask i PostgreSQL. Jest najlepszy do pracy nad zwykłym API i formularzem wsparcia.
-
-Linux / Ubuntu / macOS:
-
-```bash
-INSTALL_AI=false docker compose up --build db web
+## Tryb pełny (Wymagany mocny sprzęt / Karta NVIDIA)
+Uruchamia pełne środowisko analityczne, w tym modele językowe Ollama, Qdrant oraz wyszukiwanie semantyczne. Pierwsze uruchomienie pobiera kilka gigabajtów danych modeli.
+```Bash
+docker compose --profile ai up -d
 ```
+Uwaga: Domyślnie system wykorzystuje kartę graficzną ```(COMPUTE_DEVICE=cuda)```. Jeśli nie posiadasz dedykowanej karty, zmień w pliku ```docker-compose.yml``` wartość na ```COMPUTE_DEVICE=cpu```.
+## 3. Zarządzanie Treścią (Directus)
+Directus służy do wprowadzania danych o innowacjach, zarządzania plikami PDF oraz wyzwalania indeksacji tekstów do bazy wektorowej za pomocą webhooków. Działa w obu trybach Dockera.
+ - Adres: ```http://localhost:8055```
+ - Login: ```admin@example.com```
+ - Hasło: ```admin```
 
-Windows PowerShell:
-
-```powershell
-$env:INSTALL_AI="false"
-docker compose up --build db web
+ # Wdrożenie bazy przy pierwszym uruchomieniu
+ Jeśli pobierasz repozytorium po raz pierwszy, musisz załadować strukturę kolekcji i uprawnień. Wykonaj poniższe polecenia w terminalu:
+ Zresetuj środowisko i uruchom kontenery:
+ ```Bash
+ docker compose down
+docker compose up -d
 ```
-
-API będzie dostępne pod adresem [http://localhost:5000](http://localhost:5000). Frontend uruchom równolegle zgodnie z wcześniejszą instrukcją pod adresem `http://localhost:8000`.
-
-Zatrzymanie usług:
-
-```bash
-docker compose down
+Zaimportuj gotową konfigurację Directusa:
+```Bash
+docker exec postgres_db psql -U myuser -d mydb -f /docker-entrypoint-initdb.d/init-directus.sql
 ```
-
-### Pełne środowisko AI
-
-Profil `ai` uruchamia dodatkowo Qdrant i Ollamę oraz pobiera model językowy. Pierwsze uruchomienie może potrwać długo i pobrać kilka gigabajtów danych.
-
-```bash
-docker compose --profile ai up --build
+Zrestartuj panel, aby odczytał zaktualizowane tabele:
+```Bash
+docker compose restart directus
 ```
-
-Aktualna konfiguracja AI jest przygotowana dla karty NVIDIA (`COMPUTE_DEVICE=cuda`). Na komputerze bez zgodnej karty ustaw w `docker-compose.yml` wartość `COMPUTE_DEVICE=cpu`. Na macOS i Windows upewnij się również, że Docker Desktop ma przydzieloną wystarczającą ilość pamięci.
-
-## Dane wyszukiwarki semantycznej
-
-Przed indeksacją umieść:
-
-- plik `innowacje_biblioteka.json` w katalogu `data/`,
-- powiązane dokumenty PDF w katalogu `data/dokumenty/`.
-
-Następnie, przy uruchomionym profilu AI, wykonaj:
-
-```bash
-docker compose exec web python app/ingest.py
+## 4. Konfiguracja wysyłki zgłoszeń wsparcia
+Formularz wsparcia wysyła wiadomości e-mail. W głównym katalogu projektu utwórz plik .env (nie dodawaj go do Git) o następującej strukturze:
 ```
-
-Indeksacja zastępuje wcześniejszą zawartość kolekcji w Qdrant.
-
-## Konfiguracja wysyłki zgłoszeń wsparcia
-
-Formularz wsparcia wysyła wiadomości na adres `thecookedhan@gmail.com`. W katalogu projektu utwórz plik `.env`:
-
-```dotenv
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=nadawca@example.com
-SMTP_PASSWORD=haslo-aplikacji
-SMTP_FROM=nadawca@example.com
+SMTP_USER=twoj_adres@gmail.com
+SMTP_PASSWORD=haslo_aplikacji_gmail
+SMTP_FROM=twoj_adres@gmail.com
 ```
-
-Dla Gmaila użyj hasła aplikacji, a nie zwykłego hasła do konta. Nie dodawaj pliku `.env` do repozytorium.
-
-Po zmianie konfiguracji uruchom kontenery ponownie:
-
-```bash
-docker compose up --build db web
+Po zmianie konfiguracji zrestartuj kontener backendu: 
 ```
+docker compose restart web
+```
+## 5. Wyszukiwanie Semantyczne i Asystent AI
+Funkcje te działają wyłącznie w "Trybie pełnym" z uruchomionym profilem AI.
 
-Kontrola zalogowania w formularzu jest obecnie demonstracyjna (`X-Demo-Auth: mock-session`). Przed wdrożeniem produkcyjnym należy zastąpić ją sesją serwerową lub zweryfikowanym tokenem OAuth.
-
-## Najważniejsze adresy API
+### Inicjalizacja i wczytanie dokumentów
+Przed wyszukiwaniem należy umieścić plik innowacje_biblioteka.json w katalogu data/ oraz powiązane pliki PDF w data/dokumenty/. Następnie wykonaj indeksację (proces ten nadpisze stare zbiory w Qdrant):
+```Bash
+docker compose exec web python app/ingest.py
+```
+### Najważniejsze adresy API
 
 | Funkcja | Metoda | Adres |
-|---|---:|---|
+|---|---|---|
 | Kontrola działania API | GET | `http://localhost:5000/` |
 | Wyszukiwanie semantyczne | POST | `http://localhost:5000/search` |
 | Asystent AI | POST | `http://localhost:5000/chat` |
 | Zgłoszenie wsparcia | POST | `http://localhost:5000/support` |
 
-Przykładowe zapytanie do wyszukiwarki:
-
-Linux / macOS:
-
-```bash
-curl -X POST http://localhost:5000/search \
-  -H 'Content-Type: application/json' \
-  -d '{"query":"projekty dla seniorów","top_k":3}'
-```
-
-Windows PowerShell:
-
+**Przykładowe zapytanie (PowerShell):**
 ```powershell
-Invoke-RestMethod -Method Post `
-  -Uri "http://localhost:5000/search" `
-  -ContentType "application/json" `
-  -Body '{"query":"projekty dla seniorów","top_k":3}'
+Invoke-RestMethod -Method Post -Uri "http://localhost:5000/search" -ContentType "application/json" -Body '{"query":"projekty dla seniorów","top_k":3}'
 ```
 
-## Struktura projektu
-
-```text
-app/                 backend Flask, wyszukiwanie i asystent
+## 6. Struktura projektu
+```
+Plaintextapp/                 backend Flask, wyszukiwanie i asystent
 frontend/            strony HTML, CSS, JavaScript i zasoby
 scrapers/            pobieranie danych IOSS
-data/                lokalne dane do indeksacji (jeśli dodane)
-Dockerfile           obraz aplikacji
-docker-compose.yml   usługi aplikacji, baz danych i AI
-requirements.txt     podstawowe zależności Pythona
-requirements-ai.txt  zależności wyszukiwania semantycznego
+data/                lokalne dane do indeksacji
+Dockerfile           obraz aplikacji backendu
+docker-compose.yml   usługi aplikacji, Directus, PostgreSQL i AI
+init-directus.sql    struktura początkowa bazy danych CMS
+requirements*.txt    zależności środowiska Python
 ```
-
-## Typowe problemy
-
-- **Port 8000 lub 5000 jest zajęty:** zatrzymaj inną usługę używającą portu albo zmień numer portu w poleceniu / `docker-compose.yml`.
-- **Docker nie odpowiada:** uruchom Docker Desktop lub usługę Docker Engine.
-- **Brak odpowiedzi AI:** sprawdź, czy uruchomiono profil `ai`, wykonano indeksację i czy kontenery są aktywne przez `docker compose ps`.
-- **Pierwsze zapytanie trwa długo:** modele są wtedy pobierane lub ładowane do pamięci; kolejne odpowiedzi powinny być szybsze.
-- **Formularz wsparcia nie wysyła wiadomości:** sprawdź dane SMTP i logi poleceniem `docker compose logs web`.
+## 7. Typowe problemy
+- Port 8000, 8055 lub 5000 jest zajęty: Zatrzymaj inną usługę używającą portu lub zmień jego mapowanie w pliku docker-compose.yml.
+- Docker nie odpowiada: Upewnij się, że usługa Docker Desktop lub Docker Engine jest włączona.
+- Brak odpowiedzi AI / Endpoint nie działa: Sprawdź, czy uruchomiono projekt z flagą --profile ai i czy wykonano indeksację skryptem ingest.py.
+- Pierwsze zapytanie do AI trwa bardzo długo: To standardowe zachowanie (ładowanie modeli do pamięci RAM/VRAM). Kolejne zapytania są przetwarzane natychmiastowo.
+- Formularz nie wysyła e-maili: Sprawdź poprawność danych w pliku .env oraz logi backendu poleceniem docker compose logs web. W przypadku Gmaila wymagane jest wygenerowanie specjalnego "Hasła aplikacji" w ustawieniach konta Google.
