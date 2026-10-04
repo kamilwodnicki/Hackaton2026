@@ -55,7 +55,16 @@ const renderResources = () => {
     badge.textContent = resource.category;
     const title = document.createElement("h2");
     title.textContent = resource.title;
-    text.append(badge, title);
+    text.append(badge);
+    if (resource.thumbnail) {
+      const thumbnail = document.createElement("img");
+      thumbnail.className = "resource-thumbnail";
+      thumbnail.src = resource.thumbnail;
+      thumbnail.alt = "";
+      thumbnail.loading = "lazy";
+      text.append(thumbnail);
+    }
+    text.append(title);
     const toggle = document.createElement("button");
     toggle.type = "button";
     toggle.textContent = "Rozwiń";
@@ -68,14 +77,6 @@ const renderResources = () => {
     description.textContent = resource.description;
     const meta = document.createElement("p");
     meta.className = "resource-meta";
-    if (resource.thumbnail) {
-      const thumbnail = document.createElement("img");
-      thumbnail.className = "resource-thumbnail";
-      thumbnail.src = resource.thumbnail;
-      thumbnail.alt = "";
-      thumbnail.loading = "lazy";
-      details.append(thumbnail);
-    }
     if (resource.files) {
       meta.textContent = `${resource.type} · Dostępne dokumenty: ${resource.files.length}`;
       const files = document.createElement("ul");
