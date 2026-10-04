@@ -1,12 +1,15 @@
 import os
 import smtplib
 from email.message import EmailMessage
+import uuid
+import requests
 from flask import Flask, request, jsonify
 from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename
 from chat import chat_bp
 
-app = Flask(__name__)
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
+app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 app.register_blueprint(chat_bp)
 app.config["MAX_CONTENT_LENGTH"] = 6 * 1024 * 1024
 
@@ -110,15 +113,25 @@ QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6333))
 COLLECTION_NAME = "teksty_kolekcja"
 DEVICE = os.getenv("COMPUTE_DEVICE", "cpu")
 
-# Globalne zmienne, do których przypiszemy instancje przy pierwszym użyciu
+# Globalne instancje
 embedding_model = None
 reranker = None
 qdrant_client = None
 
+def is_ai_enabled():
+    """Sprawdza, czy biblioteki AI zostały zainstalowane podczas budowania obrazu."""
+    try:
+        import sentence_transformers
+        import qdrant_client
+        import langchain_text_splitters
+        import pymupdf
+        return True
+    except ImportError:
+        return False
+
 def get_embedding_model():
     global embedding_model
     if embedding_model is None:
-        # Importujemy bibliotekę dopiero w momencie użycia
         from sentence_transformers import SentenceTransformer
         embedding_model = SentenceTransformer('sdadas/mmlw-retrieval-roberta-base', device=DEVICE)
     return embedding_model
@@ -139,10 +152,13 @@ def get_qdrant_client():
 
 @app.route('/')
 def home():
-    return "Serwer działa! Tutaj znajdzie się API wyszukiwarki."
+    return app.send_static_file("index.html")
     
 @app.route("/search", methods=["POST"])
 def search():
+    if not is_ai_enabled():
+        return jsonify({"error": "Moduł AI jest wyłączony. Wyszukiwanie semantyczne jest niedostępne."}), 503
+
     data = request.json
     query = data.get("query", "")
     top_k = data.get("top_k", 5) 
@@ -151,7 +167,6 @@ def search():
     if not query:
         return jsonify({"error": "Brak zapytania"}), 400
 
-    # 1. Pobranie modeli i klienta bazy (załadowanie, jeśli to pierwsze użycie)
     try:
         model = get_embedding_model()
         cross_encoder = get_reranker()
@@ -159,10 +174,8 @@ def search():
     except Exception as e:
         return jsonify({"error": f"Błąd inicjalizacji usług AI: {str(e)}"}), 500
 
-    # 2. Wektoryzacja zapytania
     query_vector = model.encode(query).tolist()
 
-    # 3. Wstępne wyszukiwanie w Qdrant
     try:
         search_result = client.query_points(
             collection_name=COLLECTION_NAME,
@@ -175,16 +188,13 @@ def search():
     if not search_result:
         return jsonify({"results": []})
 
-    # 4. Przygotowanie danych do modelu sortującego
     pairs = []
     for hit in search_result:
         fragment = hit.payload.get("fragment_tekstu", "")
         pairs.append([query, fragment])
 
-    # 5. Obliczenie nowych wyników
     rerank_scores = cross_encoder.predict(pairs)
 
-    # 6. Łączenie wyników i sortowanie
     reranked_results = []
     for idx, hit in enumerate(search_result):
         hit_dict = hit.model_dump()
@@ -193,7 +203,6 @@ def search():
 
     reranked_results = sorted(reranked_results, key=lambda x: x['rerank_score'], reverse=True)
 
-    # 7. Formatowanie danych końcowych z usunięciem duplikatów dokumentów
     final_results = []
     seen_docs = set()
 
@@ -215,5 +224,178 @@ def search():
 
     return jsonify({"results": final_results})
 
+
+@app.route("/webhook/index", methods=["POST"])
+def index_new_item():
+    if not is_ai_enabled():
+        return jsonify({"status": "skipped", "message": "Moduł AI jest wyłączony."}), 200
+
+    import pymupdf
+    from qdrant_client.http import models
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+    import json
+    import time
+
+    data = request.get_json(force=True, silent=True) or {}
+    if isinstance(data, str):
+        try:
+            data = json.loads(data)
+        except Exception:
+            data = {}
+
+    print(f"\n--- OTRZYMANO ŻĄDANIE Z DIRECTUSA ---", flush=True)
+    print(json.dumps(data, indent=2, ensure_ascii=False), flush=True)
+    print("---------------------------------------", flush=True)
+
+    doc_id = data.get("id_create") or data.get("id_update") or data.get("id")
+    if not doc_id or "{{" in str(doc_id):
+        return jsonify({"error": "Brak ID dokumentu."}), 400
+
+    DIRECTUS_COLLECTION = "innowacje"
+
+    # Dajemy Directusowi 3 sekundy na domknięcie zapisu relacji i pliku
+    time.sleep(3.0) 
+
+    # TYLKO JEDNO POBRANIE DANYCH z parametrem fields=*.*
+    try:
+        api_url = f"http://directus:8055/items/{DIRECTUS_COLLECTION}/{doc_id}?fields=*.*"
+        item_response = requests.get(api_url)
+        
+        if item_response.status_code != 200:
+            return jsonify({"error": f"Błąd pobierania danych z Directusa (HTTP {item_response.status_code})."}), 400
+            
+        item_data = item_response.json().get("data", {})
+    except Exception as e:
+        import traceback
+        print("\n--- KRYTYCZNY BŁĄD WEBHOKA ---", flush=True)
+        traceback.print_exc()
+        print(f"Szczegóły błędu: {str(e)}", flush=True)
+        print("------------------------------\n", flush=True)
+        return jsonify({"error": f"Błąd indeksacji: {str(e)}"}), 500
+
+    tytul = item_data.get("tytul", "")
+    tekst = item_data.get("opis", "")
+    
+    print(f"Zawartość pola pliki z API Directusa: {item_data.get('pliki')}", flush=True)
+
+    pliki_raw = item_data.get("pliki")
+    url = f"https://adres-twojego-frontendu.pl/innowacje/{doc_id}"
+    
+    pdf_text = ""
+    pliki_ids = []
+    
+    if isinstance(pliki_raw, list):
+        for p in pliki_raw:
+            if isinstance(p, dict):
+                file_id = p.get("directus_files_id") or p.get("id")
+                if isinstance(file_id, dict):
+                    file_id = file_id.get("id")
+                if file_id:
+                    pliki_ids.append(file_id)
+            elif isinstance(p, (str, int)):
+                pliki_ids.append(p)
+    elif isinstance(pliki_raw, (str, int)) and str(pliki_raw).strip():
+        pliki_ids = [str(pliki_raw)]
+
+    pliki_ids = [str(p) for p in pliki_ids if p and not str(p).startswith("{{")]
+    print(f"Ostatecznie wykryte ID plików PDF: {pliki_ids}", flush=True)
+
+    for plik_id in pliki_ids:
+        try:
+            asset_url = f"http://directus:8055/assets/{plik_id}"
+            res = requests.get(asset_url)
+            
+            if res.status_code == 200:
+                with pymupdf.open(stream=res.content, filetype="pdf") as doc:
+                    for page in doc:
+                        extracted = page.get_text()
+                        if extracted:
+                            pdf_text += extracted + "\n"
+                print(f"Sukces: Pobrano i odczytano plik {plik_id}", flush=True)
+            else:
+                print(f"Błąd HTTP {res.status_code} przy pobieraniu pliku {plik_id}", flush=True)
+        except Exception as e:
+            print(f"Błąd przetwarzania pliku {plik_id}: {e}", flush=True)
+
+    pelny_tekst = f"{tytul}\n\n{tekst}\n\n{pdf_text}".strip()
+    
+    if not pelny_tekst:
+        return jsonify({"error": "Dokument nie zawiera treści do indeksacji."}), 400
+
+    try:
+        model = get_embedding_model()
+        client = get_qdrant_client()
+        
+        if not client.collection_exists(collection_name=COLLECTION_NAME):
+            client.create_collection(
+                collection_name=COLLECTION_NAME,
+                vectors_config=models.VectorParams(
+                    size=768, distance=models.Distance.COSINE
+                )
+            )
+        
+        client.delete(
+            collection_name=COLLECTION_NAME,
+            points_selector=models.FilterSelector(
+                filter=models.Filter(
+                    must=[
+                        models.FieldCondition(
+                            key="doc_id",
+                            match=models.MatchValue(value=doc_id)
+                        )
+                    ]
+                )
+            )
+        )
+        
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1500,
+            chunk_overlap=300,
+            length_function=len,
+            separators=["\n\n", "\n", ".", " ", ""]
+        )
+        
+        chunks = text_splitter.split_text(pelny_tekst)
+        points = []
+        
+        for idx, chunk in enumerate(chunks):
+            point_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{doc_id}_chunk_{idx}"))
+            vector = model.encode(chunk).tolist()
+            
+            points.append(
+                models.PointStruct(
+                    id=point_id,
+                    vector=vector,
+                    payload={
+                        "doc_id": doc_id,
+                        "tytul": tytul,
+                        "url": url,
+                        "fragment_tekstu": chunk,
+                        "zrodlo": "directus"
+                    }
+                )
+            )
+
+        if points:
+            client.upsert(
+                collection_name=COLLECTION_NAME,
+                points=points
+            )
+            
+        print(f"Zapisano w Qdrant dokument {doc_id} w {len(points)} fragmentach.", flush=True)
+        return jsonify({
+            "status": "success", 
+            "message": "Zapisano w Qdrant",
+            "chunks_count": len(points)
+        }), 200
+
+    except Exception as e:
+        import traceback
+        print("\n--- KRYTYCZNY BŁĄD WEBHOKA ---", flush=True)
+        traceback.print_exc()
+        print(f"Szczegóły błędu: {str(e)}", flush=True)
+        print("------------------------------\n", flush=True)
+        return jsonify({"error": f"Błąd indeksacji: {str(e)}"}), 500
+        
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

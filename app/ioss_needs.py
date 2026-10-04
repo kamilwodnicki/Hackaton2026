@@ -11,11 +11,27 @@ POPULATION_COLUMN = "s_186_ludnosc_ogoem"
 COUNT_LIKE_CORRELATION = 0.8  # wskaźniki tak mocno skorelowane z ludnością to liczby bezwzględne
 COMMENT_RE = re.compile(r"^(.*) \(IOSS id=\d+, najnowszy dostępny rok=(\d{4})\)$")
 
-# Miasta na prawach powiatu — odmiana nazw
-CITY_ALIASES = {
-    "powiat m. Kraków": ["krakow", "krakowie", "krakowa"],
-    "powiat m. Nowy Sącz": ["nowy sacz", "nowym saczu", "nowego sacza"],
-    "powiat m. Tarnów": ["tarnow", "tarnowie", "tarnowa"],
+# Miasta na prawach powiatu i siedziby powiatów — wzorce po normalizacji, z odmianą
+ALIASES = {
+    "powiat m. Kraków": r"\bkrakow(ie|a)?\b",
+    "powiat m. Nowy Sącz": r"\bnow(y|ym|ego) sac(z|zu|za)\b",
+    "powiat m. Tarnów": r"\btarnow(ie|a)?\b",
+    "powiat bocheński": r"\bbochni",
+    "powiat brzeski": r"\bbrzesk(o|a|u)\b",
+    "powiat chrzanowski": r"\bchrzanow(a|ie)?\b",
+    "powiat dąbrowski": r"\bdabrow\w* tarnowsk",
+    "powiat gorlicki": r"\bgorlic(e|ach)?\b",
+    "powiat limanowski": r"\blimanow(a|ej)\b",
+    "powiat miechowski": r"\bmiechow(a|ie)?\b",
+    "powiat myślenicki": r"\bmyslenic(e|ach)?\b",
+    "powiat nowotarski": r"\bnow(y|ym|ego) targ(u|iem)?\b",
+    "powiat olkuski": r"\bolkusz(a|u)?\b",
+    "powiat oświęcimski": r"\boswiecim(ia|iu)?\b",
+    "powiat proszowicki": r"\bproszowic(e|ach)?\b",
+    "powiat suski": r"\bsuch(a|ej) beskidzk(a|iej)\b",
+    "powiat tatrzański": r"\bzakopane(go|m)?\b",
+    "powiat wadowicki": r"\bwadowic(e|ach)?\b",
+    "powiat wielicki": r"\bwieliczk(a|i|e)\b",
 }
 
 
@@ -54,21 +70,22 @@ def _load_table():
 def detect_county(text, counties):
     text = f" {_normalize(text)} "
     for county in counties:
-        for alias in CITY_ALIASES.get(county, []):
-            if re.search(rf"\b{alias}\b", text):
-                return county
+        if county in ALIASES and re.search(ALIASES[county], text):
+            return county
         if county.startswith("powiat m. "):
             continue
         adjective = _normalize(county.removeprefix("powiat "))
-        if re.search(rf"\b{adjective[:-1]}\w*", text):  # nowotarski -> nowotarsk...
+        # Przymiotnik tylko po słowie "powiat" — "Krakowskie Przedmieście" to nie powiat krakowski
+        if re.search(rf"\bpowi\w*\s+{adjective[:-1]}\w*", text):  # w powiecie nowotarskim
             return county
     return None
 
 
-def county_needs(text):
-    """Zwraca (powiat, lista potrzeb) albo (None, []) gdy w tekście nie ma powiatu."""
+def county_needs(texts):
+    """Zwraca (powiat, lista potrzeb) dla pierwszego tekstu z rozpoznanym powiatem albo (None, [])."""
     meta, rows = _load_table()
-    county = detect_county(text, sorted(rows))
+    counties = sorted(rows)
+    county = next((c for c in (detect_county(t, counties) for t in texts) if c), None)
     if county is None:
         return None, []
 
