@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Zgłoś się jako tester innowacji społecznych." />
+    <title>Zostań testerem | Dostępność</title>
+    <link rel="icon" href="assets/logo.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Przejdź do treści</a>
+    <header class="site-header">
+      <div class="utility-bar"><a class="accessibility-link" href="#accessibility">Dostępność</a><div class="utility-tools" id="accessibility" aria-label="Ustawienia dostępności"><div class="tool-group" aria-label="Kontrast"><span>Kontrast</span><button class="color-swatch is-active" type="button" data-theme="default" aria-label="Kontrast domyślny" aria-pressed="true"></button><button class="color-swatch color-swatch--orange" type="button" data-theme="orange" aria-label="Kontrast pomarańczowy" aria-pressed="false"></button><button class="color-swatch color-swatch--dark" type="button" data-theme="dark" aria-label="Kontrast czarno-biały" aria-pressed="false"></button></div><div class="tool-group" aria-label="Wielkość tekstu"><span>Wielkość tekstu</span><button class="text-size-button" type="button" data-font-size="normal">A</button><button class="text-size-button" type="button" data-font-size="large">A+</button><button class="text-size-button" type="button" data-font-size="largest">A++</button></div><div class="tool-group language-control"><span>Język strony</span><label class="sr-only" for="language">Wybierz język strony</label><div class="language-select-wrap"><span class="language-flag" data-language="pl" aria-hidden="true"></span><select id="language"><option value="pl">Polski</option><option value="en">English</option><option value="uk">Українська</option></select></div></div></div></div>
+      <div class="main-navigation-wrap"><a class="brand" href="index.html" aria-label="Strona główna"><span class="brand-placeholder" aria-hidden="true">LOGO</span><img class="brand-logo" src="assets/logo.ico" alt="" /><span class="sr-only">Logo organizacji</span></a><button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation"><svg aria-hidden="true"><use href="#icon-menu"></use></svg><span>Menu</span></button><nav class="main-navigation" id="main-navigation" aria-label="Główna nawigacja"><a class="nav-link" href="index.html">Strona główna</a><a class="nav-link" href="my-idea.html">Mam pomysł!</a><a class="nav-link is-active" href="zostan-testerem.html" aria-current="page">Zostań testerem</a><a class="nav-link" href="mapa-potrzeb.html">Mapa potrzeb</a><a class="nav-link" href="forum.html">Forum</a><a class="nav-link" href="wsparcie.html">Wsparcie</a></nav><div class="account-actions"><a class="button button--primary" href="logowanie.html">Zaloguj się</a><a class="button button--secondary" href="rejestracja.html">Zarejestruj się</a></div></div>
+      <nav class="audience-navigation" aria-label="Nawigacja według grup odbiorców"><a class="audience-link audience-link--plain" href="panel.html">Twój panel</a><a class="audience-link" href="mieszkancy.html">Mieszkańcy i NGO</a><a class="audience-link" href="samorzady.html">Jednostki samorządu terytorialnego</a><a class="audience-link" href="rops-worker.html">Pracownicy ROPS</a><a class="audience-link" href="eksperci.html">Eksperci branżowi i mentorzy</a></nav>
+    </header>
+
+    <main id="main-content" class="tester-page">
+      <h1 class="tester-title">Zostań testerem innowacji</h1>
+      <form class="tester-form" id="tester-form">
+        <div class="tester-form-heading"><p id="tester-progress">Strona 1 z 2</p><p>Wypełnij formularz i dołącz do testowania rozwiązań społecznych.</p></div>
+        <fieldset class="tester-step" data-tester-step="type"><legend class="sr-only">Typ zgłaszającego</legend><h2 tabindex="-1">Kim jesteś?</h2><p>Wybierz jedną opcję. Wybrana odpowiedź pojawi się wyraźnie pod kafelkami.</p><div class="tester-choices"><label class="tester-choice"><input type="radio" name="type" value="person" required /><strong>Osoba fizyczna</strong><span>Chcę osobiście testować innowacje i przekazywać opinię.</span></label><label class="tester-choice"><input type="radio" name="type" value="ngo" required /><strong>Organizacja pozarządowa (NGO)</strong><span>Chcemy zaangażować zespół lub społeczność naszej organizacji.</span></label></div><p class="tester-choice-status" id="tester-choice-status" role="status">Nie wybrano jeszcze żadnej opcji.</p></fieldset>
+
+        <fieldset class="tester-step" data-tester-step="person-details" hidden><legend class="sr-only">Dane osoby fizycznej</legend><h2 tabindex="-1">Twoje dane i zainteresowania</h2><div class="tester-fields two-columns"><label>Imię i nazwisko<input name="person_name" autocomplete="name" required /></label><label>Numer telefonu<input name="person_phone" type="tel" autocomplete="tel" required /></label><label class="full-width">Adres e-mail<input name="person_email" type="email" autocomplete="email" required /></label><label class="full-width">Jakie innowacje Cię interesują i w czym chcesz pomóc?<textarea name="person_interests" rows="7" maxlength="1000" required></textarea></label></div></fieldset>
+
+        <fieldset class="tester-step" data-tester-step="ngo-details" hidden><legend class="sr-only">Dane organizacji</legend><h2 tabindex="-1">Informacje o NGO</h2><div class="tester-fields two-columns"><label class="full-width">Nazwa organizacji<input name="ngo_name" required /></label><label>Kategoria działalności<select name="ngo_category" required><option value="">Wybierz kategorię</option><option>Pomoc społeczna</option><option>Zdrowie</option><option>Edukacja</option><option>Kultura</option><option>Ekologia</option><option>Aktywizacja zawodowa</option><option>Inna</option></select></label><label>Liczba osób możliwych do zaangażowania<input name="ngo_people" type="number" min="1" max="10000" required /></label><label class="full-width">W jakich innowacjach widzicie swoją organizację?<textarea name="ngo_interests" rows="7" maxlength="1000" required></textarea></label></div></fieldset>
+
+        <fieldset class="tester-step" data-tester-step="ngo-contact" hidden><legend class="sr-only">Osoba kontaktowa NGO</legend><h2 tabindex="-1">Osoba kontaktowa</h2><div class="tester-fields"><label>Imię i nazwisko osoby kontaktowej<input name="ngo_contact_name" autocomplete="name" required /></label><label>Numer telefonu<input name="ngo_phone" type="tel" autocomplete="tel" required /></label><label>Adres e-mail<input name="ngo_email" type="email" autocomplete="email" required /></label></div></fieldset>
+
+        <div class="tester-actions"><button class="tester-back" id="tester-back" type="button" hidden>Cofnij</button><span></span><button class="tester-next" id="tester-next" type="button">Dalej</button><button class="tester-submit" id="tester-submit" type="submit" hidden>Wyślij</button></div>
+      </form>
+    </main>
+
+    <dialog class="tester-dialog" id="tester-confirm-dialog"><div><h2>Czy na pewno chcesz wysłać zgłoszenie?</h2><p>Po potwierdzeniu formularz zostanie przekazany do zespołu.</p><div class="tester-dialog-actions"><button id="tester-confirm-cancel" type="button">Wróć do formularza</button><button id="tester-confirm-submit" type="button">Tak, wyślij</button></div></div></dialog>
+    <dialog class="tester-dialog" id="tester-success-dialog"><div><h2>Zgłoszenie zostało wysłane</h2><p>Dziękujemy za chęć udziału w testowaniu innowacji społecznych.</p><div class="tester-dialog-actions"><button id="tester-success-close" type="button">Zamknij</button></div></div></dialog>
+    <footer class="contact-bar"><div class="contact-inner"><div class="contact-item contact-item--organization"><strong>Regionalny Ośrodek Polityki Społecznej</strong></div><address class="contact-item">ul. Piastowska 32, 30-070 Kraków</address><a class="contact-item" href="tel:+48124220636">+48 12 422 06 36</a><a class="contact-item" href="mailto:biuro@rops.krakow.pl">biuro@rops.krakow.pl</a></div></footer>
+    <svg class="svg-sprite" aria-hidden="true"><symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></symbol></svg>
+    <script src="vendor/i18next.min.js"></script><script src="i18n.js"></script><script src="script.js"></script><script src="zostan-testerem.js"></script>
+  </body>
+</html>

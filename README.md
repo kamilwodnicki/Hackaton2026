@@ -1,66 +1,174 @@
-## Moduł Wyszukiwania Semantycznego (Baza Wektorowa i API)
+# ROPS — innowacje społeczne
 
-Ten komponent systemu odpowiada za analizę, przechowywanie oraz zaawansowane wyszukiwanie fragmentów tekstu w dokumentach PDF i danych strukturalnych. Pozwala on na precyzyjne odnajdywanie informacji na podstawie znaczenia zapytania, dostarczając niezbędny kontekst dla dalszych procesów w aplikacji.
+Responsywny portal wspierający rozwój innowacji społecznych. Projekt zawiera frontend demonstracyjny, formularze i panele użytkowników oraz backend Flask z PostgreSQL, wyszukiwaniem semantycznym, Qdrantem i opcjonalnym lokalnym modelem językowym Ollama.
 
-### 1. Architektura i uruchamianie modułu
-Moduł działa w oparciu o konteneryzację (Docker). W celu optymalizacji obciążenia systemu, elementy związane ze sztuczną inteligencją oraz bazą wektorową nie są uruchamiane domyślnie. 
+## Najszybsze uruchomienie strony
 
-**Uruchamianie usług AI:** 
-Aby włączyć pełne środowisko analityczne wymagane do działania tego modułu, należy uruchomić kontenery z parametrem profilu `ai`:
-```cmd
-docker compose --profile ai up -d
+Do obejrzenia interfejsu nie jest potrzebna instalacja zależności ani baza danych. Logowanie, rejestracja i role działają obecnie w trybie demonstracyjnym i zapisują dane wyłącznie w pamięci przeglądarki (`localStorage`).
+
+### Linux / Ubuntu / macOS
+
+1. Otwórz terminal w katalogu projektu.
+2. Uruchom lokalny serwer:
+
+```bash
+python3 -m http.server 8000 --directory frontend
 ```
-Wykorzystywane technologie:
-* **Baza wektorowa Qdrant:** Przechowuje wektory (reprezentacje liczbowe tekstów) o wymiarze 768.
-* **Model wektoryzujący:** Przekształca tekst z dokumentów i zapytania użytkownika na wektory (`sdadas/mmlw-retrieval-roberta-base`).
-* **Model sortujący (Cross-Encoder):** Weryfikuje i precyzyjnie układa wyniki wyszukiwania od najbardziej trafnego (`sdadas/polish-reranker-roberta-v3`).
-* **Zarządzanie zasobami:** System obsługuje przełączanie obciążenia między procesorem a kartą graficzną za pomocą zmiennej środowiskowej `COMPUTE_DEVICE` w pliku `docker-compose.yml`. Ustawienie tej wartości na `cpu` pozwala zarezerwować pamięć VRAM wyłącznie dla głównego modelu językowego.
 
-### 2. Wprowadzanie danych do systemu (Indeksacja)
-Przed rozpoczęciem wyszukiwania należy przetworzyć pliki źródłowe, co obejmuje podzielenie ich na fragmenty, wygenerowanie wektorów i zapisanie ich w bazie Qdrant. Skrypt automatycznie usuwa stare dane przy każdym uruchomieniu, aby zachować spójność bazy.
+3. Wejdź w przeglądarce na [http://localhost:8000](http://localhost:8000).
+4. Serwer zatrzymasz skrótem `Ctrl+C`.
 
-**Wymagania wstępne:**
-* Plik z metadanymi `innowacje_biblioteka.json` musi znajdować się w folderze `data/`.
-* Powiązane pliki PDF muszą znajdować się w podkatalogu `data/dokumenty/`.
-Dane pobierz z linka https://drive.google.com/file/d/1uCTI-b5s0RGgIjOS_qKEqo8x2-AfhE0i/view?usp=drive_link
+Jeśli polecenie `python3` nie istnieje, spróbuj `python`.
 
-**Uruchomienie indeksacji:**
-Aby przetworzyć pliki, wykonaj w terminalu polecenie:
-```cmd
+### Windows 10/11
+
+1. Otwórz folder projektu w Eksploratorze plików.
+2. Kliknij pasek adresu, wpisz `powershell` i naciśnij Enter.
+3. Uruchom:
+
+```powershell
+py -m http.server 8000 --directory frontend
+```
+
+4. Wejdź w przeglądarce na [http://localhost:8000](http://localhost:8000).
+5. Serwer zatrzymasz skrótem `Ctrl+C`.
+
+Jeśli polecenie `py` nie istnieje, zainstaluj [Python 3](https://www.python.org/downloads/) i podczas instalacji zaznacz opcję **Add Python to PATH**, a następnie użyj `python` zamiast `py`.
+
+> Sam frontend wystarcza do prezentacji widoków i funkcji mock. Wysyłka zgłoszeń wsparcia oraz funkcje AI wymagają backendu.
+
+## Pełne uruchomienie z Dockerem
+
+Ta metoda działa na Linuxie, Ubuntu, macOS i Windows. Wymaga:
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) na Windowsie lub macOS,
+- Docker Engine z wtyczką Compose na Linuxie,
+- co najmniej 8 GB wolnej pamięci RAM; moduły AI mogą wymagać znacznie więcej.
+
+Sprawdź instalację:
+
+```text
+docker --version
+docker compose version
+```
+
+### Backend bez modułów AI
+
+Ten wariant uruchamia Flask i PostgreSQL. Jest najlepszy do pracy nad zwykłym API i formularzem wsparcia.
+
+Linux / Ubuntu / macOS:
+
+```bash
+INSTALL_AI=false docker compose up --build db web
+```
+
+Windows PowerShell:
+
+```powershell
+$env:INSTALL_AI="false"
+docker compose up --build db web
+```
+
+API będzie dostępne pod adresem [http://localhost:5000](http://localhost:5000). Frontend uruchom równolegle zgodnie z wcześniejszą instrukcją pod adresem `http://localhost:8000`.
+
+Zatrzymanie usług:
+
+```bash
+docker compose down
+```
+
+### Pełne środowisko AI
+
+Profil `ai` uruchamia dodatkowo Qdrant i Ollamę oraz pobiera model językowy. Pierwsze uruchomienie może potrwać długo i pobrać kilka gigabajtów danych.
+
+```bash
+docker compose --profile ai up --build
+```
+
+Aktualna konfiguracja AI jest przygotowana dla karty NVIDIA (`COMPUTE_DEVICE=cuda`). Na komputerze bez zgodnej karty ustaw w `docker-compose.yml` wartość `COMPUTE_DEVICE=cpu`. Na macOS i Windows upewnij się również, że Docker Desktop ma przydzieloną wystarczającą ilość pamięci.
+
+## Dane wyszukiwarki semantycznej
+
+Przed indeksacją umieść:
+
+- plik `innowacje_biblioteka.json` w katalogu `data/`,
+- powiązane dokumenty PDF w katalogu `data/dokumenty/`.
+
+Następnie, przy uruchomionym profilu AI, wykonaj:
+
+```bash
 docker compose exec web python app/ingest.py
 ```
 
-### 3. Wyszukiwanie danych (Endpoint API)
-Moduł udostępnia lokalny punkt końcowy, który przyjmuje zapytania i zwraca najbardziej pasujące fragmenty, eliminując przy tym zduplikowane wyniki z tego samego dokumentu.
+Indeksacja zastępuje wcześniejszą zawartość kolekcji w Qdrant.
 
-* **Adres URL:** `http://localhost:5000/search`
-* **Metoda:** `POST`
-* **Nagłówek:** `Content-Type: application/json`
+## Konfiguracja wysyłki zgłoszeń wsparcia
 
-**Struktura zapytania:**
-Należy przesłać obiekt JSON zawierający szukaną frazę (`query`) oraz opcjonalnie limit oczekiwanych wyników (`top_k`). Przykład wywołania z poziomu terminala Windows (CMD / PowerShell):
+Formularz wsparcia wysyła wiadomości na adres `thecookedhan@gmail.com`. W katalogu projektu utwórz plik `.env`:
+
+```dotenv
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=nadawca@example.com
+SMTP_PASSWORD=haslo-aplikacji
+SMTP_FROM=nadawca@example.com
+```
+
+Dla Gmaila użyj hasła aplikacji, a nie zwykłego hasła do konta. Nie dodawaj pliku `.env` do repozytorium.
+
+Po zmianie konfiguracji uruchom kontenery ponownie:
+
+```bash
+docker compose up --build db web
+```
+
+Kontrola zalogowania w formularzu jest obecnie demonstracyjna (`X-Demo-Auth: mock-session`). Przed wdrożeniem produkcyjnym należy zastąpić ją sesją serwerową lub zweryfikowanym tokenem OAuth.
+
+## Najważniejsze adresy API
+
+| Funkcja | Metoda | Adres |
+|---|---:|---|
+| Kontrola działania API | GET | `http://localhost:5000/` |
+| Wyszukiwanie semantyczne | POST | `http://localhost:5000/search` |
+| Asystent AI | POST | `http://localhost:5000/chat` |
+| Zgłoszenie wsparcia | POST | `http://localhost:5000/support` |
+
+Przykładowe zapytanie do wyszukiwarki:
+
+Linux / macOS:
+
+```bash
+curl -X POST http://localhost:5000/search \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"projekty dla seniorów","top_k":3}'
+```
+
+Windows PowerShell:
+
 ```powershell
-curl.exe -X POST http://localhost:5000/search -H "Content-Type: application/json" -d "{\`"query\`": \`"projekty dla seniorów\`", \`"top_k\`": 3}"
+Invoke-RestMethod -Method Post `
+  -Uri "http://localhost:5000/search" `
+  -ContentType "application/json" `
+  -Body '{"query":"projekty dla seniorów","top_k":3}'
 ```
 
-**Struktura odpowiedzi:**
-Zwracany jest obiekt JSON z tablicą `results`. Zawiera ona podstawowe metadane dokumentu, dopasowany fragment tekstu oraz oceny trafności.
-```json
-{
-  "results": [
-    {
-      "doc_id": "stworzenie-narzedzia-ulatwiajacego-seniorom-prawidlowe-regulowanie-spraw-spadkowych",
-      "tytul": "Stworzenie narzędzia ułatwiającego seniorom prawidłowe regulowanie spraw spadkowych",
-      "url": "[https://rops.krakow.pl/](https://rops.krakow.pl/)...",
-      "fragment": "Zasadnicza treść dopasowanego tekstu z pliku PDF...",
-      "score_qdrant": 0.8653362,
-      "score_reranker": 0.9933578372001648
-    }
-  ]
-}
+## Struktura projektu
+
+```text
+app/                 backend Flask, wyszukiwanie i asystent
+frontend/            strony HTML, CSS, JavaScript i zasoby
+scrapers/            pobieranie danych IOSS
+data/                lokalne dane do indeksacji (jeśli dodane)
+Dockerfile           obraz aplikacji
+docker-compose.yml   usługi aplikacji, baz danych i AI
+requirements.txt     podstawowe zależności Pythona
+requirements-ai.txt  zależności wyszukiwania semantycznego
 ```
 
-### 4. Wydajność i czasy odpowiedzi
-Podczas odpytywania systemu występują zauważalne różnice w czasie obsługi żądań:
-* **Pierwsze zapytanie (ok. 6-8 sekund):** Wymaga pełnego wczytania modeli do pamięci operacyjnej urządzenia oraz nawiązania pierwszego połączenia z bazą danych Qdrant.
-* **Kolejne zapytania (ok. 0.2 - 0.4 sekundy):** Struktury obliczeniowe i połączenia są już aktywne, co pozwala na bieżące przetwarzanie zapytań bez konieczności ponownej inicjalizacji systemu.
+## Typowe problemy
+
+- **Port 8000 lub 5000 jest zajęty:** zatrzymaj inną usługę używającą portu albo zmień numer portu w poleceniu / `docker-compose.yml`.
+- **Docker nie odpowiada:** uruchom Docker Desktop lub usługę Docker Engine.
+- **Brak odpowiedzi AI:** sprawdź, czy uruchomiono profil `ai`, wykonano indeksację i czy kontenery są aktywne przez `docker compose ps`.
+- **Pierwsze zapytanie trwa długo:** modele są wtedy pobierane lub ładowane do pamięci; kolejne odpowiedzi powinny być szybsze.
+- **Formularz wsparcia nie wysyła wiadomości:** sprawdź dane SMTP i logi poleceniem `docker compose logs web`.
