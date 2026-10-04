@@ -20,7 +20,7 @@
           <label for="register-name">Imię i nazwisko lub nazwa NGO</label><input id="register-name" name="name" autocomplete="name" required />
           <label for="register-email">Służbowy lub prywatny adres e-mail</label><input id="register-email" name="email" type="email" autocomplete="email" required />
           <label for="register-password">Hasło</label><input id="register-password" name="password" type="password" autocomplete="new-password" minlength="8" required />
-          <fieldset class="registration-roles"><legend>Role użytkownika <span>(wybierz 1–3)</span></legend><label><input name="roles" type="checkbox" value="resident" checked /> Mieszkaniec / NGO</label><label><input name="roles" type="checkbox" value="jst" /> Pracownik JST</label><label><input name="roles" type="checkbox" value="rops" /> Pracownik ROPS</label><label><input name="roles" type="checkbox" value="expert" /> Ekspert branżowy / mentor</label></fieldset>
+          <fieldset class="registration-roles"><legend>Rola użytkownika <span>(wybierz jedną)</span></legend><label><input name="roles" type="radio" value="resident" checked /> Mieszkaniec / NGO</label><label><input name="roles" type="radio" value="jst" /> Pracownik JST</label><label><input name="roles" type="radio" value="rops" /> Pracownik ROPS</label><label><input name="roles" type="radio" value="expert" /> Ekspert branżowy / mentor</label></fieldset>
           <p class="role-help" id="role-help"></p>
           <button class="email-auth-button" type="submit">Zarejestruj się e-mailem</button>
           <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>

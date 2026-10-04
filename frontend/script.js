@@ -71,7 +71,8 @@ document.querySelectorAll('a[href="panel.html"], a[href="ustawienia-konta.html"]
 });
 
 document.querySelectorAll("[data-logout]").forEach((button) => {
-  button.addEventListener("click", () => {
+  button.addEventListener("click", async () => {
+    await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     localStorage.removeItem("rops-auth-session");
     location.href = "index.html";
   });

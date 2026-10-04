@@ -1,5 +1,5 @@
 const AUTH_CONFIG = {
-  mode: "mock", // Zmień na "backend" po uruchomieniu API.
+  mode: "backend", // "mock" = konta tylko w localStorage, bez serwera.
   apiBase: "/api/auth",
   endpoints: {
     login: "/login",
@@ -109,7 +109,10 @@ form?.addEventListener("submit", (event) => {
   if (!form.reportValidity()) return;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData.entries());
-  if (pageMode === "register") data.roles = formData.getAll("roles");
+  if (pageMode === "register") {
+    data.roles = formData.getAll("roles");
+    data.invite = params.get("invite");
+  }
   runAuthentication(pageMode === "register" ? "register" : "login", data, event.submitter);
 });
 
@@ -141,4 +144,6 @@ const updateRoleHelp = () => {
 roleInputs.forEach((input) => input.addEventListener("change", updateRoleHelp));
 updateRoleHelp();
 
-if (readStorage(authSessionKey, null) && pageMode === "login") location.href = redirectTarget;
+// Odesłanie z ?reason= znaczy, że serwer nie widzi sesji — stara sesja z localStorage jest nieważna
+if (params.get("reason")) localStorage.removeItem(authSessionKey);
+else if (readStorage(authSessionKey, null) && pageMode === "login") location.href = redirectTarget;
